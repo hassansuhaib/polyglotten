@@ -1,8 +1,8 @@
 from django.db import transaction
 from rest_framework import serializers
-from dj_rest_auth.registraion.serializers import RegisterSerializer
+from dj_rest_auth.registration.serializers import RegisterSerializer
 
-from polyglotten.models import GENDER_SELECTION
+from .models import GENDER_SELECTION
 
 
 class CustomRegisterSerializer(RegisterSerializer):
