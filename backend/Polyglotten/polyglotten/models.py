@@ -1,3 +1,13 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
-# Create your models here.
+
+GENDER_SELECTION = [
+    ('M', 'Male'),
+    ('F', 'Female'),
+    ('NS', 'Not Specified'),
+]
+
+
+class User(AbstractUser):
+    gender = models.CharField(max_length=20, choices=GENDER_SELECTION)
