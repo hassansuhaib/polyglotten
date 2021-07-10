@@ -1,6 +1,6 @@
 import React from 'react'
-import Nav from '../components/nav/Nav'
-import Footer from '../components/footer/Footer'
+import Nav from '../../components/Nav/Nav'
+import Footer from '../../components/Footer/Footer'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { makeStyles } from '@material-ui/core/styles'
 

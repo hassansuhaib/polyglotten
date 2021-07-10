@@ -1,10 +1,12 @@
 import React from 'react'
 import { withRouter, Route, Switch } from 'react-router-dom'
 
-import Layout from './containers/Layout'
-import Home from './containers/Home'
-import Login from './containers/auth/Login'
-import Register from './containers/auth/Register'
+import Layout from './containers/Layout/Layout'
+import Home from './containers/Home/Home'
+import Login from './containers/Auth/Login'
+import Register from './containers/Auth/Register'
+import UserProfile from './containers/Profile/UserProfile'
+import Forum from './containers/Forum/Forum'
 
 const Routes = withRouter(({ location }) => {
   return (
@@ -14,6 +16,14 @@ const Routes = withRouter(({ location }) => {
           <Route exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
+          <Route
+            exact
+            path="/profile/:username"
+            render={(props) => (
+              <UserProfile key={props.location.key} {...props} />
+            )}
+          />
+          <Route exact path="/forum" component={Forum} />
         </Switch>
       </Layout>
     </div>

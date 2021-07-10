@@ -4,8 +4,8 @@ import { authLogin } from '../../store/actions/auth'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 
-import TextField from '../../components/form/TextField'
-import Checkbox from '../../components/form/Checkbox'
+import TextField from '../../components/Form/TextField'
+import Checkbox from '../../components/Form/Checkbox'
 
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
