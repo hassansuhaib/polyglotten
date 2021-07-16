@@ -5,7 +5,7 @@ import Layout from './containers/Layout/Layout'
 import Home from './containers/Home/Home'
 import Login from './containers/Auth/Login'
 import Register from './containers/Auth/Register'
-import UserProfile from './containers/Profile/UserProfile'
+import Profile from './containers/Profile/Profile'
 import Forum from './containers/Forum/Forum'
 
 const Routes = withRouter(({ location }) => {
@@ -19,9 +19,7 @@ const Routes = withRouter(({ location }) => {
           <Route
             exact
             path="/profile/:username"
-            render={(props) => (
-              <UserProfile key={props.location.key} {...props} />
-            )}
+            render={(props) => <Profile key={props.location.key} {...props} />}
           />
           <Route exact path="/forum" component={Forum} />
         </Switch>
