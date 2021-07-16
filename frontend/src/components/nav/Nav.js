@@ -29,11 +29,14 @@ const Nav = () => {
         </div>
       </Link>
       <div>
-        <Button color="inherit" component={RouterLink} to="/login">
+        <Button color="primary" component={RouterLink} to="/login">
           Login
         </Button>
-        <Button color="inherit" component={RouterLink} to="/register">
+        <Button color="primary" component={RouterLink} to="/register">
           Register
+        </Button>
+        <Button color="primary" component={RouterLink} to="/forum">
+          Forum
         </Button>
       </div>
     </div>

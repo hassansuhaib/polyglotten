@@ -5,7 +5,7 @@ import Link from '@material-ui/core/Link'
 
 const Footer = () => {
   return (
-    <Typography variant="body2" color="textSeconday" align="center">
+    <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link color="inherit" component={RouterLink} to="/">
         Polyglotten

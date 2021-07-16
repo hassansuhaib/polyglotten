@@ -8,6 +8,7 @@ from rest_framework.pagination import PageNumberPagination
 from polyglotten.models import User, UserProfile, Ranking, Interest, Language, Question, Answer, Vote
 from polyglotten.api.serializers import UserSerialzer, UserProfileSerializer, RankingSerializer, InterestSerializer, LanguageSerializer, QuestionSerializer, AnswerSerializer, VoteSerializer
 
+# Detail Views
 
 class UserDetailView(RetrieveAPIView):
     permission_classes = (IsAuthenticated, )
@@ -20,6 +21,7 @@ class UserDetailView(RetrieveAPIView):
         except User.DoesNotExist:
             raise Http404("User does not exist")
 
+# List Views
 
 class RankingListView(ListAPIView):
     permission_classes = (IsAuthenticated, )
@@ -69,4 +71,17 @@ class AnswerListView(ListAPIView):
     def get_queryset(self):
         qs = Header.objects.all()
         return qs
+
+# Create API Views
+
+class QuestionCreateView(CreateAPIView):
+    permission_classes = (IsAuthenticated, )
+    serializer_class = QuestionSerializer
+    queryset = Question.objects.all()
+
+
+class AnswerCreateView(CreateAPIView):
+    permission_classes = (IsAuthenticated, )
+    serializer_class = AnswerSerializer
+    queryset = Answer.objects.all()
 

@@ -42,7 +42,7 @@ class Language(models.Model):
     def __str__(self):
         return f"{self.title} {self.classification}"
 
-VOTE_TYPES = [('q', 'Question'), ('a', 'Answer')]
+VOTE_TYPES = [('Q', 'Question'), ('A', 'Answer')]
 
 
 class UserProfile(models.Model):
@@ -58,7 +58,7 @@ class Vote(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='votes')
     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='votes', null=True)
     answer = models.ForeignKey(Answer, on_delete=models.CASCADE, related_name='votes', null=True)
-    vote_type = models.CharField(max_length=10, choices=VOTE_TYPES)
+    vote_type = models.CharField(max_length=1, choices=VOTE_TYPES)
 
     def __str__(self):
         return f"{self.user.username}"
