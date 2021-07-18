@@ -11,3 +11,4 @@ const authURL = `/auth`
 export const logout = `${authURL}/logout/`
 export const login = `${authURL}/login/`
 export const registration = `${authURL}/registration/`
+export const refreshToken = `${authURL}/token/refresh`

@@ -1,5 +1,7 @@
 import React from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { Link as RouterLink } from 'react-router-dom'
+import { logout } from '../../store/actions/auth'
 
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
@@ -17,6 +19,12 @@ const useStyles = makeStyles((theme) => ({
 
 const Nav = () => {
   const classes = useStyles()
+  const accessToken = useSelector((state) => state.auth.token)
+  const dispatch = useDispatch()
+
+  const handleLogout = () => {
+    dispatch(logout())
+  }
 
   return (
     <div className={classes.nav}>
@@ -29,12 +37,25 @@ const Nav = () => {
         </div>
       </Link>
       <div>
-        <Button color="primary" component={RouterLink} to="/login">
-          Login
-        </Button>
-        <Button color="primary" component={RouterLink} to="/register">
-          Register
-        </Button>
+        {accessToken ? (
+          <Button
+            color="primary"
+            component={RouterLink}
+            to="/logout"
+            onClick={handleLogout}
+          >
+            Logout
+          </Button>
+        ) : (
+          <React.Fragment>
+            <Button color="primary" component={RouterLink} to="/login">
+              Login
+            </Button>
+            <Button color="primary" component={RouterLink} to="/register">
+              Register
+            </Button>
+          </React.Fragment>
+        )}
         <Button color="primary" component={RouterLink} to="/forum">
           Forum
         </Button>

@@ -49,19 +49,10 @@ class UserProfile(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     language = models.ForeignKey(
-        Language, on_delete=models.CASCADE, related_name='profiles')
+        Language, on_delete=models.CASCADE, related_name='profiles', null=True)
 
     def __str__(self):
         return self.user.username
-
-class Vote(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='votes')
-    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='votes', null=True)
-    answer = models.ForeignKey(Answer, on_delete=models.CASCADE, related_name='votes', null=True)
-    vote_type = models.CharField(max_length=1, choices=VOTE_TYPES)
-
-    def __str__(self):
-        return f"{self.user.username}"
 
 class Question(models.Model):
     title = models.CharField(max_length=250)
@@ -80,6 +71,18 @@ class Answer(models.Model):
     def __str__(self):
         return f"{self.id} answered by {self.user.username}"
 
+
+class Vote(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='votes')
+    question = models.ForeignKey(
+        Question, on_delete=models.CASCADE, related_name='votes', null=True)
+    answer = models.ForeignKey(
+        Answer, on_delete=models.CASCADE, related_name='votes', null=True)
+    vote_type = models.CharField(max_length=1, choices=VOTE_TYPES)
+
+    def __str__(self):
+        return f"{self.user.username}"
 
 
 def userprofile_receiver(sender, instance, created, *args, **kwargs):

@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import { authRegister } from '../../store/actions/auth'
+import { signUp } from '../../store/actions/auth'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 
@@ -59,9 +59,12 @@ const validationSchema = Yup.object({
   ),
 })
 
-const Register = () => {
+const Register = ({ location }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
+  // For redirection after login
+  const { from } = location.state || { from: { pathname: '/' } }
+
   const handleSubmit = ({
     username,
     firstName,
@@ -84,14 +87,15 @@ const Register = () => {
       gender
     )
     dispatch(
-      authRegister(
+      signUp(
         username,
         firstName,
         lastName,
         email,
         password1,
         password2,
-        gender
+        gender,
+        from
       )
     )
   }

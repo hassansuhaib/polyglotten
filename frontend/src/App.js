@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { authCheckState } from './store/actions/auth'
 import Routes from './Routes'
 import { Router } from 'react-router-dom'
 import history from './history'
@@ -11,6 +13,10 @@ import theme from './theme'
 import '@fontsource/quicksand'
 
 const App = () => {
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(authCheckState())
+  })
   return (
     <div className="App">
       <ThemeProvider theme={theme}>

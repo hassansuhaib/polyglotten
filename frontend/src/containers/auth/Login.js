@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import { authLogin } from '../../store/actions/auth'
+import { login } from '../../store/actions/auth'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 
@@ -37,12 +37,15 @@ const validationSchema = Yup.object({
   password: Yup.string().required('Required'),
 })
 
-const Login = () => {
+const Login = ({ location }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
+
+  // For redirection after login
+  const { from } = location.state || { from: { pathname: '/' } }
   const handleSubmit = ({ username, password }) => {
     console.log('Credentials: ', username, password)
-    dispatch(authLogin(username, password))
+    dispatch(login(username, password, from))
   }
 
   return (
