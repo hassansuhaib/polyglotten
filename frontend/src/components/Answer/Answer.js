@@ -1,7 +1,12 @@
 import React from 'react'
 
-const Answer = () => {
-  return <h2>Answer</h2>
+const Answer = ({ answer }) => {
+  const { content, id } = answer
+  return (
+    <React.Fragment>
+      <p>{content}</p>
+    </React.Fragment>
+  )
 }
 
 export default Answer

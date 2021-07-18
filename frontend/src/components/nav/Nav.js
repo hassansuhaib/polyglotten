@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Nav = () => {
   const classes = useStyles()
-  const accessToken = useSelector((state) => state.auth.token)
+  const auth = useSelector((state) => state.auth)
   const dispatch = useDispatch()
 
   const handleLogout = () => {
@@ -37,15 +37,19 @@ const Nav = () => {
         </div>
       </Link>
       <div>
-        {accessToken ? (
-          <Button
-            color="primary"
-            component={RouterLink}
-            to="/logout"
-            onClick={handleLogout}
-          >
-            Logout
-          </Button>
+        {auth.token ? (
+          <React.Fragment>
+            <Button
+              color="primary"
+              component={RouterLink}
+              to={`/profile/${auth.user.username}`}
+            >
+              {auth.user.username}
+            </Button>
+            <Button color="primary" onClick={handleLogout}>
+              Logout
+            </Button>
+          </React.Fragment>
         ) : (
           <React.Fragment>
             <Button color="primary" component={RouterLink} to="/login">

@@ -1,4 +1,4 @@
-import axiosAPI, { setNewHeaders } from '../../api/axiosApi'
+import api, { setHeaders } from '../../api'
 import * as actionTypes from './actionTypes'
 import * as urls from '../../constants'
 import history from '../../history'
@@ -9,10 +9,10 @@ export const authStart = () => {
   }
 }
 
-export const authSuccess = (token) => {
+export const authSuccess = (token, user) => {
   return {
     type: actionTypes.AUTH_SUCCESS,
-    payload: token,
+    payload: { token, user },
   }
 }
 
@@ -26,6 +26,9 @@ export const authFail = (error) => {
 export const logout = () => {
   localStorage.removeItem('access_token')
   localStorage.removeItem('refresh_token')
+  localStorage.removeItem('user')
+
+  history.push('/')
 
   return {
     type: actionTypes.AUTH_LOGOUT,
@@ -34,15 +37,15 @@ export const logout = () => {
 
 export const login = (username, password, from) => (dispatch) => {
   dispatch(authStart())
-  axiosAPI
+  api
     .post(urls.login, {
       username,
       password,
     })
     .then((response) => {
       console.log('Meow: ', response)
-      setNewHeaders(response)
-      dispatch(authSuccess(response.data.access_token))
+      setHeaders(response)
+      dispatch(authSuccess(response.data.access_token, response.data.user))
       history.push(from)
     })
     .catch((error) => {
@@ -52,10 +55,10 @@ export const login = (username, password, from) => (dispatch) => {
 }
 
 export const signUp =
-  (username, firstName, lastName, email, password1, password2, gender) =>
+  (username, firstName, lastName, email, password1, password2, gender, from) =>
   (dispatch) => {
     dispatch(authStart())
-    axiosAPI
+    api
       .post(urls.registration, {
         username,
         firstName,
@@ -66,8 +69,9 @@ export const signUp =
         gender,
       })
       .then((response) => {
-        setNewHeaders(response)
-        dispatch(authSuccess(response.data.access_token))
+        setHeaders(response)
+        dispatch(authSuccess(response.data.access_token, response.data.user))
+        history.push(from)
       })
       .catch((error) => {
         console.log('Error: ', error)
@@ -79,10 +83,11 @@ export const authCheckState = () => {
   return (dispatch) => {
     const access_token = localStorage.getItem('access_token')
     const refresh_token = localStorage.getItem('refresh_token')
-    if (access_token === undefined || refresh_token === undefined) {
+    const user = localStorage.getItem('user')
+    if (!access_token || !refresh_token || !user) {
       dispatch(logout())
     } else {
-      dispatch(authSuccess(access_token))
+      dispatch(authSuccess(access_token, JSON.parse(user)))
     }
   }
 }

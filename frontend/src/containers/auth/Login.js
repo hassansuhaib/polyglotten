@@ -80,7 +80,7 @@ const Login = ({ location }) => {
                   name="password"
                   type={values.show_password ? 'text' : 'password'}
                   label="Password"
-                  autoComplete="current-password"
+                  autoComplete="password"
                   variant="outlined"
                   margin="normal"
                   required

@@ -1,10 +1,10 @@
 import axios from 'axios'
-import { endpoint as baseURL } from '../constants'
-import * as urls from '../constants'
+import { endpoint as baseURL } from './constants'
+import * as urls from './constants'
 
 const accessToken = localStorage.getItem('access_token')
 
-const axiosAPI = axios.create({
+const api = axios.create({
   baseURL: baseURL,
   timeout: 5000,
   headers: {
@@ -14,10 +14,12 @@ const axiosAPI = axios.create({
   },
 })
 
-axiosAPI.interceptors.response.use(
+api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config
+
+    console.log('Resposne: ', error.response.status)
 
     // Prevent infinite loops
     if (
@@ -33,6 +35,8 @@ axiosAPI.interceptors.response.use(
       error.response.statusText === 'Unauthorized'
     ) {
       const refresh = localStorage.getItem('refresh_token')
+      console.log('Refresh: ', typeof refresh)
+      console.log('Refresh value: ', refresh)
       if (refresh) {
         const tokenParts = JSON.parse(atob(refresh.split('.')[1]))
 
@@ -41,13 +45,13 @@ axiosAPI.interceptors.response.use(
 
         if (tokenParts.exp > now) {
           try {
-            const response = await axiosAPI.post(urls.refreshToken, {
+            const response = await api.post(urls.refreshToken, {
               refresh,
             })
             setNewHeaders(response)
             originalRequest.headers['Authorization'] =
               'JWT ' + response.data.access_token
-            return axiosAPI(originalRequest)
+            return api(originalRequest)
           } catch (error) {
             console.log(error)
           }
@@ -67,11 +71,16 @@ axiosAPI.interceptors.response.use(
 )
 
 export function setNewHeaders(response) {
-  axiosAPI.defaults.headers['Authorization'] =
-    'JWT ' + response.data.access_token
+  console.log('In set new header: ', response)
+  api.defaults.headers['Authorization'] = 'JWT ' + response.data.access
+  localStorage.setItem('access_token', response.data.access)
+  localStorage.setItem('refresh_token', response.data.refresh)
+}
+
+export function setHeaders(response) {
   localStorage.setItem('user', JSON.stringify(response.data.user))
   localStorage.setItem('access_token', response.data.access_token)
   localStorage.setItem('refresh_token', response.data.refresh_token)
 }
 
-export default axiosAPI
+export default api

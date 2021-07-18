@@ -7,6 +7,7 @@ import Login from './containers/Auth/Login'
 import Register from './containers/Auth/Register'
 import Profile from './containers/Profile/Profile'
 import Forum from './containers/Forum/Forum'
+import QuestionDetail from './components/Question/QuestionDetail'
 
 const Routes = withRouter(({ location }) => {
   return (
@@ -22,6 +23,13 @@ const Routes = withRouter(({ location }) => {
             render={(props) => <Profile key={props.location.key} {...props} />}
           />
           <Route exact path="/forum" component={Forum} />
+          <Route
+            exact
+            path="/forum/question/:id"
+            render={(props) => (
+              <QuestionDetail key={props.location.key} {...props} />
+            )}
+          />
         </Switch>
       </Layout>
     </div>

@@ -1,17 +1,13 @@
 from rest_framework import serializers, fields
 from polyglotten.models import User, UserProfile, Ranking, Interest, Language, Question, Answer, Vote
 
-class UserSerialzer(serializers.ModelSerializer):
+
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'is_active', 'email']
+        fields = ['id', 'username', 'first_name',
+                  'last_name', 'email', 'is_active', 'email']
 
-class UserProfileSerializer(serializers.ModelSerializer):
-    user = UserSerialzer()
-    language = LanguageSerializer()
-    class Meta:
-        model = UserProfile
-        fields = ['user', 'language']
 
 class RankingSerializer(serializers.ModelSerializer):
     class Meta:
@@ -31,20 +27,21 @@ class LanguageSerializer(serializers.ModelSerializer):
         fields = ['title', 'classification']
 
 
-class VoteSerializer(serializers.ModelSerializer):
-    user = UserSerialzer()
-    question = QuestionSerializer()
-    answer = AnswerSerializer()
+class UserProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    language = LanguageSerializer()
+
     class Meta:
-        model = Vote
-        fields = ['user', 'question', 'answer', 'vote_type']
+        model = UserProfile
+        fields = ['user', 'language']
 
 
 class QuestionSerializer(serializers.ModelSerializer):
     user = UserSerializer()
+
     class Meta:
         model = Question
-        fields = ['title', 'content', 'created_at', 'user']
+        fields = ['id', 'title', 'content', 'created_at', 'user']
 
 
 class AnswerSerializer(serializers.ModelSerializer):
@@ -52,5 +49,14 @@ class AnswerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Answer
-        fields = ['content', 'created_at', 'user']
-        
+        fields = ['id', 'content', 'created_at', 'user']
+
+
+class VoteSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    question = QuestionSerializer()
+    answer = AnswerSerializer()
+
+    class Meta:
+        model = Vote
+        fields = ['user', 'question', 'answer', 'vote_type']

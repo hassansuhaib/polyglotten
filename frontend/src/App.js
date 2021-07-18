@@ -16,7 +16,7 @@ const App = () => {
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(authCheckState())
-  })
+  }, [])
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
