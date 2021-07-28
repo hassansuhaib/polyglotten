@@ -9,8 +9,11 @@ urlpatterns = [
     path('rankings/', RankingListView.as_view(), name='rankings'),
     path('interests/', InterestListView.as_view(), name='interests'),
     path('languages/', LanguageListView.as_view(), name='languages'),
+    # Forum URLS
     path('questions/', QuestionListView.as_view(), name='questions'),
+    path('questions/create', QuestionCreateView.as_view(), name="create-question"),
     path('question-detail/<int:id>',
          QuestionDetailView.as_view(), name='question-detail'),
     path('answers/', AnswerListView.as_view(), name='answers'),
+    path('answers/create', AnswerCreateView.as_view(), name='create-answer'),
 ]

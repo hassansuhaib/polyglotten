@@ -97,6 +97,20 @@ class QuestionCreateView(CreateAPIView):
     serializer_class = QuestionSerializer
     queryset = Question.objects.all()
 
+    def post(self, request, *args, **kwargs):
+        user_id = request.data.get('user')
+        try:
+            user = User.objects.get(id=user_id)
+        except:
+            return Response({'Error': 'User does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        title = request.data.get('title')
+        content = request.data.get('content')
+        question = Question(title=title, content=content, user=user)
+        question.save()
+        return question
+
+
+
 
 class AnswerCreateView(CreateAPIView):
     permission_classes = (IsAuthenticated, )
