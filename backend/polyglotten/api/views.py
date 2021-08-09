@@ -6,7 +6,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.generics import DestroyAPIView, CreateAPIView, UpdateAPIView, RetrieveAPIView, ListAPIView
 from rest_framework.pagination import PageNumberPagination
 
-from polyglotten.models import User, UserProfile, Ranking, Interest, Language, Question, Answer
+from polyglotten.models import User, UserProfile, Badge, Interest, Language, Question, Answer
 from polyglotten.api.serializers import *
 # Detail Views
 
@@ -39,13 +39,13 @@ class QuestionDetailView(APIView):
 
 # List Views
 
-class RankingListView(ListAPIView):
+class BadgeListView(ListAPIView):
     permission_classes = (IsAuthenticated, )
-    serializer_class = RankingSerializer
+    serializer_class = BadgeSerializer
     pagination_class = None
 
     def get_queryset(self):
-        qs = Ranking.objects.all()
+        qs = Badge.objects.all()
         return qs
 
 

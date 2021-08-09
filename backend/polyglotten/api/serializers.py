@@ -1,30 +1,29 @@
 from rest_framework import serializers, fields
-from polyglotten.models import User, UserProfile, Ranking, Interest, Language, Question, Answer
+from polyglotten.models import User, UserProfile, Badge, Interest, Language, Question, Answer
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'first_name',
-                  'last_name', 'email', 'is_active', 'email']
+        fields = '__all__'
 
 
-class RankingSerializer(serializers.ModelSerializer):
+class BadgeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Ranking
-        fields = ['title']
+        model = Badge
+        fields = '__all__'
 
 
 class InterestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Interest
-        fields = ['title']
+        fields = '__all__'
 
 
 class LanguageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Language
-        fields = ['title', 'classification']
+        fields = '__all__'
 
 
 class UserProfileSerializer(serializers.ModelSerializer):

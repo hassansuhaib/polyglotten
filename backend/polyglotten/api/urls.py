@@ -6,7 +6,7 @@ app_name = 'polyglotten'
 
 urlpatterns = [
     path('user-detail/', UserDetailView.as_view(), name='user-detail'),
-    path('rankings/', RankingListView.as_view(), name='rankings'),
+    path('badges/', BadgeListView.as_view(), name='badges'),
     path('interests/', InterestListView.as_view(), name='interests'),
     path('languages/', LanguageListView.as_view(), name='languages'),
     # Forum URLS
