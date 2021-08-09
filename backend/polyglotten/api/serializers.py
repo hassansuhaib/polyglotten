@@ -1,5 +1,5 @@
 from rest_framework import serializers, fields
-from polyglotten.models import User, UserProfile, Ranking, Interest, Language, Question, Answer, Vote
+from polyglotten.models import User, UserProfile, Ranking, Interest, Language, Question, Answer
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -44,6 +44,12 @@ class QuestionSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'content', 'created_at', 'user']
 
 
+class QuestionCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Question
+        fields = '__all__'
+
+
 class AnswerSerializer(serializers.ModelSerializer):
     user = UserSerializer()
 
@@ -52,11 +58,7 @@ class AnswerSerializer(serializers.ModelSerializer):
         fields = ['id', 'content', 'created_at', 'user']
 
 
-class VoteSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
-    question = QuestionSerializer()
-    answer = AnswerSerializer()
-
+class AnswerCreateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Vote
-        fields = ['user', 'question', 'answer', 'vote_type']
+        model = Answer
+        fields = '__all__'

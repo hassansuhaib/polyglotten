@@ -6,9 +6,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.generics import DestroyAPIView, CreateAPIView, UpdateAPIView, RetrieveAPIView, ListAPIView
 from rest_framework.pagination import PageNumberPagination
 
-from polyglotten.models import User, UserProfile, Ranking, Interest, Language, Question, Answer, Vote
-from polyglotten.api.serializers import UserSerializer, UserProfileSerializer, RankingSerializer, InterestSerializer, LanguageSerializer, QuestionSerializer, AnswerSerializer, VoteSerializer
-
+from polyglotten.models import User, UserProfile, Ranking, Interest, Language, Question, Answer
+from polyglotten.api.serializers import *
 # Detail Views
 
 
@@ -94,25 +93,11 @@ class AnswerListView(ListAPIView):
 
 class QuestionCreateView(CreateAPIView):
     permission_classes = (IsAuthenticated, )
-    serializer_class = QuestionSerializer
+    serializer_class = QuestionCreateSerializer
     queryset = Question.objects.all()
-
-    def post(self, request, *args, **kwargs):
-        user_id = request.data.get('user')
-        try:
-            user = User.objects.get(id=user_id)
-        except:
-            return Response({'Error': 'User does not exist'}, status=status.HTTP_404_NOT_FOUND)
-        title = request.data.get('title')
-        content = request.data.get('content')
-        question = Question(title=title, content=content, user=user)
-        question.save()
-        return question
-
-
 
 
 class AnswerCreateView(CreateAPIView):
     permission_classes = (IsAuthenticated, )
-    serializer_class = AnswerSerializer
+    serializer_class = QuestionCreateSerializer
     queryset = Answer.objects.all()
