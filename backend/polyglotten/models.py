@@ -258,7 +258,22 @@ class VoiceChannel(models.Model):
         return super(VoiceChannel, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.topid
+        return self.topic
+
+
+class Message(models.Model):
+    content = models.TextField()
+    image = models.FileField(upload_to='post_images/', null=True, blank=True)
+    edited = models.BooleanField(default=False)
+    edited_content = models.TextField(null=True, blank=True)
+    sender = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='sender')
+    receiver = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='receiver')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Sent by {self.sender} to {self.receiver}"
 
 
 def userprofile_receiver(sender, instance, created, *args, **kwargs):
