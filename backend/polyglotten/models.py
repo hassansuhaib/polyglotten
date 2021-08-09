@@ -12,7 +12,13 @@ GENDER_SELECTION = [
 
 LANGUAGE_SELECTION = [
     ('N', 'Native'),
-    ('T', 'Target')
+    ('T', 'Target'),
+]
+
+NOTIFICATION_TYPES = [
+    ('C', 'Comment'),
+    ('S', 'Share'),
+    ('L', 'Like'),
 ]
 
 
@@ -41,9 +47,6 @@ class Language(models.Model):
         return f'{self.title} {self.classification}'
 
 
-VOTE_TYPES = [('Q', 'Question'), ('A', 'Answer')]
-
-
 class UserProfile(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -52,6 +55,10 @@ class UserProfile(models.Model):
     languages = models.ManyToManyField(
         Language, related_name='language', through='UserLanguages', blank=True)
     friends = models.ManyToManyField(User, related_name='friends', blank=True)
+    cover_photo = models.FileField(
+        upload_to='user_profile/', null=True, blank=True)
+    profile_photo = models.FileField(
+        upload_to='user_profile/', null=True, blank=True)
 
     def __str__(self):
         return self.user.username
@@ -263,7 +270,8 @@ class VoiceChannel(models.Model):
 
 class Message(models.Model):
     content = models.TextField()
-    image = models.FileField(upload_to='post_images/', null=True, blank=True)
+    image = models.FileField(
+        upload_to='message_images/', null=True, blank=True)
     edited = models.BooleanField(default=False)
     edited_content = models.TextField(null=True, blank=True)
     sender = models.ForeignKey(
@@ -274,6 +282,38 @@ class Message(models.Model):
 
     def __str__(self):
         return f"Sent by {self.sender} to {self.receiver}"
+
+
+class Notification(models.Model):
+    created_at = models.DateTimeField(auto_add=True)
+    content = models.Charfield(max_length=250)
+    notification_type = models.Charfield(
+        max_length=5, choices=NOTIFICATION_TYPES)
+    from_user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="from_user")
+    to_user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="to_user")
+    post = models.ForeignKey(Post, on_delete=models.CASCADE,
+                             related_name='post_notification', null=True, blank=True)
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE,
+                                related_name='comment_notification', null=True, blank=True)
+    slug = models.CharField(max_length=400)
+
+    def save(self, *args, **kwargs):
+        if notification_type == 'L':
+            if post:
+                self.content = f'{self.from_user.first_name} liked your post'
+            else:
+                self.content = f'{self.from_user.first_name} liked your comment'
+        elif notification_type == 'C':
+            self.content = f'{self.from_user.first_name} commented on your post'
+        elif notification_type == 'S':
+            self.content = f'{self.from_user.first_name} shared your post'
+
+        return super(Notification, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.content
 
 
 def userprofile_receiver(sender, instance, created, *args, **kwargs):
