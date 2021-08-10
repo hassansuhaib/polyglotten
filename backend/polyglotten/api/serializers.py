@@ -29,10 +29,11 @@ class LanguageSerializer(serializers.ModelSerializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     language = LanguageSerializer()
+    interest = InterestSerializer()
 
     class Meta:
         model = UserProfile
-        fields = ['user', 'language']
+        fields = ['user', 'language', 'interest']
 
 
 class QuestionSerializer(serializers.ModelSerializer):

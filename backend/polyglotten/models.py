@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save
 from django.conf import settings
+import datetime
 
 
 GENDER_SELECTION = [
@@ -19,6 +20,12 @@ NOTIFICATION_TYPES = [
     ('C', 'Comment'),
     ('S', 'Share'),
     ('L', 'Like'),
+]
+
+QUIZ_LEVELS = [
+    ('B', 'Beginner'),
+    ('I', 'Intermediate'),
+    ('A', 'Advanced'),
 ]
 
 
@@ -47,6 +54,16 @@ class Language(models.Model):
         return f'{self.title} {self.classification}'
 
 
+class NotificationSettings(models.Model):
+    every = models.BooleanField(default=True)
+    post = models.BooleanField(default=True)
+    friend_request = models.BooleanField(default=True)
+    recommendations = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f'All: {self.every}, Post: {self.post}, Friend Request: {self.friend_request}, Recommendations: {self.recommendations}'
+
+
 class UserProfile(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -59,6 +76,8 @@ class UserProfile(models.Model):
         upload_to='user_profile/', null=True, blank=True)
     profile_photo = models.FileField(
         upload_to='user_profile/', null=True, blank=True)
+    notifications = models.OneToOneField(
+        NotificationSettings, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.user.username
@@ -284,10 +303,48 @@ class Message(models.Model):
         return f"Sent by {self.sender} to {self.receiver}"
 
 
+class Results(models.Model):
+    vocabulary = models.IntegerField()
+    translation = models.IntegerField()
+
+    def __str__(self):
+        return f"Vocabulary: {self.vocabulary} Translation: {self.translation}"
+
+
+class Quiz(models.Model):
+    level = models.CharField(max_length=10, choices=QUIZ_LEVELS)
+    time = models.TimeField(default=datetime.time(0, 20, 0))
+
+    def __str__(self):
+        return f"Level: {self.level} and Time: {self.time}"
+
+
+class MCQ(models.Model):
+    quiz = models.ForeignKey(
+        Quiz, on_delete=models.CASCADE, related_name='mcqs')
+    word = models.CharField(max_length=100)
+    choice_1 = models.CharField(max_length=100)
+    choice_2 = models.CharField(max_length=100)
+    choice_3 = models.CharField(max_length=100)
+    choice_4 = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.content
+
+
+class Translation(models.Model):
+    quiz = models.ForeignKey(
+        Quiz, on_delete=models.CASCADE, related_name='translations')
+    sentence = models.CharField(max_length=300)
+
+    def __str__(self):
+        return self.sentence
+
+
 class Notification(models.Model):
-    created_at = models.DateTimeField(auto_add=True)
-    content = models.Charfield(max_length=250)
-    notification_type = models.Charfield(
+    created_at = models.DateTimeField(auto_now=True)
+    content = models.CharField(max_length=250)
+    notification_type = models.CharField(
         max_length=5, choices=NOTIFICATION_TYPES)
     from_user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="from_user")
@@ -297,7 +354,6 @@ class Notification(models.Model):
                              related_name='post_notification', null=True, blank=True)
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE,
                                 related_name='comment_notification', null=True, blank=True)
-    slug = models.CharField(max_length=400)
 
     def save(self, *args, **kwargs):
         if notification_type == 'L':
