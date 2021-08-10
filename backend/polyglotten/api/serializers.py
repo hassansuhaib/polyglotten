@@ -5,7 +5,8 @@ from polyglotten.models import *
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ['first_name', 'last_name', 'id',
+                  'username', 'is_active', 'gender']
 
 
 class BadgeSerializer(serializers.ModelSerializer):
@@ -160,4 +161,16 @@ class QuestionCreateSerializer(serializers.ModelSerializer):
 class AnswerCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Answer
+        fields = '__all__'
+
+
+class PostCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = '__all__'
+
+
+class CommentCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
         fields = '__all__'

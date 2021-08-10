@@ -71,13 +71,21 @@ class UserProfile(models.Model):
         Interest, related_name='interests', blank=True)
     languages = models.ManyToManyField(
         Language, related_name='language', through='UserLanguages', blank=True)
-    friends = models.ManyToManyField(User, related_name='friends', blank=True)
+    friends = models.ManyToManyField(
+        User, related_name='friends', blank=True)
     cover_photo = models.FileField(
         upload_to='user_profile/', null=True, blank=True)
     profile_photo = models.FileField(
         upload_to='user_profile/', null=True, blank=True)
-    notifications = models.OneToOneField(
+    notification_settings = models.OneToOneField(
         NotificationSettings, on_delete=models.CASCADE)
+
+    def save(self, *args, **kwargs):
+        notification = NotificationSettings()
+        notification.save()
+        self.notification_settings = notification
+
+        return super(UserProfile, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.user.username
@@ -172,7 +180,7 @@ class Post(models.Model):
 class PostImage(models.Model):
     post = models.ForeignKey(
         Post, default=None, on_delete=models.CASCADE, related_name='images')
-    image = models.FileField(upload_to='post_images/')
+    image = models.ImageField(upload_to='post_images')
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
