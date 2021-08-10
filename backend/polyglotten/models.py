@@ -285,6 +285,7 @@ class VoiceChannel(models.Model):
         User, on_delete=models.CASCADE, null=True, blank=True, related_name='user_4')
 
     def save(self, *args, **kwargs):
+        # If it has all the users than of course it will be full
         if user_1 and user_2 and user_3 and user_4:
             self.full = True
         else:
@@ -309,14 +310,6 @@ class Message(models.Model):
 
     def __str__(self):
         return f"Sent by {self.sender} to {self.receiver}"
-
-
-class Result(models.Model):
-    vocabulary = models.IntegerField()
-    translation = models.IntegerField()
-
-    def __str__(self):
-        return f"Vocabulary: {self.vocabulary} Translation: {self.translation}"
 
 
 class Quiz(models.Model):
@@ -347,6 +340,19 @@ class Translation(models.Model):
 
     def __str__(self):
         return self.sentence
+
+
+class Result(models.Model):
+    quiz = models.ForeignKey(
+        Quiz, on_delete=models.CASCADE, related_name='results')
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='results')
+    vocabulary = models.IntegerField()
+    translation = models.IntegerField()
+    created_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Vocabulary: {self.vocabulary} Translation: {self.translation} taken on {self.created_at}"
 
 
 class Notification(models.Model):

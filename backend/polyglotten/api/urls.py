@@ -12,7 +12,7 @@ urlpatterns = [
     path('languages/', LanguageListView.as_view(), name='languages'),
     path('notifications/', NotificationListView.as_view(), name='notifications'),
 
-    # Forum URLS
+    # Q/A Forum URLS
     path('questions/', QuestionListView.as_view(), name='questions'),
     path('questions/create', QuestionCreateView.as_view(), name="create-question"),
     path('question-detail/<int:id>',
