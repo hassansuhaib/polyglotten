@@ -303,7 +303,7 @@ class Message(models.Model):
         return f"Sent by {self.sender} to {self.receiver}"
 
 
-class Results(models.Model):
+class Result(models.Model):
     vocabulary = models.IntegerField()
     translation = models.IntegerField()
 

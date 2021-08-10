@@ -1,5 +1,5 @@
 from rest_framework import serializers, fields
-from polyglotten.models import User, UserProfile, Badge, Interest, Language, Question, Answer
+from polyglotten.models import *
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -26,36 +26,135 @@ class LanguageSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class NotificationSettingsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NotificationSettings
+        fields = '__all__'
+
+
 class UserProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer()
-    language = LanguageSerializer()
-    interest = InterestSerializer()
+    languages = LanguageSerializer(many=True)
+    interests = InterestSerializer(many=True)
+    notifications = NotificationSettingsSerializer()
 
     class Meta:
         model = UserProfile
-        fields = ['user', 'language', 'interest']
+        fields = ['user', 'languages', 'interests',
+                  'cover_photo', 'profile_photo', 'notifications']
+
+
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = '__all__'
+
+
+class PostImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PostImage
+        fields = '__all__'
+
+
+class PostSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    sharing_user = UserSerializer()
+    tags = TagSerializer(many=True)
+    no_of_likes = serializers.SerializerMethodField()
+    images = PostImageSerializer(many=True)
+
+    class Meta:
+        model = Post
+        fields = ['user', 'content', 'images', 'created_at', 'edited', 'no_of_likes', 'likes',
+                  'tags', 'mentions', 'shared', 'shared_content', 'shared_at', 'sharing_user']
+
+    def get_no_of_likes(self, obj):
+        return obj.number_of_likes()
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    no_of_likes = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Comment
+        fields = ['user', 'post', 'content', 'created_at',
+                  'edited', 'likes', 'no_of_likes', 'tags', 'mentions']
+
+    def get_no_of_likes(self, obj):
+        return obj.number_of_likes()
 
 
 class QuestionSerializer(serializers.ModelSerializer):
     user = UserSerializer()
+    tags = TagSerializer(many=True)
+    no_of_votes = serializers.SerializerMethodField()
 
     class Meta:
         model = Question
-        fields = ['id', 'title', 'content', 'created_at', 'user']
+        fields = ['id', 'title', 'content', 'created_at',
+                  'user', 'edited', 'tags', 'no_of_votes']
+
+    def get_no_of_votes(self, obj):
+        return obj.number_of_votes()
+
+
+class AnswerSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    no_of_votes = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Answer
+        fields = ['id', 'content', 'created_at',
+                  'user', 'edited', 'no_of_votes']
+
+    def get_no_of_votes(self, obj):
+        return obj.number_of_votes()
+
+
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = ['content', 'image', 'edited',
+                  'edited_content', 'sender', 'receiver', 'created_at']
+
+
+class ResultsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Result
+        fields = '__all__'
+
+
+class QuizSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Quiz
+        fields = '__all__'
+
+
+class MCQSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MCQ
+        fields = '__all__'
+
+
+class TranslationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Translation
+        fields = '__all__'
+
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = '__all__'
+
+# Creation Serializers
 
 
 class QuestionCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
         fields = '__all__'
-
-
-class AnswerSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
-
-    class Meta:
-        model = Answer
-        fields = ['id', 'content', 'created_at', 'user']
 
 
 class AnswerCreateSerializer(serializers.ModelSerializer):

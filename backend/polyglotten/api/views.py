@@ -6,7 +6,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.generics import DestroyAPIView, CreateAPIView, UpdateAPIView, RetrieveAPIView, ListAPIView
 from rest_framework.pagination import PageNumberPagination
 
-from polyglotten.models import User, UserProfile, Badge, Interest, Language, Question, Answer
+from polyglotten.models import *
 from polyglotten.api.serializers import *
 # Detail Views
 
@@ -88,8 +88,8 @@ class AnswerListView(ListAPIView):
         qs = Answer.objects.all()
         return qs
 
-# Create API Views
 
+# Create API Views
 
 class QuestionCreateView(CreateAPIView):
     permission_classes = (IsAuthenticated, )
