@@ -69,16 +69,54 @@ class NotificationListView(ListAPIView):
 # API Views
 
 
-class EditAboutView(APIView):
+# class EditNotificationSettingsView(APIView):
+#     permission_classes = (AllowAny, )
+
+#     def post(self, request, *args, **kwargs):
+#         new_settings = request.data.get('settings')
+#         try:
+#             user_profile = UserProfile.objects.get(user=request.user.id)
+#             user_profile.notification_settings.every = new_settings.every
+#             user_profile.notification_settings.post = new_settings.post
+#             user_profile.notification_settings.friend_request = new_settings.friend_request
+#             user_profile.notification_settings.recommendations = new_settings.recommendations
+#             user_profile.notification.save()
+#             return Response(UserProfileSerializer(user_profile).data, status=status.HTTP_200_OK)
+#         except Exception as e:
+#             return Response({'Error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+# Update Views
+
+class ProfileUpdateView(UpdateAPIView):
+    permission_classes = (AllowAny, )
+    serializer_class = UserProfileSerializer
+
+    def get_queryset(self):
+        profile = UserProfile.objects.filter(user=self.request.user.id)
+        return profile
+
+
+class NotificationUpdateView(UpdateAPIView):
+    permission_classes = (AllowAny, )
+    serializer_class = NotificationSerializer
+
+    def get_queryset(self):
+        notifications = Notification.objects.filter(user=self.request.user.id)
+        return notifications
+
+
+class MarkAllNotificationsView(APIView):
     permission_classes = (AllowAny, )
 
     def post(self, request, *args, **kwargs):
-        about = request.data.get('about')
         try:
-            user_profile = UserProfile.objects.get(user=request.user.id)
-            user_profile.about = about
-            user_profile.save()
-            return Response(UserProfileSerializer(user_profile).data, status=status.HTTP_200_OK)
+            notifications = Notification.objects.filter(
+                read=False, user=request.user.id)
+            for notification in notifications:
+                notification.read = True
+                notification.save()
+            return Response(NotificationSerializer(notifications, many=True).data, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'Error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -150,7 +188,8 @@ class MessageListView(ListAPIView):
     pagination_class = None
 
     def get_queryset(self):
-        qs = Message.objects.all()
+        qs = Message.objects.filter(
+            sender=self.request.user.id, receiver=self.request.user.id)
         return qs
 
 
@@ -294,7 +333,7 @@ class LikeView(APIView):
             return Response({'Error': str(e)}, status=status.HTTP_200_OK)
 
 
-class ShareView(APIView):
+class PostShareView(APIView):
     permission_classes = (AllowAny, )
 
     def post(self, request, *args, **kwargs):
@@ -327,21 +366,25 @@ class PostEditView(APIView):
         except Exception as e:
             return Response({'Error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
+# Update Views
 
-class CommentEditView(APIView):
+
+class PostUpdateView(UpdateAPIView):
     permission_classes = (AllowAny, )
+    serializer_class = PostSerializer
 
-    def post(self, request, *args, **kwargs):
-        edited_content = request.data.get('edited_content')
-        comment_id = request.data.get('comment_id')
-        try:
-            comment = Comment.objects.get(id=comment_id)
-            comment.content = edited_content
-            comment.edited = True
-            comment.save()
-            return Response(PostSerializer(comment).data, status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response({'Error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+    def get_queryset(self):
+        posts = Post.objects.filter(user=self.request.user.id)
+        return posts
+
+
+class CommentUpdateView(UpdateAPIView):
+    permission_classes = (AllowAny, )
+    serializer_class = CommentSerializer
+
+    def get_queryset(self):
+        comments = Comment.objects.filter(user=self.request.user.id)
+        return comments
 
 
 """ Q/A Forum Views """
@@ -381,6 +424,26 @@ class AnswerCreateView(CreateAPIView):
     permission_classes = (AllowAny, )
     serializer_class = QuestionCreateSerializer
     queryset = Answer.objects.all()
+
+
+# Update Views
+class QuestionUpdateView(UpdateAPIView):
+    permission_classes = (AllowAny, )
+    serializer_class = QuestionSerializer
+
+    def get_queryset(self):
+        questions = Question.objects.filter(user=self.request.user.id)
+        return questions
+
+
+class AnswerUpdateView(UpdateAPIView):
+    permission_classes = (AllowAny, )
+    serializer_class = AnswerSerializer
+
+    def get_queryset(self):
+        answers = Answer.objects.filter(user=self.request.user.id)
+        return answers
+
 
 # API Views
 

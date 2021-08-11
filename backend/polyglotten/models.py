@@ -370,6 +370,7 @@ class Result(models.Model):
 class Notification(models.Model):
     created_at = models.DateTimeField(auto_now=True)
     content = models.CharField(max_length=250)
+    read = models.BooleanField(default=False)
     notification_type = models.CharField(
         max_length=5, choices=NOTIFICATION_TYPES)
     from_user = models.ForeignKey(
