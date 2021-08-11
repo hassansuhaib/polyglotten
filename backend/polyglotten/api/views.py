@@ -66,6 +66,80 @@ class NotificationListView(ListAPIView):
         qs = Notification.objects.filter(user=self.request.user)
         return qs
 
+# API Views
+
+
+class EditAboutView(APIView):
+    permission_classes = (AllowAny, )
+
+    def post(self, request, *args, **kwargs):
+        about = request.data.get('about')
+        try:
+            user_profile = UserProfile.objects.get(user=request.user.id)
+            user_profile.about = about
+            user_profile.save()
+            return Response(UserProfileSerializer(user_profile).data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'Error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class LanguageAddView(APIView):
+    permission_classes = (AllowAny, )
+
+    def post(self, request, *args, **kwargs):
+        language = request.data.get('language')
+        classification = request.data.get('classification')
+        try:
+            user_profile = UserProfile.objects.get(user=request.user.id)
+            language_obj = Languages.objects.get(title=language)
+            user_profile.add(language_obj, through_defaults={
+                             'classification': classification})
+            return Response(UserProfileSerializer(user_profile).data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'Error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class LanguageRemoveView(APIView):
+    permission_classes = (AllowAny, )
+
+    def post(self, request, *args, **kwargs):
+        language = request.data.get('language')
+        try:
+            user_profile = UserProfile.objects.get(user=request.user.id)
+            language_obj = Languages.objects.get(title=language)
+            user_profile.remove(language_obj)
+            return Response(UserProfileSerializer(user_profile).data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'Error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class InterestAddView(APIView):
+    permission_classes = (AllowAny, )
+
+    def post(self, request, *args, **kwargs):
+        interest = request.data.get('interest')
+        try:
+            user_profile = UserProfile.objects.get(user=request.user.id)
+            interest_obj = Interests.objects.get(title=interest)
+            user_profile.add(interest_obj)
+            return Response(UserProfileSerializer(user_profile).data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'Error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class InterestRemoveView(APIView):
+    permission_classes = (AllowAny, )
+
+    def post(self, request, *args, **kwargs):
+        interest = request.data.get('interest')
+        try:
+            user_profile = UserProfile.objects.get(user=request.user.id)
+            interest_obj = Interests.objects.get(title=interest)
+            user_profile.remove(interest_obj)
+            return Response(UserProfileSerializer(user_profile).data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'Error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
 
 """ Message Related Views """
 
