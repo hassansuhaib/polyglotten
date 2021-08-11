@@ -155,7 +155,25 @@ class NotificationSerializer(serializers.ModelSerializer):
         model = Notification
         fields = '__all__'
 
+
+class VoiceChannelSerializer(serializers.ModelSerializer):
+    user_1 = UserSerializer()
+    user_2 = UserSerializer()
+    user_3 = UserSerializer()
+    user_4 = UserSerializer()
+
+    class Meta:
+        model = VoiceChannel
+        fields = ['id', 'user_1', 'user_2',
+                  'user_3', 'user_4', 'language', 'full']
+
+
 # Creation Serializers
+
+class VoiceChannelCreationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VoiceChannel
+        fields = '__all__'
 
 
 class QuestionCreateSerializer(serializers.ModelSerializer):

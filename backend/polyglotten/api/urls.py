@@ -63,6 +63,17 @@ urlpatterns = [
     path('quiz/results/', ResultListView.as_view(), name='results'),
 
     # Message URLS
-    path('messages/all/', MessageListView.as_view(), name='messages')
+    path('messages/all/', MessageListView.as_view(), name='messages'),
+
+    # Voice Channel URLS
+    path('voice-channels/create/', VoiceChannelCreateView.as_view(),
+         name='create-voice-channel'),
+    path('voice-channels/detail/<int:id>/', VoiceChannelDetailView.as_view(),
+         name='voice-channel-detail'),
+    path('voice-channels/all/', VoiceChannelListView.as_view(),
+         name='voice-channels'),
+    path('voice-channels/<pk>/update/',
+         VoiceChannelUpdateView.as_view(), name='update-voice-channel'),
+
 
 ]

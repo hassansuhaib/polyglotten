@@ -477,3 +477,30 @@ class UpvoteView(APIView):
             return Response({'Message': 'Upvoted!'}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'Error': str(e)}, status=status.HTTP_200_OK)
+
+
+""" Voice Channels """
+
+
+class VoiceChannelCreateView(CreateAPIView):
+    permission_classes = (AllowAny, )
+    serializer_class = VoiceChannelCreationSerializer
+    queryset = VoiceChannel.objects.all()
+
+
+class VoiceChannelDetailView(RetrieveAPIView):
+    permission_classes = (AllowAny, )
+    serializer_class = VoiceChannelSerializer
+    queryset = VoiceChannel.objects.all()
+
+
+class VoiceChannelListView(ListAPIView):
+    permission_classes = (AllowAny, )
+    serializer_class = VoiceChannelSerializer
+    queryset = VoiceChannel.objects.all()
+
+
+class VoiceChannelUpdateView(UpdateAPIView):
+    permission_classes = (AllowAny, )
+    serializer_class = VoiceChannelCreationSerializer
+    queryset = VoiceChannel.objects.all()
