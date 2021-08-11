@@ -67,6 +67,7 @@ class NotificationSettings(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    about = models.CharField(max_length=250, null=True, blank=True)
     interests = models.ManyToManyField(
         Interest, related_name='interests', blank=True)
     languages = models.ManyToManyField(
@@ -324,6 +325,7 @@ class MCQ(models.Model):
     quiz = models.ForeignKey(
         Quiz, on_delete=models.CASCADE, related_name='mcqs')
     word = models.CharField(max_length=100)
+    answer = models.CharField(max_length=100)
     choice_1 = models.CharField(max_length=100)
     choice_2 = models.CharField(max_length=100)
     choice_3 = models.CharField(max_length=100)
@@ -337,6 +339,7 @@ class Translation(models.Model):
     quiz = models.ForeignKey(
         Quiz, on_delete=models.CASCADE, related_name='translations')
     sentence = models.CharField(max_length=300)
+    answer = models.CharField(max_length=300)
 
     def __str__(self):
         return self.sentence
@@ -349,7 +352,16 @@ class Result(models.Model):
         User, on_delete=models.CASCADE, related_name='results')
     vocabulary = models.IntegerField()
     translation = models.IntegerField()
+    passed = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now=True)
+    level = models.CharField(max_length=20, choices=QUIZ_LEVELS)
+
+    def save(self, *args, **kwargs):
+        if vocabulary > 6 and translation > 6:
+            self.passed = True
+        self.level = self.quiz.level
+
+        return super(Results, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"Vocabulary: {self.vocabulary} Translation: {self.translation} taken on {self.created_at}"

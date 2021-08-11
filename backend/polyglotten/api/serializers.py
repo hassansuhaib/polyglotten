@@ -42,7 +42,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = ['user', 'languages', 'interests',
-                  'cover_photo', 'profile_photo', 'notifications']
+                  'cover_photo', 'profile_photo', 'notifications', 'about']
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -120,16 +120,13 @@ class MessageSerializer(serializers.ModelSerializer):
                   'edited_content', 'sender', 'receiver', 'created_at']
 
 
-class ResultsSerializer(serializers.ModelSerializer):
+class ResultSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
     class Meta:
         model = Result
-        fields = '__all__'
-
-
-class QuizSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Quiz
-        fields = '__all__'
+        fields = ['quiz', 'user', 'vocabulary',
+                  'translation', 'created_at', 'passed', 'level']
 
 
 class MCQSerializer(serializers.ModelSerializer):
@@ -142,6 +139,15 @@ class TranslationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Translation
         fields = '__all__'
+
+
+class QuizSerializer(serializers.ModelSerializer):
+    mcqs = MCQSerializer(many=True)
+    tranlations = TranslationSerializer(many=True)
+
+    class Meta:
+        model = Quiz
+        fields = ['id', 'level', 'mcqs', 'translations', 'time']
 
 
 class NotificationSerializer(serializers.ModelSerializer):

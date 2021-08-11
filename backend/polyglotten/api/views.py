@@ -8,7 +8,9 @@ from rest_framework.pagination import PageNumberPagination
 
 from polyglotten.models import *
 from polyglotten.api.serializers import *
-# Detail Views
+
+
+""" User Related Views """
 
 
 class UserDetailView(RetrieveAPIView):
@@ -22,22 +24,8 @@ class UserDetailView(RetrieveAPIView):
         except User.DoesNotExist:
             raise Http404("User does not exist")
 
-
-class QuestionDetailView(APIView):
-    permission_classes = (AllowAny, )
-
-    def get(self, request, id, *args, **kwargs):
-        try:
-            question = Question.objects.get(id=id)
-            answers = question.answers.all()
-            question_serializer = QuestionSerializer(question)
-            answers_serializer = AnswerSerializer(answers, many=True)
-            return Response({'question': question_serializer.data, 'answers': answers_serializer.data}, status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response({'Error': str(e)}, status=status.HTTP_404_NOT_FOUND)
-
-
 # List Views
+
 
 class BadgeListView(ListAPIView):
     permission_classes = (AllowAny, )
@@ -69,24 +57,17 @@ class LanguageListView(ListAPIView):
         return qs
 
 
-class CommentListView(ListAPIView):
+class NotificationListView(ListAPIView):
     permission_classes = (AllowAny, )
-    serializer_class = CommentSerializer
+    serializer_class = NotificationSerializer
     pagination_class = None
 
     def get_queryset(self):
-        qs = Comment.objects.all()
+        qs = Notification.objects.filter(user=self.request.user)
         return qs
 
 
-class PostListView(ListAPIView):
-    permission_classes = (AllowAny, )
-    serializer_class = PostSerializer
-    pagination_class = None
-
-    def get_queryset(self):
-        qs = Post.objects.all()
-        return qs
+""" Message Related Views """
 
 
 class MessageListView(ListAPIView):
@@ -97,6 +78,11 @@ class MessageListView(ListAPIView):
     def get_queryset(self):
         qs = Message.objects.all()
         return qs
+
+
+""" Quiz Related Views """
+
+# List Views
 
 
 class MCQListView(ListAPIView):
@@ -119,14 +105,174 @@ class TranslationListView(ListAPIView):
         return qs
 
 
-class NotificationListView(ListAPIView):
+class ResultListView(ListAPIView):
     permission_classes = (AllowAny, )
-    serializer_class = NotificationSerializer
+    serializer_class = ResultSerializer
     pagination_class = None
 
     def get_queryset(self):
-        qs = Notification.objects.all()
+        qs = Result.objects.filter(user=self.request.user)
         return qs
+
+# Detail Views
+
+
+class QuizDetailView(RetrieveAPIView):
+    permission_classes = (AllowAny, )
+    serializer_class = QuizSerializer
+
+    def get_object(self):
+        level = self.request.query_params.get('level')
+        try:
+            quiz = Quiz.objects.get(level=level)
+            return Quiz
+        except:
+            raise Http404("Error fetching the quiz.")
+
+
+# API Views
+
+class QuizCompletionView(APIView):
+    permission_classes = (AllowAny, )
+
+    def post(self, request, *args, **kwargs):
+        quiz_id = request.data.get('quiz_id')
+        vocabulary_answers = request.data.get('vocabulary')
+        translation_answers = request.data.get('translations')
+        try:
+            quiz = Quiz.objects.get(id=quiz_id)
+            mcqs = quiz.mcqs.all()
+            translations = quiz.translations.all()
+            vocab_result = 0
+            translation_result = 0
+            # The answers should be according to sequence of questions in the quiz for this to work
+            for index, mcq in enumerate(mcqs):
+                if vocabulary_answers[index] == mcq.answer:
+                    vocab_result += 1
+            for index, translation in enumerate(translations):
+                if translation_answer[index] == translation.answer:
+                    translation_result += 1
+
+            result = Result(quiz=quiz, user=request.user,
+                            vocabulary=vocab_result, translation=translation_result, level=quiz.level)
+            result.save()
+            return Response(ResultSerializer(result).data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'Error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+""" Post Related Views """
+
+# List Views
+
+
+class CommentListView(ListAPIView):
+    permission_classes = (AllowAny, )
+    serializer_class = CommentSerializer
+    pagination_class = None
+
+    def get_queryset(self):
+        qs = Comment.objects.all()
+        return qs
+
+
+class PostListView(ListAPIView):
+    permission_classes = (AllowAny, )
+    serializer_class = PostSerializer
+    pagination_class = None
+
+    def get_queryset(self):
+        qs = Post.objects.all()
+        return qs
+
+# Create Views
+
+
+class PostCreateView(CreateAPIView):
+    permission_classes = (AllowAny, )
+    serializer_class = PostCreateSerializer
+    queryset = Post.objects.all()
+
+
+class CommentCreateView(CreateAPIView):
+    permission_classes = (AllowAny, )
+    serializer_class = CommentCreateSerializer
+    queryset = Comment.objects.all()
+
+
+# API Views
+
+
+class LikeView(APIView):
+    permission_classes = (AllowAny, )
+
+    def post(self, request, like_type, id, *args, **kwargs):
+        try:
+            user = User.objects.get(id=request.user.id)
+            if like_type == 'comment':
+                comment = Comment.objects.get(id=id)
+                comment.likes.add(user)
+            else:
+                post = Post.objects.get(id=id)
+                post.likes.add(user)
+            return Response({'Message': 'Liked!'}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'Error': str(e)}, status=status.HTTP_200_OK)
+
+
+class ShareView(APIView):
+    permission_classes = (AllowAny, )
+
+    def post(self, request, *args, **kwargs):
+        sharing_user = User.objects.get(id=request.user.id)
+        shared_content = request.data.get('shared_content')
+        post_id = request.data.get('post_id')
+        try:
+            post = Post.objects.get(id=post_id)
+            post.shared_content = shared_content
+            post.sharing_user = sharing_user
+            post.shared = True
+            post.save()
+            return Response(PostSerializer(post).data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'Error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PostEditView(APIView):
+    permission_classes = (AllowAny, )
+
+    def post(self, request, *args, **kwargs):
+        edited_content = request.data.get('edited_content')
+        post_id = request.data.get('post_id')
+        try:
+            post = Post.objects.get(id=post_id)
+            post.content = edited_content
+            post.edited = True
+            post.save()
+            return Response(PostSerializer(post).data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'Error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CommentEditView(APIView):
+    permission_classes = (AllowAny, )
+
+    def post(self, request, *args, **kwargs):
+        edited_content = request.data.get('edited_content')
+        comment_id = request.data.get('comment_id')
+        try:
+            comment = Comment.objects.get(id=comment_id)
+            comment.content = edited_content
+            comment.edited = True
+            comment.save()
+            return Response(PostSerializer(comment).data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'Error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+""" Q/A Forum Views """
+
+# List Views
 
 
 class QuestionListView(ListAPIView):
@@ -148,27 +294,36 @@ class AnswerListView(ListAPIView):
         qs = Answer.objects.all()
         return qs
 
-# Post Related Views
+# Create Views
 
 
-class LikeView(APIView):
+class QuestionCreateView(CreateAPIView):
+    permission_classes = (AllowAny, )
+    serializer_class = QuestionCreateSerializer
+    queryset = Question.objects.all()
+
+
+class AnswerCreateView(CreateAPIView):
+    permission_classes = (AllowAny, )
+    serializer_class = QuestionCreateSerializer
+    queryset = Answer.objects.all()
+
+# API Views
+
+
+class QuestionDetailView(APIView):
     permission_classes = (AllowAny, )
 
-    def post(self, request, like_type, id, *args, **kwargs):
+    def get(self, request, id, *args, **kwargs):
         try:
-            user = User.objects.get(id=request.user.id)
-            if like_type == 'comment':
-                comment = Comment.objects.get(id=id)
-                comment.likes.add(user)
-            else:
-                post = Post.objects.get(id=id)
-                post.likes.add(user)
-            return Response({'Message': 'Liked!'}, status=status.HTTP_200_OK)
+            question = Question.objects.get(id=id)
+            answers = question.answers.all()
+            question_serializer = QuestionSerializer(question)
+            answers_serializer = AnswerSerializer(answers, many=True)
+            return Response({'question': question_serializer.data, 'answers': answers_serializer.data}, status=status.HTTP_200_OK)
         except Exception as e:
-            return Response({'Error': str(e)}, status=status.HTTP_200_OK)
+            return Response({'Error': str(e)}, status=status.HTTP_404_NOT_FOUND)
 
-
-# Q/A Forum Views
 
 class UpvoteView(APIView):
     permission_classes = (AllowAny, )
@@ -185,29 +340,3 @@ class UpvoteView(APIView):
             return Response({'Message': 'Upvoted!'}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'Error': str(e)}, status=status.HTTP_200_OK)
-
-# Create API Views
-
-
-class QuestionCreateView(CreateAPIView):
-    permission_classes = (AllowAny, )
-    serializer_class = QuestionCreateSerializer
-    queryset = Question.objects.all()
-
-
-class AnswerCreateView(CreateAPIView):
-    permission_classes = (AllowAny, )
-    serializer_class = QuestionCreateSerializer
-    queryset = Answer.objects.all()
-
-
-class PostCreateView(CreateAPIView):
-    permission_classes = (AllowAny, )
-    serializer_class = PostCreateSerializer
-    queryset = Post.objects.all()
-
-
-class CommentCreateView(CreateAPIView):
-    permission_classes = (AllowAny, )
-    serializer_class = CommentCreateSerializer
-    queryset = Comment.objects.all()
