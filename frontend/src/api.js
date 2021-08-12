@@ -19,18 +19,20 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config
 
-    console.log('Resposne: ', error.response.status)
+    console.log('Response: ', error.response ? error.response.status : error)
 
     // Prevent infinite loops
     if (
+      error.reponse &&
       error.response.status === 401 &&
-      originalRequest.url === urls.refreshToken
+      originalRequest.url === urls.tokenRefresh
     ) {
       window.location.href = '/login/'
       return Promise.reject(error)
     }
 
     if (
+      error.reponse &&
       error.response.status === 401 &&
       error.response.statusText === 'Unauthorized'
     ) {
@@ -45,7 +47,7 @@ api.interceptors.response.use(
 
         if (tokenParts.exp > now) {
           try {
-            const response = await api.post(urls.refreshToken, {
+            const response = await api.post(urls.tokenRefresh, {
               refresh,
             })
             setNewHeaders(response)

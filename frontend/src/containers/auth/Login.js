@@ -7,26 +7,37 @@ import * as Yup from 'yup'
 import TextField from '../../components/Form/TextField'
 import Checkbox from '../../components/Form/Checkbox'
 
-import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box'
-import CssBaseline from '@material-ui/core/CssBaseline'
 import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
+import { Grid } from '@material-ui/core'
+import { Container } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: '100vh',
+    paddingTop: theme.spacing(10),
+    paddingBottom: theme.spacing(10),
   },
   form: {
     width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
+  login: {
+    backgroundColor: 'white',
+  },
+  text: {
+    textAlign: 'center',
+  },
+  buttons: {
+    '& > *': {
+      marginTop: theme.spacing(2),
+    },
   },
 }))
 
@@ -49,59 +60,80 @@ const Login = ({ location }) => {
   }
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Box boxShadow={3} p={5}>
-          <Typography component="h1" variant="h5">
-            Login
-          </Typography>
-          <Formik
-            onSubmit={handleSubmit}
-            initialValues={{ username: '', password: '', remember: '' }}
-            validateOnChange={true}
-            validationSchema={validationSchema}
-          >
-            {({ values }) => (
-              <Form className={classes.form}>
-                <TextField
-                  id="username"
-                  label="Username"
-                  name="username"
-                  autoComplete="username"
-                  type="text"
-                  variant="outlined"
-                  margin="normal"
-                  required
-                  fullWidth
-                />
-                <TextField
-                  id="password"
-                  name="password"
-                  type={values.show_password ? 'text' : 'password'}
-                  label="Password"
-                  autoComplete="password"
-                  variant="outlined"
-                  margin="normal"
-                  required
-                  fullWidth
-                />
-                <Checkbox name="show_password" label="Show password" />
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  className={classes.submit}
-                >
-                  {'Login'}
-                </Button>
-              </Form>
-            )}
-          </Formik>
-        </Box>
-      </div>
-    </Container>
+    <div className={classes.paper}>
+      <Container>
+        <Grid
+          container
+          alignItems="center"
+          justifyContent="center"
+          direction="column"
+        >
+          <Grid item xs={12} md={8} lg={4}>
+            <Box boxShadow={3} p={5} className={classes.login}>
+              <div className={classes.text}>
+                <Typography component="h1" variant="h5">
+                  Login
+                </Typography>
+              </div>
+              <Formik
+                onSubmit={handleSubmit}
+                initialValues={{ username: '', password: '', remember: '' }}
+                validateOnChange={true}
+                validationSchema={validationSchema}
+              >
+                {({ values }) => (
+                  <Form className={classes.form}>
+                    <TextField
+                      id="username"
+                      label="Username"
+                      name="username"
+                      autoComplete="username"
+                      type="text"
+                      variant="outlined"
+                      margin="normal"
+                      required
+                      fullWidth
+                    />
+                    <TextField
+                      id="password"
+                      name="password"
+                      type={values.show_password ? 'text' : 'password'}
+                      label="Password"
+                      autoComplete="password"
+                      variant="outlined"
+                      margin="normal"
+                      required
+                      fullWidth
+                    />
+                    <Checkbox name="show_password" label="Show password" />
+                    <div className={classes.buttons}>
+                      <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                      >
+                        {'Login'}
+                      </Button>
+                      <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="secondary"
+                        className={classes.submit}
+                      >
+                        {'Login with Google'}
+                      </Button>
+                    </div>
+                  </Form>
+                )}
+              </Formik>
+            </Box>
+          </Grid>
+        </Grid>
+      </Container>
+    </div>
   )
 }
 

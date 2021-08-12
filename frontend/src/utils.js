@@ -1,9 +1,9 @@
-import axiosAPI, { setNewHeaders } from './api/axiosApi'
-import { refreshToken } from './constants'
+import api, { setNewHeaders } from './api'
+import { tokenRefresh } from './constants'
 
 export const refreshToken = (refresh) => {
-  axiosAPI
-    .post(refreshToken, {
+  api
+    .post(tokenRefresh, {
       refresh,
     })
     .then((response) => {

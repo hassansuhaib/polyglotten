@@ -1,17 +1,16 @@
 import React from 'react'
 import Nav from '../../components/Nav/Nav'
-import Footer from '../../components/Footer/Footer'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { makeStyles } from '@material-ui/core/styles'
+import { Container } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
-  pagewrap: {
-    display: 'flex',
-    flexDirection: 'column',
-    minHeight: '100vh',
-  },
   main: {
-    flexGrow: '1',
+    '& > *': {
+      minHeight: '100vh',
+      paddingTop: theme.spacing(10),
+      paddingBottom: theme.spacing(10),
+    },
   },
 }))
 
@@ -20,11 +19,8 @@ const Layout = (props) => {
   return (
     <React.Fragment>
       <CssBaseline />
-      <div className={classes.pagewrap}>
-        <Nav />
-        <div className={classes.main}>{props.children}</div>
-        <Footer />
-      </div>
+      <Nav />
+      <div className={classes.main}>{props.children}</div>
     </React.Fragment>
   )
 }

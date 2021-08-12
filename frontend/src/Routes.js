@@ -8,6 +8,7 @@ import Register from './containers/Auth/Register'
 import Profile from './containers/Profile/Profile'
 import Forum from './containers/Forum/Forum'
 import QuestionDetail from './components/Question/QuestionDetail'
+import PrivateRoute from './components/Authentication/PrivateRoute'
 
 const Routes = withRouter(({ location }) => {
   return (
@@ -17,18 +18,16 @@ const Routes = withRouter(({ location }) => {
           <Route exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
-          <Route
-            exact
-            path="/profile/:username"
-            render={(props) => <Profile key={props.location.key} {...props} />}
-          />
           <Route exact path="/forum" component={Forum} />
           <Route
             exact
             path="/forum/question/:id"
-            render={(props) => (
-              <QuestionDetail key={props.location.key} {...props} />
-            )}
+            render={(props) => <QuestionDetail key={location.key} {...props} />}
+          />
+          <PrivateRoute
+            exact
+            path="/profile/:username"
+            render={(props) => <Profile key={location.key} {...props} />}
           />
         </Switch>
       </Layout>

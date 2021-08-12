@@ -8,17 +8,32 @@ import history from './history'
 import ThemeProvider from '@material-ui/styles/ThemeProvider'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import theme from './theme'
+import { makeStyles } from '@material-ui/core/styles'
 
 // For using custom font
 import '@fontsource/quicksand'
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    // backgroundImage: `url(${
+    //   process.env.PUBLIC_URL + '/assets/background/bg.jpg'
+    // })`,
+    // backgroundRepeat: 'no-repeat',
+    // backgroundSize: 'cover',
+    backgroundColor: '#e5e5f7',
+    backgroundImage: 'radial-gradient(#444cf7 0.5px, #e5e5f7 0.5px)',
+    backgroundSize: '10px 10px',
+  },
+}))
+
 const App = () => {
+  const classes = useStyles()
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(authCheckState())
   }, [])
   return (
-    <div className="App">
+    <div className={classes.root}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Router history={history}>

@@ -9,11 +9,20 @@ import Button from '@material-ui/core/Button'
 import Link from '@material-ui/core/Link'
 
 import logo from './logo192.png'
+import { AppBar, Toolbar } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
-  nav: {
-    display: 'flex',
-    justifyContent: 'space-between',
+  appbar: {
+    background: 'none',
+    color: 'primary',
+  },
+  appbarTitle: {
+    flexGrow: 1,
+    textDecoration: 'none',
+    color: 'primary',
+  },
+  title: {
+    marginLeft: theme.spacing(2),
   },
 }))
 
@@ -27,43 +36,47 @@ const Nav = () => {
   }
 
   return (
-    <div className={classes.nav}>
-      <Link component={RouterLink} to="/">
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <img src={logo} alt="logo" width="28" />
-          <Typography variant="h6" className={classes.title}>
-            Polyglotten
-          </Typography>
-        </div>
-      </Link>
-      <div>
-        {auth.token ? (
-          <React.Fragment>
-            <Button
-              color="primary"
-              component={RouterLink}
-              to={`/profile/${auth.user.username}`}
-            >
-              {auth.user.username}
+    <div>
+      <AppBar className={classes.appbar} elevation={0}>
+        <Toolbar>
+          <Link component={RouterLink} to="/" className={classes.appbarTitle}>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <img src={logo} alt="logo" width="28" />
+              <Typography variant="h6" className={classes.title}>
+                Polyglotten
+              </Typography>
+            </div>
+          </Link>
+          <div>
+            {auth.token ? (
+              <React.Fragment>
+                <Button
+                  color="primary"
+                  component={RouterLink}
+                  to={`/profile/${auth.user.username}`}
+                >
+                  {auth.user.username}
+                </Button>
+                <Button color="primary" onClick={handleLogout}>
+                  Logout
+                </Button>
+              </React.Fragment>
+            ) : (
+              <React.Fragment>
+                <Button color="primary" component={RouterLink} to="/login">
+                  Login
+                </Button>
+                <Button color="primary" component={RouterLink} to="/register">
+                  Register
+                </Button>
+              </React.Fragment>
+            )}
+            <Button color="primary" component={RouterLink} to="/forum">
+              Forum
             </Button>
-            <Button color="primary" onClick={handleLogout}>
-              Logout
-            </Button>
-          </React.Fragment>
-        ) : (
-          <React.Fragment>
-            <Button color="primary" component={RouterLink} to="/login">
-              Login
-            </Button>
-            <Button color="primary" component={RouterLink} to="/register">
-              Register
-            </Button>
-          </React.Fragment>
-        )}
-        <Button color="primary" component={RouterLink} to="/forum">
-          Forum
-        </Button>
-      </div>
+          </div>
+        </Toolbar>
+      </AppBar>
     </div>
   )
 }

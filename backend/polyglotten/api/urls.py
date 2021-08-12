@@ -13,13 +13,13 @@ urlpatterns = [
 
     # Notification URLS
     path('notifications/', NotificationListView.as_view(), name='notifications'),
-    path('notifications/<pk>/', UpdateNotificationView.as_view(),
+    path('notifications/<pk>/', NotificationUpdateView.as_view(),
          name='notification-read'),
     path('notifications/mark/all/', MarkAllNotificationsView.as_view(),
          name='notifications-all-read'),
 
     # User Profile URLS
-    path('profile/edit/', ProfileEditView.as_view(), name='edit-profile'),
+    path('profile/edit/', ProfileUpdateView.as_view(), name='edit-profile'),
 
     # Q/A Forum URLS
     path('forum/questions/', QuestionListView.as_view(), name='questions'),
