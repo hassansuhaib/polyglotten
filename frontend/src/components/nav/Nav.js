@@ -19,9 +19,11 @@ const useStyles = makeStyles((theme) => ({
     color: 'primary',
   },
   appbarTitle: {
-    flexGrow: 1,
     textDecoration: 'none',
     color: 'primary',
+    [theme.breakpoints.down('md')]: {
+      flex: '1',
+    },
   },
   title: {
     marginLeft: theme.spacing(2),
@@ -54,29 +56,23 @@ const Nav = () => {
                 </Typography>
               </div>
             </Link>
-            <div>
-              <Hidden mdDown>
-                {auth.token ? (
-                  <React.Fragment></React.Fragment>
-                ) : (
-                  <React.Fragment>
-                    <Button color="primary" component={RouterLink} to="/login">
-                      Login
-                    </Button>
-                    <Button
-                      color="primary"
-                      component={RouterLink}
-                      to="/register"
-                    >
-                      Register
-                    </Button>
-                  </React.Fragment>
-                )}
-              </Hidden>
-              <Hidden lgUp>
-                <SideDrawer />
-              </Hidden>
-            </div>
+            <Hidden mdDown>
+              {auth.token ? (
+                <React.Fragment></React.Fragment>
+              ) : (
+                <React.Fragment>
+                  <Button color="primary" component={RouterLink} to="/login">
+                    Login
+                  </Button>
+                  <Button color="primary" component={RouterLink} to="/register">
+                    Register
+                  </Button>
+                </React.Fragment>
+              )}
+            </Hidden>
+            <Hidden lgUp>
+              <SideDrawer />
+            </Hidden>
           </Toolbar>
         </Container>
       </AppBar>

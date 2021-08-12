@@ -21,44 +21,43 @@ import ForumIcon from '@material-ui/icons/Forum'
 const useStyles = makeStyles((theme) => ({
   sidebar: {
     position: 'fixed',
-  },
-  heading: {
-    textAlign: 'left',
     paddingLeft: theme.spacing(2),
     paddingTop: theme.spacing(2),
   },
+  heading: {},
 }))
 
-const SideBar = () => {
+const RightBar = () => {
   const classes = useStyles()
   return (
     <div className={classes.sidebar}>
-      <div className={classes.heading}>
-        <Typography variant="h6" component="p">
-          Recommended Users
-        </Typography>
-      </div>
-
-      <List>
-        <ListItem button component={RouterLink} to={`/profile`}>
+      <List
+        aria-labelledby="nested-list-subheader"
+        subheader={
+          <Typography variant="h6" component="p" id="nested-list-subheader">
+            Recommended Users
+          </Typography>
+        }
+      >
+        <ListItem disableGutters button component={RouterLink} to={`/profile`}>
           <ListItemIcon>
             <PersonIcon />
           </ListItemIcon>
           <ListItemText primary="Imtinan" />
         </ListItem>
-        <ListItem button component={RouterLink} to={`/profile`}>
+        <ListItem disableGutters button component={RouterLink} to={`/profile`}>
           <ListItemIcon>
             <PersonIcon />
           </ListItemIcon>
           <ListItemText primary="Usman" />
         </ListItem>
-        <ListItem button component={RouterLink} to={`/profile`}>
+        <ListItem disableGutters button component={RouterLink} to={`/profile`}>
           <ListItemIcon>
             <PersonIcon />
           </ListItemIcon>
           <ListItemText primary="Ahmed" />
         </ListItem>
-        <ListItem button component={RouterLink} to={`/profile`}>
+        <ListItem disableGutters button component={RouterLink} to={`/profile`}>
           <ListItemIcon>
             <PersonIcon />
           </ListItemIcon>
@@ -68,4 +67,4 @@ const SideBar = () => {
     </div>
   )
 }
-export default SideBar
+export default RightBar

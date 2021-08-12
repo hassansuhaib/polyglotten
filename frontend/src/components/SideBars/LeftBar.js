@@ -19,12 +19,10 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import ForumIcon from '@material-ui/icons/Forum'
 
 const useStyles = makeStyles((theme) => ({
-  sidebar: {
-    position: 'fixed',
-  },
+  sidebar: {},
 }))
 
-const SideBar = () => {
+const LeftBar = ({ styling }) => {
   const classes = useStyles()
   const auth = useSelector((state) => state.auth)
   const dispatch = useDispatch()
@@ -33,7 +31,7 @@ const SideBar = () => {
     dispatch(logout())
   }
   return (
-    <List className={classes.sidebar}>
+    <List className={styling}>
       <ListItem disableGutters button>
         <ListItemIcon>
           <HomeIcon />
@@ -89,4 +87,4 @@ const SideBar = () => {
     </List>
   )
 }
-export default SideBar
+export default LeftBar

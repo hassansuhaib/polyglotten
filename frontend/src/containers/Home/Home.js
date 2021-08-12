@@ -2,8 +2,8 @@ import React from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 
 import Feed from '../../components/Feed/Feed'
-import LeftBar from '../../components/LeftBar/LeftBar'
-import RightBar from '../../components/RightBar/RightBar'
+import LeftBar from '../../components/SideBars/LeftBar'
+import RightBar from '../../components/SideBars/RightBar'
 
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
@@ -17,6 +17,9 @@ const useStyles = makeStyles((theme) => ({
     minHeight: '100vh',
   },
   toolbar: theme.mixins.toolbar,
+  leftBar: {
+    position: 'fixed',
+  },
 }))
 
 const Home = () => {
@@ -28,7 +31,7 @@ const Home = () => {
         <Grid container>
           <Hidden mdDown>
             <Grid item className={classes.text} xs={12} md={4} lg={3}>
-              <LeftBar />
+              <LeftBar styling={classes.leftBar} />
             </Grid>
           </Hidden>
           <Grid item className={classes.text} xs={12} md={8} lg={6}>
