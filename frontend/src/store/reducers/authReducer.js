@@ -3,6 +3,7 @@ import {
   AUTH_SUCCESS,
   AUTH_FAIL,
   AUTH_LOGOUT,
+  AUTH_RESET,
 } from '../actions/actionTypes'
 
 const INITIAL_STATE = {
@@ -28,6 +29,8 @@ export const authReducer = (state = INITIAL_STATE, action) => {
       return { ...state, error: action.payload, loading: false }
     case AUTH_LOGOUT:
       return { ...state, token: null }
+    case AUTH_RESET:
+      return INITIAL_STATE
     default:
       return state
   }

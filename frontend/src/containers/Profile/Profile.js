@@ -1,7 +1,23 @@
 import React from 'react'
 
-const Profile = (props) => {
-  return <h1>User Profile: {props.match.params.username}</h1>
-}
+import { makeStyles } from '@material-ui/core/styles'
+import { Container, Typography } from '@material-ui/core'
 
+const useStyles = makeStyles((theme) => ({
+  toolbar: theme.mixins.toolbar,
+}))
+
+const Profile = () => {
+  const classes = useStyles()
+  return (
+    <div>
+      <div className={classes.toolbar} />
+      <Container>
+        <Typography variant="h3" component="h3">
+          User profile
+        </Typography>
+      </Container>
+    </div>
+  )
+}
 export default Profile

@@ -23,6 +23,12 @@ export const authFail = (error) => {
   }
 }
 
+export const authReset = () => {
+  return {
+    type: actionTypes.AUTH_RESET,
+  }
+}
+
 export const logout = () => {
   localStorage.removeItem('access_token')
   localStorage.removeItem('refresh_token')

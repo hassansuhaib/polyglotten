@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { login } from '../../store/actions/auth'
+import { login, authReset } from '../../store/actions/auth'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 
@@ -20,9 +20,6 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: '100vh',
-    paddingTop: theme.spacing(10),
-    paddingBottom: theme.spacing(10),
   },
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -39,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
       marginTop: theme.spacing(2),
     },
   },
+  toolbar: theme.mixins.toolbar,
 }))
 
 const validationSchema = Yup.object({
@@ -52,6 +50,10 @@ const Login = ({ location }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
 
+  useEffect(() => {
+    window.scrollTo(0, 0)
+    dispatch(authReset())
+  }, [])
   // For redirection after login
   const { from } = location.state || { from: { pathname: '/' } }
   const handleSubmit = ({ username, password }) => {
@@ -61,6 +63,7 @@ const Login = ({ location }) => {
 
   return (
     <div className={classes.paper}>
+      <div className={classes.toolbar} />
       <Container>
         <Grid
           container

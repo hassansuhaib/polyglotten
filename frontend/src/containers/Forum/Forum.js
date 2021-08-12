@@ -10,6 +10,7 @@ import { Typography } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   forum: {},
+  toolbar: theme.mixins.toolbar,
 }))
 
 const Forum = () => {
@@ -34,6 +35,7 @@ const Forum = () => {
 
   return (
     <div className={classes.forum}>
+      <div className={classes.toolbar} />
       <Container>
         <Typography variant="h3" component="h1">
           Q/A Forum

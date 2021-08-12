@@ -8,12 +8,11 @@ import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import Link from '@material-ui/core/Link'
 
-import logo from './logo192.png'
 import { AppBar, Toolbar } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   appbar: {
-    background: 'none',
+    background: 'white',
     color: 'primary',
   },
   appbarTitle: {
@@ -41,7 +40,11 @@ const Nav = () => {
         <Toolbar>
           <Link component={RouterLink} to="/" className={classes.appbarTitle}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
-              <img src={logo} alt="logo" width="28" />
+              <img
+                src={process.env.PUBLIC_URL + '/assets/logos/logo192.png'}
+                alt="logo"
+                width="28"
+              />
               <Typography variant="h6" className={classes.title}>
                 Polyglotten
               </Typography>

@@ -16,3 +16,15 @@ export const isAuthenticated = () => {
   const token = localStorage.getItem('access_token')
   return !!token
 }
+
+export const showError = (error) => {
+  try {
+    if (error) {
+      for (const key in error.response.data) {
+        return error.response.data[key]
+      }
+    }
+  } catch {
+    return 'An Error Occurred'
+  }
+}

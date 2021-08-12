@@ -1,6 +1,7 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { signUp } from '../../store/actions/auth'
+import { showError } from '../../utils'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 
@@ -18,13 +19,10 @@ import { Container } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    minHeight: '100vh',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: theme.spacing(10),
-    paddingBottom: theme.spacing(10),
   },
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -40,6 +38,15 @@ const useStyles = makeStyles((theme) => ({
   },
   text: {
     textAlign: 'center',
+    marginBottom: theme.spacing(2),
+  },
+  toolbar: theme.mixins.toolbar,
+  names: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    '& > *': {
+      flexBasis: '45%',
+    },
   },
 }))
 
@@ -73,6 +80,7 @@ const validationSchema = Yup.object({
 const Register = ({ location }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
+  const status = useSelector((state) => state.auth)
   // For redirection after login
   const { from } = location.state || { from: { pathname: '/' } }
 
@@ -113,6 +121,7 @@ const Register = ({ location }) => {
 
   return (
     <div className={classes.paper}>
+      <div className={classes.toolbar} />
       <Container>
         <Grid
           container
@@ -123,11 +132,15 @@ const Register = ({ location }) => {
           <Grid item xs={12} md={8} lg={4}>
             <Box boxShadow={3} p={5} className={classes.register}>
               <div className={classes.text}>
-                <Typography component="h1" variant="h5">
+                <Typography component="h2" variant="h5">
                   Register
                 </Typography>
               </div>
-
+              <div className={classes.text}>
+                <Typography variant="subtitle1" component="p" color="error">
+                  {showError(status.error)}
+                </Typography>
+              </div>
               <Formik
                 onSubmit={handleSubmit}
                 initialValues={{
@@ -145,23 +158,23 @@ const Register = ({ location }) => {
               >
                 {({ values }) => (
                   <Form className={classes.form}>
-                    <TextField
-                      autoComplete="fname"
-                      name="firstName"
-                      id="firstName"
-                      label="First Name"
-                      autoFocus
-                      fullWidth
-                      required
-                    />
-                    <TextField
-                      autoComplete="lname"
-                      name="lastName"
-                      id="lastName"
-                      label="Last Name"
-                      fullWidth
-                      required
-                    />
+                    <div className={classes.names}>
+                      <TextField
+                        autoComplete="fname"
+                        name="firstName"
+                        id="firstName"
+                        label="First Name"
+                        autoFocus
+                        required
+                      />
+                      <TextField
+                        autoComplete="lname"
+                        name="lastName"
+                        id="lastName"
+                        label="Last Name"
+                        required
+                      />
+                    </div>
                     <TextField
                       autoComplete="email"
                       name="email"
