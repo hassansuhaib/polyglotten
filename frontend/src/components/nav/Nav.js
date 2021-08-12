@@ -2,11 +2,14 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link as RouterLink } from 'react-router-dom'
 import { logout } from '../../store/actions/auth'
+import SideDrawer from './SideDrawer'
 
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import Link from '@material-ui/core/Link'
+import Hidden from '@material-ui/core/Hidden'
+import { Container } from '@material-ui/core'
 
 import { AppBar, Toolbar } from '@material-ui/core'
 
@@ -37,48 +40,45 @@ const Nav = () => {
   return (
     <div>
       <AppBar className={classes.appbar} elevation={0}>
-        <Toolbar>
-          <Link component={RouterLink} to="/" className={classes.appbarTitle}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <img
-                src={process.env.PUBLIC_URL + '/assets/logos/logo192.png'}
-                alt="logo"
-                width="28"
-              />
-              <Typography variant="h6" className={classes.title}>
-                Polyglotten
-              </Typography>
+        <Container disableGutters>
+          <Toolbar>
+            <Link component={RouterLink} to="/" className={classes.appbarTitle}>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <img
+                  src={process.env.PUBLIC_URL + '/assets/logos/logo192.png'}
+                  alt="logo"
+                  width="28"
+                />
+                <Typography variant="h6" className={classes.title}>
+                  Polyglotten
+                </Typography>
+              </div>
+            </Link>
+            <div>
+              <Hidden mdDown>
+                {auth.token ? (
+                  <React.Fragment></React.Fragment>
+                ) : (
+                  <React.Fragment>
+                    <Button color="primary" component={RouterLink} to="/login">
+                      Login
+                    </Button>
+                    <Button
+                      color="primary"
+                      component={RouterLink}
+                      to="/register"
+                    >
+                      Register
+                    </Button>
+                  </React.Fragment>
+                )}
+              </Hidden>
+              <Hidden lgUp>
+                <SideDrawer />
+              </Hidden>
             </div>
-          </Link>
-          <div>
-            {auth.token ? (
-              <React.Fragment>
-                <Button
-                  color="primary"
-                  component={RouterLink}
-                  to={`/profile/${auth.user.username}`}
-                >
-                  {auth.user.username}
-                </Button>
-                <Button color="primary" onClick={handleLogout}>
-                  Logout
-                </Button>
-              </React.Fragment>
-            ) : (
-              <React.Fragment>
-                <Button color="primary" component={RouterLink} to="/login">
-                  Login
-                </Button>
-                <Button color="primary" component={RouterLink} to="/register">
-                  Register
-                </Button>
-              </React.Fragment>
-            )}
-            <Button color="primary" component={RouterLink} to="/forum">
-              Forum
-            </Button>
-          </div>
-        </Toolbar>
+          </Toolbar>
+        </Container>
       </AppBar>
     </div>
   )

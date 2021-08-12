@@ -2,9 +2,10 @@ import React from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 
 import Feed from '../../components/Feed/Feed'
+import LeftBar from '../../components/LeftBar/LeftBar'
+import RightBar from '../../components/RightBar/RightBar'
 
 import Grid from '@material-ui/core/Grid'
-import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
 
 import { Container, Hidden, Typography } from '@material-ui/core'
@@ -14,8 +15,6 @@ const useStyles = makeStyles((theme) => ({
   text: {
     textAlign: 'center',
     minHeight: '100vh',
-    backgroundColor: 'pink',
-    border: '2px solid white',
   },
   toolbar: theme.mixins.toolbar,
 }))
@@ -29,9 +28,7 @@ const Home = () => {
         <Grid container>
           <Hidden mdDown>
             <Grid item className={classes.text} xs={12} md={4} lg={3}>
-              <Typography variant="h5" component="h3">
-                Profile
-              </Typography>
+              <LeftBar />
             </Grid>
           </Hidden>
           <Grid item className={classes.text} xs={12} md={8} lg={6}>
@@ -39,9 +36,7 @@ const Home = () => {
           </Grid>
           <Hidden mdDown>
             <Grid item className={classes.text} xs={12} md={4} lg={3}>
-              <Typography variant="h5" component="h3">
-                Settings
-              </Typography>
+              <RightBar />
             </Grid>
           </Hidden>
         </Grid>

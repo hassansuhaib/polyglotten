@@ -10,9 +10,6 @@ const Feed = () => {
   const classes = useStyles()
   return (
     <div>
-      <Typography variant="h4" component="h4">
-        Feed
-      </Typography>
       <Post />
       <Post />
       <Post />
