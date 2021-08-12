@@ -8,6 +8,10 @@ import Login from './containers/Auth/Login'
 import Register from './containers/Auth/Register'
 import Profile from './containers/Profile/Profile'
 import Forum from './containers/Forum/Forum'
+import Settings from './containers/Settings/Settings'
+import VoiceChannels from './containers/VoiceChannels/VoiceChannels'
+import Quizzes from './containers/Quizzes/Quizzes'
+import Setup from './containers/Setup/Setup'
 
 import QuestionDetail from './components/Question/QuestionDetail'
 import PrivateRoute from './components/Routes/PrivateRoute'
@@ -27,7 +31,8 @@ const Routes = withRouter(({ location }) => {
             path="/forum/question/:id"
             render={(props) => <QuestionDetail key={location.key} {...props} />}
           />
-          <PrivateRoute exact path="/profile/:username" component={Profile} />
+          <PrivateRoute exact path="/:view" component={Home} />
+          <PrivateRoute exact path="/:view/:username" component={Home} />
         </Switch>
       </Layout>
     </div>

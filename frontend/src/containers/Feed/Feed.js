@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { makeStyles } from '@material-ui/core/styles'
-import Post from './Post'
+import Post from '../../components/Post/Post'
 import { Typography } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({}))

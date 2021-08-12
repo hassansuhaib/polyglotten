@@ -11,7 +11,6 @@ const Profile = () => {
   const classes = useStyles()
   return (
     <div>
-      <div className={classes.toolbar} />
       <Container>
         <Typography variant="h3" component="h3">
           User profile

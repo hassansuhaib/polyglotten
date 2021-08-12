@@ -32,7 +32,7 @@ const LeftBar = ({ styling }) => {
   }
   return (
     <List className={styling}>
-      <ListItem disableGutters button>
+      <ListItem disableGutters button component={RouterLink} to={`/`}>
         <ListItemIcon>
           <HomeIcon />
         </ListItemIcon>
@@ -42,7 +42,7 @@ const LeftBar = ({ styling }) => {
         disableGutters
         button
         component={RouterLink}
-        to={`/profile/${auth.user.username}`}
+        to={`/profile/${auth ? auth.user.username : ''}`}
       >
         <ListItemIcon>
           <PersonIcon />
