@@ -8,6 +8,8 @@ const useStyles = makeStyles((theme) => ({
   toolbar: theme.mixins.toolbar,
   profile: {
     textAlign: 'left',
+    paddingLeft: '1rem',
+    paddingRight: '1rem',
   },
   coverPhoto: {
     width: '100%',
@@ -24,15 +26,13 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row-reverse',
     alignItems: 'center',
-    paddingLeft: '1rem',
-    paddingRight: '1rem',
   },
   profileDiv: {
     position: 'absolute',
     width: '150px',
     height: '150px',
     bottom: '0',
-    left: '1rem',
+    left: '38%',
     borderRadius: '50%' /*don't forget prefixes*/,
     backgroundImage: `url(${
       process.env.PUBLIC_URL + '/assets/profile_photos/philip.jpg'
@@ -40,9 +40,16 @@ const useStyles = makeStyles((theme) => ({
     backgroundPosition: 'center center',
     backgroundSize: 'contain',
   },
-  name: {
-    paddingLeft: '1rem',
-    paddingRight: '1rem',
+  language: {
+    border: '1px solid green',
+    borderRadius: '10px',
+    minWidth: '30px',
+    padding: theme.spacing(1),
+  },
+  languages: {
+    display: 'flex',
+    justifyContent: 'space-evenly',
+    flexWrap: 'wrap',
   },
 }))
 
@@ -52,13 +59,64 @@ const Profile = () => {
     window.scrollTo(0, 0)
     document.title = 'Profile'
   }, [])
+
+  const renderLanguages = () => {
+    return (
+      <div className={classes.languages}>
+        <div className={classes.language}>
+          <Typography variant="subtitle1">German</Typography>
+        </div>
+        <div className={classes.language}>
+          <Typography variant="subtitle1">German</Typography>
+        </div>
+        <div className={classes.language}>
+          <Typography variant="subtitle1">German</Typography>
+        </div>
+        <div className={classes.language}>
+          <Typography variant="subtitle1">German</Typography>
+        </div>
+        <div className={classes.language}>
+          <Typography variant="subtitle1">German</Typography>
+        </div>
+        <div className={classes.language}>
+          <Typography variant="subtitle1">German</Typography>
+        </div>
+      </div>
+    )
+  }
+
+  const renderInterests = () => {
+    return (
+      <div className={classes.languages}>
+        <div className={classes.language}>
+          <Typography variant="subtitle1">Football</Typography>
+        </div>
+        <div className={classes.language}>
+          <Typography variant="subtitle1">Football</Typography>
+        </div>
+        <div className={classes.language}>
+          <Typography variant="subtitle1">Football</Typography>
+        </div>
+        <div className={classes.language}>
+          <Typography variant="subtitle1">Football</Typography>
+        </div>
+        <div className={classes.language}>
+          <Typography variant="subtitle1">Football</Typography>
+        </div>
+        <div className={classes.language}>
+          <Typography variant="subtitle1">Football</Typography>
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <Grid container className={classes.profile}>
+    <Grid container>
       <Grid item xs={12}>
         <div className={classes.coverPhoto}></div>
         <div className={classes.imagesDiv}>
           <div className={classes.profileDiv}></div>
-          <Button variant="contained" color="primary">
+          <Button variant="outlined" color="primary">
             Edit Profile
           </Button>
         </div>
@@ -71,15 +129,38 @@ const Profile = () => {
           </Typography>
         </div>
       </Grid>
-      <Grid item xs={12}></Grid>
       <Grid item xs={12}>
-        <Typography variant="h5">Languages</Typography>
+        <Typography variant="h6">Languages</Typography>
+        {renderLanguages()}
       </Grid>
       <Grid item xs={12}>
         <Typography variant="h5">Interests</Typography>
+        {renderInterests()}
       </Grid>
       <Grid item xs={12}>
         <Typography variant="h5">Friends</Typography>
+        <ul style={{ listStyle: 'none' }}>
+          <li>
+            <Typography variant="body1" component="p">
+              John Doe
+            </Typography>
+          </li>
+          <li>
+            <Typography variant="body1" component="p">
+              John Doe
+            </Typography>
+          </li>
+          <li>
+            <Typography variant="body1" component="p">
+              John Doe
+            </Typography>
+          </li>
+          <li>
+            <Typography variant="body1" component="p">
+              John Doe
+            </Typography>
+          </li>
+        </ul>
       </Grid>
       <Grid item xs={12}>
         <Feed />
