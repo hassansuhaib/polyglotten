@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { signUp } from '../../store/actions/auth'
+import { signUp, authReset } from '../../store/actions/auth'
 import { showError } from '../../utils'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
@@ -83,6 +83,12 @@ const Register = ({ location }) => {
   const status = useSelector((state) => state.auth)
   // For redirection after login
   const { from } = location.state || { from: { pathname: '/' } }
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+    dispatch(authReset())
+    document.title = 'Register'
+  }, [])
 
   const handleSubmit = ({
     username,

@@ -17,6 +17,7 @@ import VolumeUpIcon from '@material-ui/icons/VolumeUp'
 import SubjectIcon from '@material-ui/icons/Subject'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import ForumIcon from '@material-ui/icons/Forum'
+import SearchIcon from '@material-ui/icons/Search'
 
 const useStyles = makeStyles((theme) => ({
   sidebar: {},
@@ -31,18 +32,24 @@ const LeftBar = ({ styling }) => {
     dispatch(logout())
   }
   return (
-    <List className={styling}>
+    <List className={styling} disablePadding>
       <ListItem disableGutters button component={RouterLink} to={`/`}>
         <ListItemIcon>
           <HomeIcon />
         </ListItemIcon>
         <ListItemText primary="Home" />
       </ListItem>
+      <ListItem disableGutters button component={RouterLink} to={`/search`}>
+        <ListItemIcon>
+          <SearchIcon />
+        </ListItemIcon>
+        <ListItemText primary="Search" />
+      </ListItem>
       <ListItem
         disableGutters
         button
         component={RouterLink}
-        to={`/profile/${auth ? auth.user.username : ''}`}
+        to={`/profile/${auth.user ? auth.user.username : ''}`}
       >
         <ListItemIcon>
           <PersonIcon />

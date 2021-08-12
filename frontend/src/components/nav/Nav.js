@@ -15,7 +15,7 @@ import { AppBar, Toolbar } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   appbar: {
-    background: 'white',
+    background: 'none',
     color: 'primary',
   },
   appbarTitle: {

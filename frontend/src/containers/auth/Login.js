@@ -53,6 +53,7 @@ const Login = ({ location }) => {
   useEffect(() => {
     window.scrollTo(0, 0)
     dispatch(authReset())
+    document.title = 'Login'
   }, [])
   // For redirection after login
   const { from } = location.state || { from: { pathname: '/' } }

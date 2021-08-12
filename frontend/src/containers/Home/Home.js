@@ -3,10 +3,10 @@ import { Link as RouterLink } from 'react-router-dom'
 
 import Feed from '../Feed/Feed'
 import Settings from '../Settings/Settings'
-import Forum from '../Forum/Forum'
 import Quizzes from '../Quizzes/Quizzes'
 import VoiceChannels from '../VoiceChannels/VoiceChannels'
 import Profile from '../Profile/Profile'
+import Search from '../Search/Search'
 
 import LeftBar from '../../components/SideBars/LeftBar'
 import RightBar from '../../components/SideBars/RightBar'
@@ -32,8 +32,6 @@ const Home = (props) => {
   const classes = useStyles()
   const view = props.match.params.view
   const username = props.match.params.username
-  console.log(view)
-  console.log('Username: ', username)
 
   const renderView = () => {
     switch (view) {
@@ -43,6 +41,8 @@ const Home = (props) => {
         return <Quizzes />
       case 'voice-channels':
         return <VoiceChannels />
+      case 'search':
+        return <Search />
       case 'profile':
         return <Profile username={username} />
       default:

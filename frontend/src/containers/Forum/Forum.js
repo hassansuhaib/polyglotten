@@ -25,6 +25,7 @@ const Forum = () => {
         .then((response) => setState({ questions: response.data }))
     }
     getQuestions()
+    document.title = 'Forum'
   }, [])
 
   const renderQuestions = () => {

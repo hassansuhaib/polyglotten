@@ -22,7 +22,6 @@ const useStyles = makeStyles((theme) => ({
   sidebar: {
     position: 'fixed',
     paddingLeft: theme.spacing(2),
-    paddingTop: theme.spacing(2),
   },
   heading: {},
 }))
@@ -33,6 +32,7 @@ const RightBar = () => {
     <div className={classes.sidebar}>
       <List
         aria-labelledby="nested-list-subheader"
+        disablePadding
         subheader={
           <Typography variant="h6" component="p" id="nested-list-subheader">
             Recommended Users
