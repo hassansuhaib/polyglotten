@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   root: {},
   text: {
     textAlign: 'center',
-    minHeight: '100vh',
+    minHeight: '92vh',
   },
   toolbar: theme.mixins.toolbar,
   leftBar: {

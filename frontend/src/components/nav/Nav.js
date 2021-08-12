@@ -41,7 +41,7 @@ const Nav = () => {
 
   return (
     <div>
-      <AppBar className={classes.appbar} elevation={0}>
+      <AppBar className={classes.appbar} elevation={1}>
         <Container disableGutters>
           <Toolbar>
             <Link component={RouterLink} to="/" className={classes.appbarTitle}>
