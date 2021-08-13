@@ -26,6 +26,8 @@ const Routes = withRouter(({ location }) => {
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/forum" component={Forum} />
+          <Route exact path="/settings" component={Settings} />
+          <Route exact path="/settings/:option" component={Settings} />
           <Route
             exact
             path="/forum/question/:id"

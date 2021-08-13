@@ -1,12 +1,13 @@
-import React from 'react'
+import React, { Profiler } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 
 import Feed from '../Feed/Feed'
-import Settings from '../Settings/Settings'
 import Quizzes from '../Quizzes/Quizzes'
 import VoiceChannels from '../VoiceChannels/VoiceChannels'
 import Profile from '../Profile/Profile'
 import Search from '../Search/Search'
+import Notifications from '../Notifications/Notifications'
+import Messages from '../Messages/MessageList'
 
 import LeftBar from '../../components/SideBars/LeftBar'
 import RightBar from '../../components/SideBars/RightBar'
@@ -35,8 +36,6 @@ const Home = (props) => {
 
   const renderView = () => {
     switch (view) {
-      case 'settings':
-        return <Settings />
       case 'tests':
         return <Quizzes />
       case 'voice-channels':
@@ -45,6 +44,10 @@ const Home = (props) => {
         return <Search />
       case 'profile':
         return <Profile username={username} />
+      case 'notifications':
+        return <Notifications />
+      case 'messages':
+        return <Messages username={username} />
       default:
         return <Feed />
     }
