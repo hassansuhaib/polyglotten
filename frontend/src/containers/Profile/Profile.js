@@ -43,13 +43,16 @@ const useStyles = makeStyles((theme) => ({
   language: {
     border: '1px solid green',
     borderRadius: '10px',
-    minWidth: '30px',
+    minWidth: '100px',
     padding: theme.spacing(1),
   },
   languages: {
     display: 'flex',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-between',
     flexWrap: 'wrap',
+    '& > *': {
+      margin: '10px',
+    },
   },
 }))
 
@@ -64,22 +67,22 @@ const Profile = () => {
     return (
       <div className={classes.languages}>
         <div className={classes.language}>
-          <Typography variant="subtitle1">German</Typography>
+          <Typography variant="subtitle2">German</Typography>
         </div>
         <div className={classes.language}>
-          <Typography variant="subtitle1">German</Typography>
+          <Typography variant="subtitle2">Spanish</Typography>
         </div>
         <div className={classes.language}>
-          <Typography variant="subtitle1">German</Typography>
+          <Typography variant="subtitle2">Arabic</Typography>
         </div>
         <div className={classes.language}>
-          <Typography variant="subtitle1">German</Typography>
+          <Typography variant="subtitle2">Italian</Typography>
         </div>
         <div className={classes.language}>
-          <Typography variant="subtitle1">German</Typography>
+          <Typography variant="subtitle2">Afrikaans</Typography>
         </div>
         <div className={classes.language}>
-          <Typography variant="subtitle1">German</Typography>
+          <Typography variant="subtitle2">Urdu</Typography>
         </div>
       </div>
     )
@@ -89,22 +92,22 @@ const Profile = () => {
     return (
       <div className={classes.languages}>
         <div className={classes.language}>
-          <Typography variant="subtitle1">Football</Typography>
+          <Typography variant="subtitle2">Football</Typography>
         </div>
         <div className={classes.language}>
-          <Typography variant="subtitle1">Football</Typography>
+          <Typography variant="subtitle2">Football</Typography>
         </div>
         <div className={classes.language}>
-          <Typography variant="subtitle1">Football</Typography>
+          <Typography variant="subtitle2">Football</Typography>
         </div>
         <div className={classes.language}>
-          <Typography variant="subtitle1">Football</Typography>
+          <Typography variant="subtitle2">Football</Typography>
         </div>
         <div className={classes.language}>
-          <Typography variant="subtitle1">Football</Typography>
+          <Typography variant="subtitle2">Football</Typography>
         </div>
         <div className={classes.language}>
-          <Typography variant="subtitle1">Football</Typography>
+          <Typography variant="subtitle2">Football</Typography>
         </div>
       </div>
     )

@@ -18,6 +18,8 @@ import SubjectIcon from '@material-ui/icons/Subject'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import ForumIcon from '@material-ui/icons/Forum'
 import SearchIcon from '@material-ui/icons/Search'
+import NotificationsIcon from '@material-ui/icons/Notifications'
+import ChatIcon from '@material-ui/icons/Chat'
 
 const useStyles = makeStyles((theme) => ({
   sidebar: {},
@@ -55,6 +57,23 @@ const LeftBar = ({ styling }) => {
           <PersonIcon />
         </ListItemIcon>
         <ListItemText primary="Profile" />
+      </ListItem>
+      <ListItem disableGutters button component={RouterLink} to={`/messages`}>
+        <ListItemIcon>
+          <ChatIcon />
+        </ListItemIcon>
+        <ListItemText primary="Messages" />
+      </ListItem>
+      <ListItem
+        disableGutters
+        button
+        component={RouterLink}
+        to={`/notifications`}
+      >
+        <ListItemIcon>
+          <NotificationsIcon />
+        </ListItemIcon>
+        <ListItemText primary="Notifications" />
       </ListItem>
       <ListItem
         disableGutters
