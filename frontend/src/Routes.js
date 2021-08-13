@@ -26,13 +26,11 @@ const Routes = withRouter(({ location }) => {
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/forum" component={Forum} />
+          <Route exact path="/forum/:view/:id" component={Forum} />
           <Route exact path="/settings" component={Settings} />
-          <Route exact path="/settings/:option" component={Settings} />
-          <Route
-            exact
-            path="/forum/question/:id"
-            render={(props) => <QuestionDetail key={location.key} {...props} />}
-          />
+          <Route exact path="/settings/:view" component={Settings} />
+          <Route exact path="/tests" component={Quizzes} />
+          <Route exact path="/tests/:view" component={Quizzes} />
           <PrivateRoute exact path="/:view" component={Home} />
           <PrivateRoute exact path="/:view/:username" component={Home} />
         </Switch>

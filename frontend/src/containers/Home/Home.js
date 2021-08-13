@@ -1,4 +1,4 @@
-import React, { Profiler } from 'react'
+import React from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 
 import Feed from '../Feed/Feed'
@@ -36,8 +36,6 @@ const Home = (props) => {
 
   const renderView = () => {
     switch (view) {
-      case 'tests':
-        return <Quizzes />
       case 'voice-channels':
         return <VoiceChannels />
       case 'search':

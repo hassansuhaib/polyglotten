@@ -1,37 +1,33 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 
-import Question from '../../components/Question/Question'
 import Container from '@material-ui/core/Container'
 import { makeStyles } from '@material-ui/core/styles'
-
-import api from '../../api'
-import * as urls from '../../constants'
 import { Typography } from '@material-ui/core'
+
+import QuestionDetail from '../../components/Question/QuestionDetail'
+import QuestionList from '../../components/Question/QuestionList'
 
 const useStyles = makeStyles((theme) => ({
   forum: {},
   toolbar: theme.mixins.toolbar,
 }))
 
-const Forum = () => {
+const Forum = (props) => {
   const classes = useStyles()
-  const [state, setState] = useState({
-    questions: [],
-  })
+  const view = props.match.params.view
+  const questionId = props.match.params.id
+
   useEffect(() => {
-    const getQuestions = () => {
-      api
-        .get(urls.questions)
-        .then((response) => setState({ questions: response.data }))
-    }
-    getQuestions()
     document.title = 'Forum'
   }, [])
 
-  const renderQuestions = () => {
-    return state.questions.map((question) => (
-      <Question question={question} key={question.id} />
-    ))
+  const renderView = () => {
+    switch (view) {
+      case 'question':
+        return <QuestionDetail id={questionId} />
+      default:
+        return <QuestionList />
+    }
   }
 
   return (
@@ -41,6 +37,7 @@ const Forum = () => {
         <Typography variant="h3" component="h1">
           Q/A Forum
         </Typography>
+        {renderView()}
       </Container>
     </div>
   )

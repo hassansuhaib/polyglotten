@@ -75,9 +75,12 @@ const Messages = ({ username }) => {
   }
 
   return (
-    <List className={classes.root}>
-      {username ? renderChat() : renderManyMessages()}
-    </List>
+    <React.Fragment>
+      <h1>Messages</h1>
+      <List className={classes.root}>
+        {username ? renderChat() : renderManyMessages()}
+      </List>
+    </React.Fragment>
   )
 }
 export default Messages
