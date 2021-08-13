@@ -3,7 +3,7 @@ import { Link as RouterLink } from 'react-router-dom'
 
 import Feed from '../Feed/Feed'
 import Quizzes from '../Quizzes/Quizzes'
-import VoiceChannels from '../VoiceChannels/VoiceChannels'
+import VoiceChannels from '../VoiceChannels/ActiveChannel'
 import Profile from '../Profile/Profile'
 import Search from '../Search/Search'
 import Notifications from '../Notifications/Notifications'

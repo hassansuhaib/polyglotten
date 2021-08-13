@@ -74,12 +74,7 @@ const LeftBar = ({ styling }) => {
         </ListItemIcon>
         <ListItemText primary="Notifications" />
       </ListItem>
-      <ListItem
-        disableGutters
-        button
-        component={RouterLink}
-        to={`/voice-channels`}
-      >
+      <ListItem disableGutters button component={RouterLink} to={`/channels`}>
         <ListItemIcon>
           <VolumeUpIcon />
         </ListItemIcon>
