@@ -3,6 +3,11 @@ import React, { useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 
+import Start from './Start'
+import VocabularyQuiz from './VocabularyQuiz'
+import TranslationQuiz from './TranslationQuiz'
+import Result from './Result'
+
 const useStyles = makeStyles((theme) => ({ toolbar: theme.mixins.toolbar }))
 
 const Quizzes = (props) => {
@@ -16,12 +21,14 @@ const Quizzes = (props) => {
 
   const renderView = () => {
     switch (view) {
-      case 'hello':
-        return <h1>Hello</h1>
-      case 'mellow':
-        return <h1>Mellow</h1>
+      case 'vocabulary':
+        return <VocabularyQuiz />
+      case 'translation':
+        return <TranslationQuiz />
+      case 'result':
+        return <Result />
       default:
-        return <h1>Yellow</h1>
+        return <Start />
     }
   }
 

@@ -2,6 +2,9 @@ import React, { useEffect } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 
 import UserSettings from './UserSettings'
+import NotificationSettings from './NotificationSettings'
+import LanguageSettings from './LanguageSettings'
+import InterestSettings from './InterestSettings'
 
 import { Container, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
@@ -12,11 +15,15 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import SettingsIcon from '@material-ui/icons/Settings'
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 
 const useStyles = makeStyles((theme) => ({
   toolbar: theme.mixins.toolbar,
   fixed: {
     position: 'fixed',
+  },
+  settings: {
+    minHeight: '92vh',
   },
 }))
 
@@ -31,12 +38,14 @@ const Settings = (props) => {
 
   const renderView = () => {
     switch (view) {
-      case 'user-settings':
-        return <UserSettings content={'account'} />
-      case 'language-settings':
-        return <UserSettings content={'language'} />
+      case 'notifications':
+        return <NotificationSettings />
+      case 'languages':
+        return <LanguageSettings />
+      case 'interests':
+        return <InterestSettings />
       default:
-        return <UserSettings content={'Default'} />
+        return <UserSettings />
     }
   }
 
@@ -58,30 +67,40 @@ const Settings = (props) => {
           disableGutters
           button
           component={RouterLink}
-          to={`/settings/language-settings`}
+          to={`/settings/languages`}
         >
           <ListItemIcon>
             <SettingsIcon />
           </ListItemIcon>
           <ListItemText primary="Language Settings" />
         </ListItem>
-        <ListItem disableGutters button component={RouterLink} to={`/settings`}>
+        <ListItem
+          disableGutters
+          button
+          component={RouterLink}
+          to={`/settings/interests`}
+        >
           <ListItemIcon>
             <SettingsIcon />
           </ListItemIcon>
-          <ListItemText primary="Settings" />
+          <ListItemText primary="Interest Settings" />
         </ListItem>
-        <ListItem disableGutters button component={RouterLink} to={`/settings`}>
+        <ListItem
+          disableGutters
+          button
+          component={RouterLink}
+          to={`/settings/notifications`}
+        >
           <ListItemIcon>
             <SettingsIcon />
           </ListItemIcon>
-          <ListItemText primary="Settings" />
+          <ListItemText primary="Notification Settings" />
         </ListItem>
-        <ListItem disableGutters button component={RouterLink} to={`/settings`}>
+        <ListItem disableGutters button component={RouterLink} to={`/`}>
           <ListItemIcon>
-            <SettingsIcon />
+            <ChevronLeftIcon />
           </ListItemIcon>
-          <ListItemText primary="Settings" />
+          <ListItemText primary="Back to Home" />
         </ListItem>
       </List>
     )
@@ -97,7 +116,7 @@ const Settings = (props) => {
               {renderList()}
             </Grid>
           </Hidden>
-          <Grid item className={classes.text} xs={12} md={8} lg={6}>
+          <Grid item className={classes.settings} xs={12} md={8} lg={6}>
             {renderView()}
           </Grid>
         </Grid>
