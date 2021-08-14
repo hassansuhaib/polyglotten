@@ -185,7 +185,7 @@ class QuestionCreateSerializer(serializers.ModelSerializer):
 class AnswerCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Answer
-        fields = '__all__'
+        fields = ['question', 'content', 'user']
 
 
 class PostCreateSerializer(serializers.ModelSerializer):

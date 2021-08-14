@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { Link as RouterLink } from 'react-router-dom'
 import api from '../../api'
 import * as urls from '../../constants'
+import history from '../../history'
 
 import { makeStyles } from '@material-ui/core/styles'
 import Chip from '@material-ui/core/Chip'
@@ -34,7 +34,9 @@ const CreateQuestion = (props) => {
   const submit = () => {
     api
       .post(urls.createQuestion, state.question)
-      .then((response) => console.log(response))
+      .then((response) => {
+        history.push('/forum')
+      })
       .catch((error) => console.log(error))
   }
 

@@ -5,6 +5,7 @@ import * as urls from '../../constants'
 import Question from '../../components/Question/Question'
 import { makeStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
+import { Typography } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({}))
 
@@ -23,13 +24,16 @@ const QuestionList = () => {
     getQuestions()
   }, [])
 
-  return (
-    <List>
-      <Question question={{ title: 'Hello', id: '1' }} />
-      <Question question={{ title: 'Hello', id: '1' }} />
-      <Question question={{ title: 'Hello', id: '1' }} />
-      <Question question={{ title: 'Hello', id: '1' }} />
-    </List>
-  )
+  const renderQuestions = () => {
+    if (state.questions.length > 0) {
+      return state.questions.map((question) => (
+        <Question key={question.id} question={question} />
+      ))
+    } else {
+      return <Typography variant="body1">No Questions Found!</Typography>
+    }
+  }
+
+  return <List>{renderQuestions()}</List>
 }
 export default QuestionList

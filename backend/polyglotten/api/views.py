@@ -447,7 +447,7 @@ class QuestionCreateView(APIView):
 
 class AnswerCreateView(CreateAPIView):
     permission_classes = (AllowAny, )
-    serializer_class = QuestionCreateSerializer
+    serializer_class = AnswerCreateSerializer
     queryset = Answer.objects.all()
 
 

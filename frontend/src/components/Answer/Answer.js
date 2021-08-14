@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 const Answer = ({ answer }) => {
-  const { content, id } = answer
+  const { content, id, no_of_votes, user } = answer
   const classes = useStyles()
   return (
     <ListItem alignItems="flex-start">
@@ -24,9 +24,9 @@ const Answer = ({ answer }) => {
               className={classes.inline}
               color="textPrimary"
             >
-              Sandra Adams
+              {`${user.first_name} ${user.last_name}`}
             </Typography>
-            {' — Do you have Paris recommendations? Have you ever…'}
+            {` - Votes: ${no_of_votes}`}
           </React.Fragment>
         }
       />

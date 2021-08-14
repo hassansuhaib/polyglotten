@@ -17,6 +17,7 @@ export const tokenRefresh = `${authURL}/token/refresh`
 export const questions = `/forum/questions/`
 export const createQuestion = `/forum/questions/create/`
 export const questionDetail = (id) => `/forum/question-detail/${id}`
+export const createAnswer = `/forum/answers/create/`
 
 // Misc URLS
 export const tags = `/tags/`

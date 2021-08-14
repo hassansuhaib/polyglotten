@@ -15,7 +15,8 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const Question = ({ question }) => {
-  const { title, id } = question
+  const { id, title, content, no_of_votes, user } = question
+  console.log('Question: ', question)
   const classes = useStyles()
   return (
     <ListItem
@@ -34,9 +35,9 @@ const Question = ({ question }) => {
               className={classes.inline}
               color="textPrimary"
             >
-              Sandra Adams
+              {`${user.first_name} ${user.last_name} - Votes: ${no_of_votes}`}
             </Typography>
-            {' — Do you have Paris recommendations? Have you ever…'}
+            {` — ${content}`}
           </React.Fragment>
         }
       />
