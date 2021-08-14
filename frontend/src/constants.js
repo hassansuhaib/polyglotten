@@ -14,5 +14,9 @@ export const registration = `${authURL}/registration/`
 export const tokenRefresh = `${authURL}/token/refresh`
 
 // Forum URLs
-export const questions = `/questions/`
-export const questionDetail = (id) => `/question-detail/${id}`
+export const questions = `/forum/questions/`
+export const createQuestion = `/forum/questions/create/`
+export const questionDetail = (id) => `/forum/question-detail/${id}`
+
+// Misc URLS
+export const tags = `/tags/`

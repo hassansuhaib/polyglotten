@@ -75,5 +75,9 @@ urlpatterns = [
     path('voice-channels/<pk>/update/',
          VoiceChannelUpdateView.as_view(), name='update-voice-channel'),
 
+    # Misc URLS
+
+    path('tags/', TagListView.as_view(), name='tags'),
+
 
 ]

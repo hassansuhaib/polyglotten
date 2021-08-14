@@ -32,7 +32,6 @@ const Start = (props) => {
 
   return (
     <div>
-      <h1>Start</h1>
       <Box boxShadow={3} p={5}>
         <Grid
           container
@@ -41,6 +40,9 @@ const Start = (props) => {
           justifyContent="center"
           spacing={3}
         >
+          <Grid item xs={12}>
+            <Typography variant="h3">Take an Assessment Test</Typography>
+          </Grid>
           <Grid item xs={12}>
             <FormControl className={classes.formControl}>
               <InputLabel id="select-language">Select Language</InputLabel>

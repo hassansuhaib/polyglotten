@@ -179,6 +179,16 @@ class InterestRemoveView(APIView):
             return Response({'Error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
+""" Misc Views"""
+
+
+class TagListView(ListAPIView):
+    permission_classes = (AllowAny, )
+    serializer_class = TagSerializer
+    pagination_class = None
+    queryset = Tag.objects.all()
+
+
 """ Message Related Views """
 
 
@@ -414,10 +424,25 @@ class AnswerListView(ListAPIView):
 # Create Views
 
 
-class QuestionCreateView(CreateAPIView):
+class QuestionCreateView(APIView):
     permission_classes = (AllowAny, )
-    serializer_class = QuestionCreateSerializer
-    queryset = Question.objects.all()
+
+    def post(self, request, *args, **kwargs):
+        tags = request.data.get('tags')
+        title = request.data.get('title')
+        content = request.data.get('content')
+        try:
+            question = Question(user=request.user,
+                                title=title, content=content)
+
+            question.save()
+            for tag in tags:
+                obj, created = Tag.objects.get_or_create(title=tag.title)
+                question.tags.add(obj)
+
+            return Response({'Question': 'Created!'}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'Error': str(e)}, status=status.HTTP_404_NOT_FOUND)
 
 
 class AnswerCreateView(CreateAPIView):
@@ -476,7 +501,7 @@ class UpvoteView(APIView):
                 question.votes.add(user)
             return Response({'Message': 'Upvoted!'}, status=status.HTTP_200_OK)
         except Exception as e:
-            return Response({'Error': str(e)}, status=status.HTTP_200_OK)
+            return Response({'Error': str(e)}, status=status.HTTP_404_NOT_FOUND)
 
 
 """ Voice Channels """

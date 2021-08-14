@@ -43,6 +43,14 @@ const Forum = (props) => {
     <div className={classes.forum}>
       <div className={classes.toolbar} />
       <Container>
+        <Button
+          variant="contained"
+          color="secondary"
+          component={RouterLink}
+          to="/"
+        >
+          Home
+        </Button>
         <Grid container>
           <Grid item xs={12} lg={12}>
             <div className={classes.header}>
