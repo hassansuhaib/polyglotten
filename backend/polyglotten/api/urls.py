@@ -27,6 +27,8 @@ urlpatterns = [
          QuestionCreateView.as_view(), name="create-question"),
     path('forum/questions/<pk>/update/',
          QuestionUpdateView.as_view(), name='update-question'),
+    path('forum/questions/<pk>/delete/',
+         QuestionDeleteView.as_view(), name='delete-question'),
     path('forum/question-detail/<int:id>/',
          QuestionDetailView.as_view(), name='question-detail'),
 
@@ -34,6 +36,8 @@ urlpatterns = [
     path('forum/answers/create/', AnswerCreateView.as_view(), name='create-answer'),
     path('forum/answers/<pk>/update/',
          AnswerUpdateView.as_view(), name='update-answer'),
+    path('forum/answers/<pk>/delete/',
+         AnswerDeleteView.as_view(), name='delete-answer'),
 
     # Works for both Question and answer
     path('forum/upvote/<str:upvote_type>/<int:id>/',

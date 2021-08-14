@@ -14,6 +14,7 @@ const QuestionDetail = ({ id }) => {
     question: null,
     answers: null,
   })
+  console.log('Question Detail State: ', state)
   useEffect(() => {
     const getQuestionDetail = () => {
       api
@@ -47,7 +48,12 @@ const QuestionDetail = ({ id }) => {
   const renderAnswers = () => {
     if (state.answers) {
       return state.answers.map((answer) => (
-        <Answer answer={answer} key={answer.id} />
+        <Answer
+          answer={answer}
+          key={answer.id}
+          qDState={state}
+          qDSetState={setState}
+        />
       ))
     } else {
       return <Typography>No answers available.</Typography>
@@ -65,7 +71,11 @@ const QuestionDetail = ({ id }) => {
       </Button>
       {renderQuestion()}
       <List>{renderAnswers()}</List>
-      <CreateAnswer questionId={state.question && state.question.id} />
+      <CreateAnswer
+        questionId={parseInt(id)}
+        qDState={state}
+        qDSetState={setState}
+      />
     </React.Fragment>
   )
 }

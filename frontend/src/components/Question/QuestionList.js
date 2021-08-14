@@ -27,7 +27,12 @@ const QuestionList = () => {
   const renderQuestions = () => {
     if (state.questions.length > 0) {
       return state.questions.map((question) => (
-        <Question key={question.id} question={question} />
+        <Question
+          key={question.id}
+          question={question}
+          qLState={state}
+          qLSetState={setState}
+        />
       ))
     } else {
       return <Typography variant="body1">No Questions Found!</Typography>

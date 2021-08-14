@@ -182,12 +182,6 @@ class QuestionCreateSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class AnswerCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Answer
-        fields = ['question', 'content', 'user']
-
-
 class PostCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post

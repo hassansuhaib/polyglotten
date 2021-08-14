@@ -1,17 +1,34 @@
 import React from 'react'
+import api from '../../api'
+import * as urls from '../../constants'
+
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
-import { Typography } from '@material-ui/core'
+import { ListItemIcon, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import DeleteIcon from '@material-ui/icons/Delete'
+import { IconButton } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   inline: {
     display: 'inline',
   },
 }))
-const Answer = ({ answer }) => {
+
+const Answer = ({ answer, qDState, qDSetState }) => {
   const { content, id, no_of_votes, user } = answer
   const classes = useStyles()
+  const deleteAnswer = () => {
+    api
+      .delete(urls.answerDeleteURL(id))
+      .then((response) => {
+        qDSetState({
+          ...qDState,
+          answers: qDState.answers.filter((answer) => answer.id !== id),
+        })
+      })
+      .catch((error) => console.log(error))
+  }
   return (
     <ListItem alignItems="flex-start">
       <ListItemText
@@ -30,6 +47,9 @@ const Answer = ({ answer }) => {
           </React.Fragment>
         }
       />
+      <IconButton onClick={deleteAnswer}>
+        <DeleteIcon />
+      </IconButton>
     </ListItem>
   )
 }

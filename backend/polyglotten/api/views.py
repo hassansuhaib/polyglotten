@@ -445,13 +445,24 @@ class QuestionCreateView(APIView):
             return Response({'Error': str(e)}, status=status.HTTP_404_NOT_FOUND)
 
 
-class AnswerCreateView(CreateAPIView):
+class AnswerCreateView(APIView):
     permission_classes = (AllowAny, )
-    serializer_class = AnswerCreateSerializer
-    queryset = Answer.objects.all()
 
+    def post(self, request, *args, **kwargs):
+        content = request.data.get('content')
+        question_id = request.data.get('question')
+        question = Question.objects.get(id=question_id)
+        try:
+            answer = Answer(user=request.user, content=content,
+                            question=question)
+            answer.save()
+            return Response(AnswerSerializer(answer).data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'Error': str(e)}, status=status.HTTP_404_NOT_FOUND)
 
 # Update Views
+
+
 class QuestionUpdateView(UpdateAPIView):
     permission_classes = (AllowAny, )
     serializer_class = QuestionSerializer
@@ -468,6 +479,17 @@ class AnswerUpdateView(UpdateAPIView):
     def get_queryset(self):
         answers = Answer.objects.filter(user=self.request.user.id)
         return answers
+
+# Delete Views
+
+
+class QuestionDeleteView(DestroyAPIView):
+    permission_classes = (AllowAny, )
+    queryset = Question.objects.all()
+
+class AnswerDeleteView(DestroyAPIView):
+    permission_classes = (AllowAny, )
+    queryset = Answer.objects.all()
 
 
 # API Views

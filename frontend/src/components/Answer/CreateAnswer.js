@@ -9,7 +9,7 @@ import TextField from '@material-ui/core/TextField'
 
 const useStyles = makeStyles((theme) => ({}))
 
-const CreateAnswer = ({ questionId }) => {
+const CreateAnswer = ({ questionId, qDState, qDSetState }) => {
   const classes = useStyles()
   const user = useSelector((state) => state.auth.user)
   const [answer, setAnswer] = useState({
@@ -21,8 +21,19 @@ const CreateAnswer = ({ questionId }) => {
   const submit = () => {
     api
       .post(urls.createAnswer, answer)
-      .then((response) => console.log('Response: ', response))
+      .then((response) => {
+        qDSetState({
+          ...qDSetState,
+          answers: qDState.answers.concat(response.data),
+        })
+      })
       .catch((error) => console.log(error))
+      .finally(() => {
+        setAnswer({
+          ...answer,
+          content: '',
+        })
+      })
   }
   return (
     <div>
@@ -33,6 +44,7 @@ const CreateAnswer = ({ questionId }) => {
         multiline
         rows={4}
         variant="outlined"
+        value={answer.content}
         onChange={(event) => {
           setAnswer({
             ...answer,

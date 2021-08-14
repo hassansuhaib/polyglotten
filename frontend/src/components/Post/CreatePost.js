@@ -8,6 +8,8 @@ import TextField from '@material-ui/core/TextField'
 import Grid from '@material-ui/core/Grid'
 import { Typography } from '@material-ui/core'
 
+import Upload from './Upload'
+
 const useStyles = makeStyles((theme) => ({
   invite: {
     minWidth: 400,
@@ -58,9 +60,7 @@ const CreatePost = (props) => {
         </Grid>
         <Grid item xs={12} className={classes.invite}>
           <div className={classes.buttons}>
-            <Button variant="contained" color="primary">
-              Add Images
-            </Button>
+            <Upload />
             <Button variant="contained" color="primary">
               Post
             </Button>
