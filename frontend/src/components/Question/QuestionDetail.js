@@ -5,6 +5,7 @@ import api from '../../api'
 import * as urls from '../../constants'
 
 import Answer from '../Answer/Answer'
+import CreateAnswer from '../Answer/CreateAnswer'
 
 const QuestionDetail = ({ id }) => {
   const [state, setState] = useState({
@@ -45,6 +46,7 @@ const QuestionDetail = ({ id }) => {
       <h4>Question Detail</h4>
       <h3>{state.question.title}</h3>
       <List>{renderAnswers()}</List>
+      <CreateAnswer />
     </React.Fragment>
   )
 }

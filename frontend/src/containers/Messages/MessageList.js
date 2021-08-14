@@ -1,7 +1,6 @@
 import React from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 
-import Message from './Message'
 import { makeStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -10,6 +9,7 @@ import ListItemText from '@material-ui/core/ListItemText'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import Avatar from '@material-ui/core/Avatar'
 import Typography from '@material-ui/core/Typography'
+import Chat from './Chat'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -66,19 +66,10 @@ const Messages = ({ username }) => {
     return messages
   }
 
-  const renderChat = () => {
-    return (
-      <div>
-        <h1>Chat!</h1>
-      </div>
-    )
-  }
-
   return (
     <React.Fragment>
-      <h1>Messages</h1>
       <List className={classes.root}>
-        {username ? renderChat() : renderManyMessages()}
+        {username ? <Chat /> : renderManyMessages()}
       </List>
     </React.Fragment>
   )

@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
-import Chip from '@material-ui/core/Chip'
-import Autocomplete from '@material-ui/lab/Autocomplete'
 
 import { makeStyles } from '@material-ui/core/styles'
+import Autocomplete from '@material-ui/lab/Autocomplete'
 import Button from '@material-ui/core/Button'
 import Box from '@material-ui/core/Box'
 import TextField from '@material-ui/core/TextField'
@@ -12,6 +11,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import Grid from '@material-ui/core/Grid'
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
+import { Typography } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -38,7 +38,6 @@ const CreateChannel = (props) => {
   }
   return (
     <div>
-      <h1>CreateChannel</h1>
       <Box boxShadow={3} p={5}>
         <Grid
           container
@@ -47,6 +46,9 @@ const CreateChannel = (props) => {
           justifyContent="center"
           spacing={3}
         >
+          <Grid item xs={12}>
+            <Typography variant="h3">Create Channel</Typography>
+          </Grid>
           <Grid item xs={12}>
             <FormControl className={classes.formControl}>
               <InputLabel id="select-language">Select Language</InputLabel>

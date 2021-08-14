@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { Link as RouterLink } from 'react-router-dom'
 
 import Container from '@material-ui/core/Container'
 import { makeStyles } from '@material-ui/core/styles'
@@ -6,6 +7,7 @@ import { Button, Grid, Typography, Hidden } from '@material-ui/core'
 
 import QuestionDetail from '../../components/Question/QuestionDetail'
 import QuestionList from '../../components/Question/QuestionList'
+import CreateQuestion from '../../components/Question/CreateQuestion'
 
 const useStyles = makeStyles((theme) => ({
   forum: {},
@@ -30,6 +32,8 @@ const Forum = (props) => {
     switch (view) {
       case 'question':
         return <QuestionDetail id={questionId} />
+      case 'create':
+        return <CreateQuestion />
       default:
         return <QuestionList />
     }
@@ -45,7 +49,12 @@ const Forum = (props) => {
               <Typography variant="h3" component="h1">
                 Q/A Forum
               </Typography>
-              <Button variant="contained" color="primary">
+              <Button
+                variant="contained"
+                color="primary"
+                component={RouterLink}
+                to="/forum/create"
+              >
                 Ask a Question
               </Button>
             </div>
