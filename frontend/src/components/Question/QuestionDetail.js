@@ -1,5 +1,6 @@
-import { List, Typography } from '@material-ui/core'
 import React, { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import { Grid, Typography } from '@material-ui/core'
 
 import api from '../../api'
 import * as urls from '../../constants'
@@ -8,12 +9,34 @@ import history from '../../history'
 import Answer from '../Answer/Answer'
 import CreateAnswer from '../Answer/CreateAnswer'
 import Button from '@material-ui/core/Button'
+import IconButton from '@material-ui/core/IconButton'
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
+import Paper from '@material-ui/core/Paper'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
+import Fade from '@material-ui/core/Fade'
+import { makeStyles } from '@material-ui/core/styles'
+
+const useStyles = makeStyles((theme) => ({
+  toolbar: theme.mixins.toolbar,
+  inline: {
+    display: 'inline',
+  },
+  paper: {
+    padding: theme.spacing(1),
+    position: 'absolute',
+  },
+}))
 
 const QuestionDetail = ({ id }) => {
+  const classes = useStyles()
   const [state, setState] = useState({
     question: null,
     answers: null,
+    options: false,
   })
+  const user = useSelector((state) => state.auth.user)
   console.log('Question Detail State: ', state)
   useEffect(() => {
     const getQuestionDetail = () => {
@@ -32,11 +55,47 @@ const QuestionDetail = ({ id }) => {
     getQuestionDetail()
   }, [])
 
+  const deleteQuestion = () => {
+    api
+      .delete(urls.questionDelete(state.question.id))
+      .then((response) => {
+        history.push('/forum')
+      })
+      .catch((error) => console.log(error))
+  }
+
+  const editQuestion = () => {
+    history.push(`/forum/question/edit/${id}`)
+  }
+
   const renderQuestion = () => {
     if (state.question) {
       return (
         <React.Fragment>
-          <h3>{state.question.title}</h3>
+          <Grid container>
+            <Grid item xs={10}>
+              <Typography variant="h3">{state.question.title}</Typography>
+            </Grid>
+            <Grid item xs={2}>
+              <IconButton
+                onClick={() => setState({ ...state, options: !state.options })}
+              >
+                <MoreHorizIcon />
+              </IconButton>
+              <Fade in={state.options}>
+                <Paper className={classes.paper}>
+                  <List>
+                    <ListItem button onClick={editQuestion}>
+                      <ListItemText primary="Edit" />
+                    </ListItem>
+                    <ListItem button onClick={deleteQuestion}>
+                      <ListItemText primary="Delete" />
+                    </ListItem>
+                  </List>
+                </Paper>
+              </Fade>
+            </Grid>
+          </Grid>
           <Typography variant="body1">{state.question.content}</Typography>
         </React.Fragment>
       )

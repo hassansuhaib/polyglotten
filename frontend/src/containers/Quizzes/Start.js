@@ -12,6 +12,8 @@ import Grid from '@material-ui/core/Grid'
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
 
+import ResultList from './ResultList'
+
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
@@ -60,17 +62,11 @@ const Start = ({ qState, qSetState }) => {
   return (
     <div>
       <Box boxShadow={3} p={5}>
-        <Grid
-          container
-          direction="column"
-          alignItems="center"
-          justifyContent="center"
-          spacing={3}
-        >
-          <Grid item xs={12}>
+        <Grid container spacing={3}>
+          <Grid item align="center" xs={12}>
             <Typography variant="h3">Take an Assessment Test</Typography>
           </Grid>
-          <Grid item xs={12}>
+          <Grid item align="center" xs={12}>
             <FormControl className={classes.formControl}>
               <InputLabel id="select-language">Select Language</InputLabel>
               <Select
@@ -86,7 +82,7 @@ const Start = ({ qState, qSetState }) => {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={12}>
+          <Grid item align="center" xs={12}>
             <FormControl className={classes.formControl}>
               <InputLabel id="select-level">Select Level</InputLabel>
               <Select
@@ -102,10 +98,13 @@ const Start = ({ qState, qSetState }) => {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={12}>
+          <Grid item align="center" xs={12}>
             <Button variant="contained" color="primary" onClick={handleStart}>
               Let's Start!
             </Button>
+          </Grid>
+          <Grid item align="center" xs={12}>
+            <ResultList />
           </Grid>
         </Grid>
       </Box>

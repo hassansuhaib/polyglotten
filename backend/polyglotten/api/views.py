@@ -6,6 +6,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.generics import DestroyAPIView, CreateAPIView, UpdateAPIView, RetrieveAPIView, ListAPIView
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.parsers import FileUploadParser, MultiPartParser
+from difflib import SequenceMatcher
 
 from polyglotten.models import *
 from polyglotten.api.serializers import *
@@ -277,7 +278,9 @@ class QuizCompletionView(APIView):
                     vocab_result += 1
             print("Done with vocab")
             for index, translation in enumerate(translations):
-                if translation_answers[index] == translation.answer:
+                ratio = SequenceMatcher(
+                    None, translation_answers[index], translation.answer).ratio()
+                if ratio > 0.70:
                     translation_result += 1
             print("Done with translation")
 

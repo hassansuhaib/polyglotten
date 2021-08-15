@@ -20,19 +20,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Question = ({ question, qLState, qLSetState }) => {
   const { id, title, content, no_of_votes, user } = question
-  console.log('Question: ', question)
+
   const classes = useStyles()
-  const deleteQuestion = () => {
-    api
-      .delete(urls.questionDelete(id))
-      .then((response) => {
-        qLSetState({
-          ...qLState,
-          questions: qLState.questions.filter((question) => question.id !== id),
-        })
-      })
-      .catch((error) => console.log(error))
-  }
   return (
     <React.Fragment>
       <ListItem
@@ -58,10 +47,6 @@ const Question = ({ question, qLState, qLSetState }) => {
           }
         />
       </ListItem>
-
-      <IconButton onClick={deleteQuestion}>
-        <DeleteIcon />
-      </IconButton>
     </React.Fragment>
   )
 }

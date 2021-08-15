@@ -8,6 +8,7 @@ import { Button, Grid, Typography, Hidden } from '@material-ui/core'
 import QuestionDetail from '../../components/Question/QuestionDetail'
 import QuestionList from '../../components/Question/QuestionList'
 import CreateQuestion from '../../components/Question/CreateQuestion'
+import EditQuestion from '../../components/Question/EditQuestion'
 
 const useStyles = makeStyles((theme) => ({
   forum: {},
@@ -34,6 +35,8 @@ const Forum = (props) => {
         return <QuestionDetail id={questionId} />
       case 'create':
         return <CreateQuestion />
+      case 'edit':
+        return <EditQuestion id={questionId} />
       default:
         return <QuestionList />
     }

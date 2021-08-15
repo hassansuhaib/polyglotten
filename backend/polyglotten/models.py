@@ -319,7 +319,7 @@ class Message(models.Model):
 class Quiz(models.Model):
     level = models.CharField(max_length=10, choices=QUIZ_LEVELS)
     language = models.ForeignKey(
-        Language, on_delete=models.CASCADE, related_name="quizes")
+        Language, on_delete=models.CASCADE, related_name="quizzes")
     time = models.TimeField(default=datetime.time(0, 20, 0))
 
     class Meta:
@@ -370,12 +370,19 @@ class Result(models.Model):
     translation = models.IntegerField()
     passed = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now=True)
-    level = models.CharField(max_length=20, choices=QUIZ_LEVELS)
+    level = models.CharField(max_length=50)
+    language = models.CharField(max_length=100)
 
     def save(self, *args, **kwargs):
         if self.vocabulary > 6 and self.translation > 6:
             self.passed = True
-        self.level = self.quiz.level
+        if self.quiz.level == 'B':
+            self.level = 'Beginner'
+        elif self.quiz.level == 'I':
+            self.level = 'Intermediate'
+        else:
+            self.level = 'Advanced'
+        self.language = self.quiz.language.title
 
         return super(Result, self).save(*args, **kwargs)
 

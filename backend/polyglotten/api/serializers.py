@@ -133,7 +133,7 @@ class ResultSerializer(serializers.ModelSerializer):
     class Meta:
         model = Result
         fields = ['quiz', 'user', 'vocabulary',
-                  'translation', 'created_at', 'passed', 'level']
+                  'translation', 'created_at', 'passed', 'level', 'language']
 
 
 class MCQSerializer(serializers.ModelSerializer):
