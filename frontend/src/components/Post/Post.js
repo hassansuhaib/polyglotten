@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import api from '../../api'
 import * as urls from '../../constants'
 
@@ -36,17 +37,33 @@ const useStyles = makeStyles((theme) => ({
 const Post = ({ post }) => {
   const classes = useStyles()
   const name = `${post.user.first_name} ${post.user.last_name}`
+  const user = useSelector((state) => state.auth.user)
   const [state, setState] = useState({
     post: post,
     showForm: false,
   })
+
+  console.log('Post State: ', state)
 
   const handleLike = () => {
     api
       .post(urls.like('post', post.id))
       .then((response) => {
         const updated = post
+        updated.likes.push(user)
         updated.no_of_likes++
+        setState({ ...state, post: updated })
+      })
+      .catch((error) => console.log(error))
+  }
+
+  const handleUnLike = () => {
+    api
+      .post(urls.unlike('post', post.id))
+      .then((response) => {
+        const updated = post
+        updated.likes = updated.likes.filter((like) => like.pk !== user.pk)
+        updated.no_of_likes--
         setState({ ...state, post: updated })
       })
       .catch((error) => console.log(error))
@@ -59,6 +76,28 @@ const Post = ({ post }) => {
       ))
     } else {
       return <Typography>No Comments yet</Typography>
+    }
+  }
+
+  const renderLikeButton = () => {
+    if (state.post) {
+      if (state.post.likes.length > 0) {
+        console.log('We here')
+        const found = state.post.likes.find((like) => like.pk === user.pk)
+        if (found) {
+          console.log('Found')
+          return (
+            <Button variant="contained" color="primary" onClick={handleUnLike}>
+              UnLike
+            </Button>
+          )
+        }
+      }
+      return (
+        <Button variant="contained" color="primary" onClick={handleLike}>
+          Like
+        </Button>
+      )
     }
   }
 
@@ -104,9 +143,7 @@ const Post = ({ post }) => {
           </Grid>
           <Grid item xs={12}>
             <div className={classes.buttons}>
-              <Button variant="contained" color="primary" onClick={handleLike}>
-                Like
-              </Button>
+              {renderLikeButton()}
               <Button
                 variant="contained"
                 onClick={() =>

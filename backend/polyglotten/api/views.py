@@ -351,6 +351,23 @@ class LikeView(APIView):
             return Response({'Error': str(e)}, status=status.HTTP_200_OK)
 
 
+class UnLikeView(APIView):
+    permission_classes = (AllowAny, )
+
+    def post(self, request, like_type, id, *args, **kwargs):
+        try:
+            user = User.objects.get(id=request.user.id)
+            if like_type == 'comment':
+                comment = Comment.objects.get(id=id)
+                comment.likes.remove(user)
+            else:
+                post = Post.objects.get(id=id)
+                post.likes.remove(user)
+            return Response({'Message': 'UnLiked!'}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'Error': str(e)}, status=status.HTTP_200_OK)
+
+
 class PostShareView(APIView):
     permission_classes = (AllowAny, )
 

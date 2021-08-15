@@ -18,7 +18,6 @@ const Comment = ({ comment }) => {
   const [state, setState] = useState({
     comment: comment,
   })
-  console.log('Comment state: ', comment)
   const handleLike = () => {
     api
       .post(urls.like('comment', comment.id))

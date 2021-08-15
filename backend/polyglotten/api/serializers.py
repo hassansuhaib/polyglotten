@@ -5,7 +5,7 @@ from polyglotten.models import *
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'id',
+        fields = ['pk', 'first_name', 'last_name',
                   'username', 'is_active', 'gender']
 
 
@@ -59,6 +59,7 @@ class PostImageSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
     user = UserSerializer()
+    likes = UserSerializer(many=True)
     no_of_likes = serializers.SerializerMethodField()
 
     class Meta:
@@ -74,6 +75,7 @@ class PostSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     sharing_user = UserSerializer()
     tags = TagSerializer(many=True)
+    likes = UserSerializer(many=True)
     no_of_likes = serializers.SerializerMethodField()
     no_of_comments = serializers.SerializerMethodField()
     images = PostImageSerializer(many=True)

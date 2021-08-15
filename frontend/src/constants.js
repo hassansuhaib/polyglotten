@@ -13,6 +13,7 @@ export const postCreate = `/feed/posts/create/`
 export const postEdit = (id) => `/feed/posts/${id}/update/`
 export const postDelete = (id) => `/feed/posts/${id}/delete/`
 export const like = (name, id) => `/feed/like/${name}/${id}/`
+export const unlike = (name, id) => `/feed/unlike/${name}/${id}/`
 export const commentCreate = `/feed/comments/create/`
 
 // Authentication URLs

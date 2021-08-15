@@ -58,6 +58,8 @@ urlpatterns = [
     # Works for both post and comment
     path('feed/like/<str:like_type>/<int:id>/',
          LikeView.as_view(), name='like'),
+    path('feed/unlike/<str:like_type>/<int:id>/',
+         UnLikeView.as_view(), name='unlike'),
 
     # Quiz URLS
     path('quiz/mcqs/', MCQListView.as_view(), name='mcqs'),
