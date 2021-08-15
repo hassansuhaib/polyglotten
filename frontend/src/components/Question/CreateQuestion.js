@@ -33,7 +33,7 @@ const CreateQuestion = (props) => {
 
   const submit = () => {
     api
-      .post(urls.createQuestion, state.question)
+      .post(urls.questionCreate, state.question)
       .then((response) => {
         history.push('/forum')
       })

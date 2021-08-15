@@ -9,8 +9,6 @@ const api = axios.create({
   timeout: 5000,
   headers: {
     Authorization: accessToken ? 'JWT ' + accessToken : null,
-    'Content-Type': 'application/json',
-    accept: 'application/json',
   },
 })
 

@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.generics import DestroyAPIView, CreateAPIView, UpdateAPIView, RetrieveAPIView, ListAPIView
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.parsers import FileUploadParser, MultiPartParser
 
 from polyglotten.models import *
 from polyglotten.api.serializers import *
@@ -311,10 +312,17 @@ class PostListView(ListAPIView):
 # Create Views
 
 
-class PostCreateView(CreateAPIView):
+class PostCreateView(APIView):
     permission_classes = (AllowAny, )
-    serializer_class = PostCreateSerializer
-    queryset = Post.objects.all()
+
+    def post(self, request, *args, **kwargs):
+        content = request.data.get('content')
+        try:
+            post = Post(content=content, user=request.user)
+            post.save()
+            return Response(PostSerializer(post).data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'Error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CommentCreateView(CreateAPIView):
@@ -486,6 +494,7 @@ class AnswerUpdateView(UpdateAPIView):
 class QuestionDeleteView(DestroyAPIView):
     permission_classes = (AllowAny, )
     queryset = Question.objects.all()
+
 
 class AnswerDeleteView(DestroyAPIView):
     permission_classes = (AllowAny, )

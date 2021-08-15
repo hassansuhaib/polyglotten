@@ -24,7 +24,7 @@ const Question = ({ question, qLState, qLSetState }) => {
   const classes = useStyles()
   const deleteQuestion = () => {
     api
-      .delete(urls.questionDeleteURL(id))
+      .delete(urls.questionDelete(id))
       .then((response) => {
         qLSetState({
           ...qLState,

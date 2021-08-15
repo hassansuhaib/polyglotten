@@ -181,11 +181,11 @@ class Post(models.Model):
 class PostImage(models.Model):
     post = models.ForeignKey(
         Post, default=None, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to='post_images')
+    image = models.FileField(upload_to='post_images/')
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.product.title
+        return self.post.content
 
 
 class Comment(models.Model):

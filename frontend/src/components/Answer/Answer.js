@@ -20,7 +20,7 @@ const Answer = ({ answer, qDState, qDSetState }) => {
   const classes = useStyles()
   const deleteAnswer = () => {
     api
-      .delete(urls.answerDeleteURL(id))
+      .delete(urls.answerDelete(id))
       .then((response) => {
         qDSetState({
           ...qDState,

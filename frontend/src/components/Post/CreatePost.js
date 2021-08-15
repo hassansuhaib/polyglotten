@@ -1,72 +1,110 @@
 import React, { useState } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import api from '../../api'
+import * as urls from '../../constants'
+import history from '../../history'
 
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import Box from '@material-ui/core/Box'
 import TextField from '@material-ui/core/TextField'
 import Grid from '@material-ui/core/Grid'
-import { Typography } from '@material-ui/core'
-
-import Upload from './Upload'
+import { Paper, Typography } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
-  invite: {
-    minWidth: 400,
-  },
   createPost: {
     padding: theme.spacing(2),
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
   },
   buttons: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-evenly',
   },
+  image: {
+    '& > *': {
+      maxHeight: '100px',
+      maxWidth: '100px',
+    },
+  },
 }))
 
 const CreatePost = (props) => {
   const classes = useStyles()
   const [state, setState] = useState({
-    language: '',
-    level: '',
+    image: null,
+    content: '',
   })
+
+  console.log('CreatePost State: ', state)
+
+  const handleSubmit = () => {
+    console.log(state)
+    api
+      .post(urls.postCreate, state)
+      .then((response) => console.log('Response', response))
+      .catch((error) => console.log(error))
+      .finally(() => {
+        setState({
+          image: null,
+          content: '',
+          imageURL: null,
+        })
+      })
+  }
 
   const handleChange = (event) => {
     setState({
       ...state,
-      [event.target.name]: event.target.value,
+      image: event.target.files[0],
+      imageURL: URL.createObjectURL(event.target.files[0]),
     })
   }
+
   return (
-    <div className={classes.createPost}>
-      <Grid
-        container
-        direction="column"
-        alignItems="center"
-        justifyContent="center"
-        spacing={3}
-      >
-        <Grid item xs={12}>
-          <Typography variant="h3">Create a Post</Typography>
+    <div>
+      <Paper elevation={2} className={classes.createPost}>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Typography variant="h3">Create a Post</Typography>
+          </Grid>
+          <Grid item xs={12} className={classes.invite}>
+            <TextField
+              id="outlined-multiline-static"
+              fullWidth
+              multiline
+              rows={4}
+              variant="outlined"
+              value={state.content}
+              onChange={(event) => {
+                setState({
+                  ...state,
+                  content: event.target.value,
+                })
+              }}
+            />
+          </Grid>
+          <Grid item xs={12} className={classes.invite}>
+            <div className={classes.buttons}>
+              <div>
+                <div className={classes.image}>
+                  <img src={state.imageURL} />
+                </div>
+                <input type="file" onChange={handleChange} />
+              </div>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSubmit}
+              >
+                Post
+              </Button>
+            </div>
+          </Grid>
         </Grid>
-        <Grid item xs={12} className={classes.invite}>
-          <TextField
-            id="outlined-multiline-static"
-            fullWidth
-            multiline
-            rows={4}
-            variant="outlined"
-          />
-        </Grid>
-        <Grid item xs={12} className={classes.invite}>
-          <div className={classes.buttons}>
-            <Upload />
-            <Button variant="contained" color="primary">
-              Post
-            </Button>
-          </div>
-        </Grid>
-      </Grid>
+      </Paper>
     </div>
   )
 }

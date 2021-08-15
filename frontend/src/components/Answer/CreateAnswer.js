@@ -20,7 +20,7 @@ const CreateAnswer = ({ questionId, qDState, qDSetState }) => {
   console.log('Create Answer', answer)
   const submit = () => {
     api
-      .post(urls.createAnswer, answer)
+      .post(urls.answerCreate, answer)
       .then((response) => {
         qDSetState({
           ...qDSetState,
