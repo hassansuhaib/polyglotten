@@ -26,7 +26,6 @@ const TranslationQuiz = (props) => {
   return (
     <div>
       <Box boxShadow={3} p={5}>
-        <h1>Quiz</h1>
         <Grid>
           <Grid item xs={12}>
             Part 2 of 2: Translation

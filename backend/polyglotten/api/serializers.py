@@ -150,7 +150,7 @@ class TranslationSerializer(serializers.ModelSerializer):
 
 class QuizSerializer(serializers.ModelSerializer):
     mcqs = MCQSerializer(many=True)
-    tranlations = TranslationSerializer(many=True)
+    translations = TranslationSerializer(many=True)
 
     class Meta:
         model = Quiz

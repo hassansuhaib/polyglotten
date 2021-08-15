@@ -9,6 +9,7 @@ import VocabularyQuiz from './VocabularyQuiz'
 import TranslationQuiz from './TranslationQuiz'
 import Result from './Result'
 import { Button } from '@material-ui/core'
+import { quiz } from '../../constants'
 
 const useStyles = makeStyles((theme) => ({ toolbar: theme.mixins.toolbar }))
 
@@ -16,7 +17,7 @@ const Quizzes = (props) => {
   const classes = useStyles()
   const view = props.match.params.view
   const [state, setState] = useState(null)
-
+  console.log('Quizzes state: ', state)
   useEffect(() => {
     window.scrollTo(0, 0)
     document.title = 'Assessment Test'
@@ -25,9 +26,11 @@ const Quizzes = (props) => {
   const renderView = () => {
     switch (view) {
       case 'vocabulary':
-        return <VocabularyQuiz />
+        return <VocabularyQuiz questions={state && state.quiz.mcqs} />
       case 'translation':
-        return <TranslationQuiz />
+        return (
+          <TranslationQuiz translations={state && state.quiz.translations} />
+        )
       case 'result':
         return <Result />
       default:

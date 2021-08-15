@@ -14,9 +14,31 @@ class PostImageAdmin(admin.StackedInline):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    inlines = [PostImageAdmin]
+    inlines = [PostImageAdmin, ]
     fields = ('user', 'content', 'edited', 'likes',
               'shared', 'shared_at', 'shared_content', 'sharing_user')
+
+
+class MCQAdmin(admin.StackedInline):
+    model = MCQ
+
+    def get_extra(self, request, obj=None, **kwargs):
+        extra = 0
+        return extra
+
+
+class TranslationAdmin(admin.StackedInline):
+    model = Translation
+
+    def get_extra(self, request, obj=None, **kwargs):
+        extra = 0
+        return extra
+
+
+@admin.register(Quiz)
+class QuizAdmin(admin.ModelAdmin):
+    inlines = [MCQAdmin, TranslationAdmin, ]
+    fields = ('level', 'language', 'time')
 
 
 admin.site.register(User)

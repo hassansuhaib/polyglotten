@@ -51,7 +51,7 @@ class Language(models.Model):
     title = models.CharField(max_length=100)
 
     def __str__(self):
-        return f'{self.title} {self.classification}'
+        return f'{self.title}'
 
 
 class NotificationSettings(models.Model):
@@ -318,7 +318,12 @@ class Message(models.Model):
 
 class Quiz(models.Model):
     level = models.CharField(max_length=10, choices=QUIZ_LEVELS)
+    language = models.ForeignKey(
+        Language, on_delete=models.CASCADE, related_name="quizes")
     time = models.TimeField(default=datetime.time(0, 20, 0))
+
+    class Meta:
+        verbose_name_plural = 'Quizes'
 
     def __str__(self):
         return f"Level: {self.level} and Time: {self.time}"
@@ -335,7 +340,7 @@ class MCQ(models.Model):
     choice_4 = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.content
+        return self.word
 
 
 class Translation(models.Model):

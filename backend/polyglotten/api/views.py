@@ -249,7 +249,7 @@ class QuizDetailView(APIView):
         level = self.request.query_params.get('level')
         language = self.request.query_params.get('language')
         try:
-            quiz = Quiz.objects.get(level=level, language=language)
+            quiz = Quiz.objects.get(level=level, language__title=language)
             return Response(QuizSerializer(quiz).data, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'Error': str(e)}, status=status.HTTP_400_BAD_REQUEST)

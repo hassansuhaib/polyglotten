@@ -26,6 +26,8 @@ const Start = ({ qState, qSetState }) => {
     level: '',
   })
 
+  console.log('Start state: ', state)
+
   const handleChange = (event) => {
     setState({
       ...state,
@@ -33,7 +35,7 @@ const Start = ({ qState, qSetState }) => {
     })
   }
 
-  const getQuiz = () => {
+  const handleStart = () => {
     api
       .get(urls.quiz, {
         params: {
@@ -41,8 +43,17 @@ const Start = ({ qState, qSetState }) => {
           level: state.level,
         },
       })
-      .then((response) => console.log(response))
+      .then((response) => {
+        console.log(response)
+        qSetState({
+          ...qState,
+          quiz: response.data,
+        })
+      })
       .catch((error) => console.log(error))
+      .finally(() => {
+        history.push('/tests/vocabulary')
+      })
   }
 
   return (
@@ -63,7 +74,8 @@ const Start = ({ qState, qSetState }) => {
               <InputLabel id="select-language">Select Language</InputLabel>
               <Select
                 labelId="select-language"
-                id="language-select"
+                id="language"
+                name="language"
                 value={state.language}
                 onChange={handleChange}
               >
@@ -75,10 +87,11 @@ const Start = ({ qState, qSetState }) => {
           </Grid>
           <Grid item xs={12}>
             <FormControl className={classes.formControl}>
-              <InputLabel id="select-language">Select Level</InputLabel>
+              <InputLabel id="select-level">Select Level</InputLabel>
               <Select
-                labelId="select-language"
-                id="language-select"
+                labelId="select-level"
+                id="level"
+                name="level"
                 value={state.level}
                 onChange={handleChange}
               >
@@ -89,12 +102,7 @@ const Start = ({ qState, qSetState }) => {
             </FormControl>
           </Grid>
           <Grid item xs={12}>
-            <Button
-              variant="contained"
-              color="primary"
-              component={RouterLink}
-              to="/tests/vocabulary"
-            >
+            <Button variant="contained" color="primary" onClick={handleStart}>
               Let's Start!
             </Button>
           </Grid>

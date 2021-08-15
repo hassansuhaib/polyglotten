@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
+import { capitalize } from '../../utils'
 
 import { makeStyles } from '@material-ui/core/styles'
 import { Button, Grid, Typography } from '@material-ui/core'
@@ -18,57 +19,85 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const VocabularyQuiz = (props) => {
+const VocabularyQuiz = ({ questions }) => {
   const classes = useStyles()
 
-  const [value, setValue] = useState('Belt')
+  const [state, setState] = useState({
+    step: 0,
+    selectedOption: '',
+    answers: [],
+  })
 
   const handleChange = (event) => {
-    setValue(event.target.value)
+    setState({
+      ...state,
+      selectedOption: event.target.value,
+    })
   }
+
+  const handleNext = () => {
+    setState({
+      ...state,
+      step: ++state.step,
+    })
+  }
+
+  const renderOptions = () => {
+    return (
+      <React.Fragment>
+        <FormControlLabel
+          value={questions[state.step].choice_1}
+          control={<Radio />}
+          label={capitalize(questions[state.step].choice_1)}
+        />
+        <FormControlLabel
+          value={questions[state.step].choice_2}
+          control={<Radio />}
+          label={capitalize(questions[state.step].choice_2)}
+        />
+        <FormControlLabel
+          value={questions[state.step].choice_3}
+          control={<Radio />}
+          label={capitalize(questions[state.step].choice_3)}
+        />
+        <FormControlLabel
+          value={questions[state.step].choice_4}
+          control={<Radio />}
+          label={capitalize(questions[state.step].choice_4)}
+        />
+      </React.Fragment>
+    )
+  }
+
   return (
     <div>
       <Box boxShadow={3} p={5}>
-        <h1>Quiz</h1>
         <Grid>
           <Grid item xs={12}>
             Part 1 of 2: Vocabulary
           </Grid>
           <Grid item xs={12}>
-            <Typography>What is the word in English for "Cinturon"?</Typography>
+            <Typography>
+              What is the word in English for "
+              {capitalize(questions[state.step].word)}"?
+            </Typography>
           </Grid>
           <Grid item xs={12}>
             <FormControl component="fieldset">
               <RadioGroup
                 aria-label="answer options"
-                name="gender1"
-                value={value}
+                name="vocabulary"
+                value={state.selectedOption}
                 onChange={handleChange}
               >
-                <FormControlLabel
-                  value="belt"
-                  control={<Radio />}
-                  label="Belt"
-                />
-                <FormControlLabel
-                  value="boots"
-                  control={<Radio />}
-                  label="Boots"
-                />
-                <FormControlLabel value="mat" control={<Radio />} label="Mat" />
-                <FormControlLabel value="tie" control={<Radio />} label="Tie" />
+                {renderOptions()}
               </RadioGroup>
             </FormControl>
           </Grid>
           <Grid container item xs={12}>
             <div className={classes.navigation}>
               <Button variant="contained">Previous</Button>
-              <Button
-                variant="contained"
-                color="primary"
-                component={RouterLink}
-                to="/tests/translation"
-              >
+              <Button variant="contained" color="primary" onClick={handleNext}>
                 Next
               </Button>
             </div>
