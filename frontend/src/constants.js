@@ -32,7 +32,9 @@ export const answerCreate = `/forum/answers/create/`
 export const answerDelete = (id) => `/forum/answers/${id}/delete/`
 
 // Quiz URLS
-export const quiz = `/quiz/quiz-detail`
+export const quiz = `/quiz/quiz-detail/`
+export const quizComplete = `/quiz/complete/`
+export const quizResults = `/quiz/results/`
 
 // Misc URLS
 export const tags = `/tags/`

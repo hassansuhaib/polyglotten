@@ -42,6 +42,8 @@ urlpatterns = [
     # Works for both Question and answer
     path('forum/upvote/<str:upvote_type>/<int:id>/',
          UpvoteView.as_view(), name='upvote'),
+    path('forum/unvote/<str:upvote_type>/<int:id>/',
+         UnvoteView.as_view(), name='unvote'),
 
     # Post URLS
     path('feed/posts/', PostListView.as_view(), name='posts'),
@@ -64,8 +66,9 @@ urlpatterns = [
     # Quiz URLS
     path('quiz/mcqs/', MCQListView.as_view(), name='mcqs'),
     path('quiz/translations/', TranslationListView.as_view(), name='translations'),
-    path('quiz/quiz-detail',
+    path('quiz/quiz-detail/',
          QuizDetailView.as_view(), name='quiz-detail'),
+    path('quiz/complete/', QuizCompletionView.as_view(), name='complete'),
     path('quiz/results/', ResultListView.as_view(), name='results'),
 
     # Message URLS

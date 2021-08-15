@@ -8,7 +8,7 @@ import Start from './Start'
 import VocabularyQuiz from './VocabularyQuiz'
 import TranslationQuiz from './TranslationQuiz'
 import Result from './Result'
-import { Button } from '@material-ui/core'
+import { Button, Typography } from '@material-ui/core'
 import { quiz } from '../../constants'
 
 const useStyles = makeStyles((theme) => ({ toolbar: theme.mixins.toolbar }))
@@ -16,7 +16,13 @@ const useStyles = makeStyles((theme) => ({ toolbar: theme.mixins.toolbar }))
 const Quizzes = (props) => {
   const classes = useStyles()
   const view = props.match.params.view
-  const [state, setState] = useState(null)
+  const [state, setState] = useState({
+    quiz: null,
+    quiz_id: null,
+    vocabulary_answers: null,
+    translation_answers: null,
+  })
+
   console.log('Quizzes state: ', state)
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -26,13 +32,31 @@ const Quizzes = (props) => {
   const renderView = () => {
     switch (view) {
       case 'vocabulary':
-        return <VocabularyQuiz questions={state && state.quiz.mcqs} />
+        if (state.quiz) {
+          return (
+            <VocabularyQuiz
+              questions={state.quiz && state.quiz.mcqs}
+              qState={state}
+              qSetState={setState}
+            />
+          )
+        } else {
+          return <Typography>You aren't taking any test.</Typography>
+        }
       case 'translation':
-        return (
-          <TranslationQuiz translations={state && state.quiz.translations} />
-        )
+        if (state.quiz) {
+          return (
+            <TranslationQuiz
+              translations={state.quiz && state.quiz.translations}
+              qState={state}
+              qSetState={setState}
+            />
+          )
+        } else {
+          return <Typography>You aren't taking any test.</Typography>
+        }
       case 'result':
-        return <Result />
+        return <Result qState={state} qSetState={setState} />
       default:
         return <Start qState={state} qSetState={setState} />
     }

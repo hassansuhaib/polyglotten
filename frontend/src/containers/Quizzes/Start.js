@@ -48,6 +48,7 @@ const Start = ({ qState, qSetState }) => {
         qSetState({
           ...qState,
           quiz: response.data,
+          quiz_id: response.data.id,
         })
       })
       .catch((error) => console.log(error))

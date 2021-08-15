@@ -333,11 +333,15 @@ class MCQ(models.Model):
     quiz = models.ForeignKey(
         Quiz, on_delete=models.CASCADE, related_name='mcqs')
     word = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
     answer = models.CharField(max_length=100)
     choice_1 = models.CharField(max_length=100)
     choice_2 = models.CharField(max_length=100)
     choice_3 = models.CharField(max_length=100)
     choice_4 = models.CharField(max_length=100)
+
+    class Meta:
+        ordering = ['created_at']
 
     def __str__(self):
         return self.word
@@ -348,6 +352,10 @@ class Translation(models.Model):
         Quiz, on_delete=models.CASCADE, related_name='translations')
     sentence = models.CharField(max_length=300)
     answer = models.CharField(max_length=300)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['created_at']
 
     def __str__(self):
         return self.sentence
@@ -365,11 +373,11 @@ class Result(models.Model):
     level = models.CharField(max_length=20, choices=QUIZ_LEVELS)
 
     def save(self, *args, **kwargs):
-        if vocabulary > 6 and translation > 6:
+        if self.vocabulary > 6 and self.translation > 6:
             self.passed = True
         self.level = self.quiz.level
 
-        return super(Results, self).save(*args, **kwargs)
+        return super(Result, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"Vocabulary: {self.vocabulary} Translation: {self.translation} taken on {self.created_at}"

@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
+import api from '../../api'
+import * as urls from '../../constants'
 
 import { makeStyles } from '@material-ui/core/styles'
 import { Button, Grid, Typography } from '@material-ui/core'
 import Box from '@material-ui/core/Box'
 import TextField from '@material-ui/core/TextField'
+import { CircularProgress } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   navigation: {
@@ -15,23 +18,48 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const Result = (props) => {
+const Result = ({ qState, qSetState }) => {
   const classes = useStyles()
+  const [state, setState] = useState({
+    result: null,
+  })
+
+  console.log('Quiz State in Results: ', qState)
+
+  useEffect(() => {
+    api
+      .post(urls.quizComplete, qState)
+      .then((response) => {
+        setState({ result: response.data })
+      })
+      .catch((error) => console.log(error))
+  }, [])
+
+  const renderResult = () => {
+    if (state.result) {
+      return (
+        <React.Fragment>
+          <Typography>Vocabulary: {state.result.vocabulary}/10</Typography>
+          <Typography>Translation: {state.result.translation}/10</Typography>
+          <Typography>
+            Status: {state.result.status ? 'Passed' : 'Failed'}
+          </Typography>
+        </React.Fragment>
+      )
+    } else {
+      return <CircularProgress />
+    }
+  }
+
   return (
     <div>
       <Box boxShadow={3} p={5}>
-        <h1>Quiz</h1>
         <Grid>
-          <Grid item xs={12}>
-            Part 2 of 2: Translation
-          </Grid>
           <Grid item xs={12}>
             <Typography variant="h5">Result</Typography>
           </Grid>
           <Grid item xs={12}>
-            <Typography>Vocabulary: 1/10</Typography>
-            <Typography>Translation: 2/10</Typography>
-            <Typography>Status: Failed Idiot!</Typography>
+            {renderResult()}
           </Grid>
           <Grid container item xs={12}>
             <Button

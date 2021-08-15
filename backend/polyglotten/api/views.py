@@ -262,24 +262,27 @@ class QuizCompletionView(APIView):
 
     def post(self, request, *args, **kwargs):
         quiz_id = request.data.get('quiz_id')
-        vocabulary_answers = request.data.get('vocabulary')
-        translation_answers = request.data.get('translations')
+        vocabulary_answers = request.data.get('vocabulary_answers')
+        translation_answers = request.data.get('translation_answers')
         try:
             quiz = Quiz.objects.get(id=quiz_id)
             mcqs = quiz.mcqs.all()
             translations = quiz.translations.all()
             vocab_result = 0
             translation_result = 0
+            print("Fist here")
             # The answers should be according to sequence of questions in the quiz for this to work
             for index, mcq in enumerate(mcqs):
                 if vocabulary_answers[index] == mcq.answer:
                     vocab_result += 1
+            print("Done with vocab")
             for index, translation in enumerate(translations):
-                if translation_answer[index] == translation.answer:
+                if translation_answers[index] == translation.answer:
                     translation_result += 1
+            print("Done with translation")
 
-            result = Result(quiz=quiz, user=request.user,
-                            vocabulary=vocab_result, translation=translation_result, level=quiz.level)
+            result = Result(quiz=quiz, user=request.user, vocabulary=vocab_result,
+                            translation=translation_result, level=quiz.level)
             result.save()
             return Response(ResultSerializer(result).data, status=status.HTTP_200_OK)
         except Exception as e:
@@ -549,6 +552,23 @@ class UpvoteView(APIView):
                 question = Question.objects.get(id=id)
                 question.votes.add(user)
             return Response({'Message': 'Upvoted!'}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'Error': str(e)}, status=status.HTTP_404_NOT_FOUND)
+
+
+class UnvoteView(APIView):
+    permission_classes = (AllowAny, )
+
+    def post(self, request, upvote_type, id, *args, **kwargs):
+        try:
+            user = User.objects.get(id=request.user.id)
+            if upvote_type == 'answer':
+                answer = Answer.objects.get(id=id)
+                answer.votes.remove(user)
+            else:
+                question = Question.objects.get(id=id)
+                question.votes.remove(user)
+            return Response({'Message': 'Unvoted!'}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'Error': str(e)}, status=status.HTTP_404_NOT_FOUND)
 

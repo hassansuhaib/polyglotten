@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import { capitalize } from '../../utils'
+import history from '../../history'
 
 import { makeStyles } from '@material-ui/core/styles'
 import { Button, Grid, Typography } from '@material-ui/core'
@@ -19,13 +20,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const VocabularyQuiz = ({ questions }) => {
+const VocabularyQuiz = ({ questions, qState, qSetState }) => {
   const classes = useStyles()
 
   const [state, setState] = useState({
     step: 0,
     selectedOption: '',
-    answers: [],
+    vocabulary_answers: [],
   })
 
   const handleChange = (event) => {
@@ -36,10 +37,24 @@ const VocabularyQuiz = ({ questions }) => {
   }
 
   const handleNext = () => {
-    setState({
-      ...state,
-      step: ++state.step,
-    })
+    if (state.step < questions.length - 1) {
+      setState({
+        ...state,
+        selectedOption: '',
+        step: ++state.step,
+        vocabulary_answers: state.vocabulary_answers.concat(
+          state.selectedOption
+        ),
+      })
+    } else {
+      qSetState({
+        ...qState,
+        vocabulary_answers: state.vocabulary_answers.concat(
+          state.selectedOption
+        ),
+      })
+      history.push('translation')
+    }
   }
 
   const renderOptions = () => {
@@ -96,7 +111,6 @@ const VocabularyQuiz = ({ questions }) => {
           </Grid>
           <Grid container item xs={12}>
             <div className={classes.navigation}>
-              <Button variant="contained">Previous</Button>
               <Button variant="contained" color="primary" onClick={handleNext}>
                 Next
               </Button>

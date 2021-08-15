@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
+import history from '../../history'
 
 import { makeStyles } from '@material-ui/core/styles'
 import { Button, Grid, Typography } from '@material-ui/core'
@@ -15,14 +16,43 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const TranslationQuiz = (props) => {
+const TranslationQuiz = ({ translations, qState, qSetState }) => {
   const classes = useStyles()
 
-  const [value, setValue] = useState('Belt')
+  const [state, setState] = useState({
+    step: 0,
+    translation: '',
+    translation_answers: [],
+  })
 
   const handleChange = (event) => {
-    setValue(event.target.value)
+    setState({
+      ...state,
+      translation: event.target.value,
+    })
   }
+
+  const handleNext = () => {
+    if (state.step < translations.length - 1) {
+      setState({
+        ...state,
+        translation: '',
+        step: ++state.step,
+        translation_answers: state.translation_answers.concat(
+          state.translation
+        ),
+      })
+    } else {
+      qSetState({
+        ...qState,
+        translation_answers: state.translation_answers.concat(
+          state.translation
+        ),
+      })
+      history.push('result')
+    }
+  }
+
   return (
     <div>
       <Box boxShadow={3} p={5}>
@@ -34,9 +64,7 @@ const TranslationQuiz = (props) => {
             <Typography variant="h5">Translate the following</Typography>
           </Grid>
           <Grid item xs={12}>
-            <Typography>
-              Hola hermano, necesito tu ayuda ahore mismo.
-            </Typography>
+            <Typography>{translations[state.step].sentence}</Typography>
           </Grid>
           <Grid item xs={12}>
             <TextField
@@ -44,19 +72,16 @@ const TranslationQuiz = (props) => {
               fullWidth
               multiline
               rows={4}
+              name="translation"
               variant="outlined"
+              value={state.translation}
+              onChange={handleChange}
             />
           </Grid>
           <Grid container item xs={12}>
             <div className={classes.navigation}>
-              <Button variant="contained">Previous</Button>
-              <Button
-                variant="contained"
-                color="primary"
-                component={RouterLink}
-                to="/tests/result"
-              >
-                Finish
+              <Button variant="contained" color="primary" onClick={handleNext}>
+                Next
               </Button>
             </div>
           </Grid>
