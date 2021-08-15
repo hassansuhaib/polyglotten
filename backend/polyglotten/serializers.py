@@ -36,5 +36,7 @@ class CustomUserDetailsSerializer(serializers.ModelSerializer):
             'email',
             'username',
             'gender',
+            'first_name',
+            'last_name'
         )
         read_only_fields = ('pk', 'email',)

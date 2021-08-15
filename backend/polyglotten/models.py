@@ -123,7 +123,7 @@ class Post(models.Model):
     # Fields related to share functionality
     shared = models.BooleanField(default=False)
     shared_content = models.TextField(blank=True, null=True)
-    shared_at = models.DateTimeField(blank=True, null=True)
+    shared_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     sharing_user = models.ForeignKey(
         User, on_delete=models.CASCADE, null=True, blank=True)
 

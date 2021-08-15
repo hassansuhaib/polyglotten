@@ -10,6 +10,7 @@ const authURL = `/auth`
 // Feed URLS
 export const posts = `/feed/posts/`
 export const postCreate = `/feed/posts/create/`
+export const postShare = `/feed/posts/share/`
 export const postEdit = (id) => `/feed/posts/${id}/update/`
 export const postDelete = (id) => `/feed/posts/${id}/delete/`
 export const like = (name, id) => `/feed/like/${name}/${id}/`

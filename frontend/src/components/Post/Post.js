@@ -5,9 +5,10 @@ import * as urls from '../../constants'
 
 import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
-import { Button, Grid, TextField, Typography } from '@material-ui/core'
+import { Box, Button, Grid, TextField, Typography } from '@material-ui/core'
 import CreateComment from '../Comment/CreateComment'
 import Comment from '../Comment/Comment'
+import SharePost from './SharePost'
 
 const useStyles = makeStyles((theme) => ({
   post: {
@@ -33,14 +34,21 @@ const useStyles = makeStyles((theme) => ({
   uncomment: {
     display: 'none',
   },
+  share: {
+    display: 'flex',
+  },
+  hideShare: {
+    display: 'none',
+  },
 }))
 const Post = ({ post }) => {
   const classes = useStyles()
-  const name = `${post.user.first_name} ${post.user.last_name}`
   const user = useSelector((state) => state.auth.user)
+  const name = `${post.user.first_name} ${post.user.last_name}`
   const [state, setState] = useState({
     post: post,
     showForm: false,
+    showShare: false,
   })
 
   console.log('Post State: ', state)
@@ -82,10 +90,8 @@ const Post = ({ post }) => {
   const renderLikeButton = () => {
     if (state.post) {
       if (state.post.likes.length > 0) {
-        console.log('We here')
         const found = state.post.likes.find((like) => like.pk === user.pk)
         if (found) {
-          console.log('Found')
           return (
             <Button variant="contained" color="primary" onClick={handleUnLike}>
               UnLike
@@ -101,14 +107,42 @@ const Post = ({ post }) => {
     }
   }
 
-  return (
-    <div>
-      <Paper className={classes.post} elevation={3}>
-        <Grid container>
+  const renderBody = () => {
+    return (
+      <React.Fragment>
+        <Grid item xs={12}>
+          <div className={classes.header}>
+            <Typography>{name}</Typography>
+            <Typography>{` ${new Date(post.created_at).toLocaleDateString(
+              'en-US',
+              {
+                day: 'numeric',
+                month: 'short',
+                // year: 'numeric',
+                // hour: 'numeric',
+                // minute: 'numeric',
+              }
+            )}`}</Typography>
+          </div>
+        </Grid>
+        <Grid item xs={12}>
+          <div>
+            <Typography>{post.content}</Typography>
+            <div>Image</div>
+          </div>
+        </Grid>
+      </React.Fragment>
+    )
+  }
+
+  const renderMain = () => {
+    if (post.shared === true) {
+      return (
+        <Grid item container>
           <Grid item xs={12}>
-            <div className={classes.header}>
-              <Typography>{name}</Typography>
-              <Typography>{` ${new Date(post.created_at).toLocaleDateString(
+            <div className={classes.info}>
+              <Typography>{`${post.sharing_user.first_name} ${post.sharing_user.last_name}`}</Typography>
+              <Typography>{` ${new Date(post.shared_at).toLocaleDateString(
                 'en-US',
                 {
                   day: 'numeric',
@@ -121,11 +155,32 @@ const Post = ({ post }) => {
             </div>
           </Grid>
           <Grid item xs={12}>
-            <div>
-              <Typography>{post.content}</Typography>
-              <div>Image</div>
+            <div style={{ textAlign: 'left' }}>
+              <Typography>{post.shared_content}</Typography>
             </div>
           </Grid>
+          <Grid item xs={12}>
+            <Box p={5}>{renderBody()}</Box>
+          </Grid>
+        </Grid>
+      )
+    } else {
+      return renderBody()
+    }
+  }
+
+  return (
+    <div>
+      <Paper className={classes.post} elevation={3}>
+        <Grid container>
+          <Grid item xs={12}>
+            <div
+              className={state.showShare ? classes.share : classes.hideShare}
+            >
+              <SharePost post={post} pState={state} pSetState={setState} />
+            </div>
+          </Grid>
+          {renderMain()}
           <Grid item xs={12}>
             <div className={classes.info}>
               <Typography>
@@ -152,7 +207,13 @@ const Post = ({ post }) => {
               >
                 Comment
               </Button>
-              <Button variant="contained" color="secondary">
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() =>
+                  setState({ ...state, showShare: !state.showShare })
+                }
+              >
                 Share
               </Button>
             </div>
