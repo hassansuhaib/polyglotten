@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 
 import { makeStyles } from '@material-ui/core/styles'
@@ -15,10 +15,11 @@ const useStyles = makeStyles((theme) => ({ toolbar: theme.mixins.toolbar }))
 const Quizzes = (props) => {
   const classes = useStyles()
   const view = props.match.params.view
+  const [state, setState] = useState(null)
 
   useEffect(() => {
     window.scrollTo(0, 0)
-    document.title = 'Settings'
+    document.title = 'Assessment Test'
   }, [])
 
   const renderView = () => {
@@ -30,7 +31,7 @@ const Quizzes = (props) => {
       case 'result':
         return <Result />
       default:
-        return <Start />
+        return <Start qState={state} qSetState={setState} />
     }
   }
 

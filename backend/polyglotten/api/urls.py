@@ -64,7 +64,7 @@ urlpatterns = [
     # Quiz URLS
     path('quiz/mcqs/', MCQListView.as_view(), name='mcqs'),
     path('quiz/translations/', TranslationListView.as_view(), name='translations'),
-    path('quiz/quiz-detail/<int:id>/',
+    path('quiz/quiz-detail',
          QuizDetailView.as_view(), name='quiz-detail'),
     path('quiz/results/', ResultListView.as_view(), name='results'),
 

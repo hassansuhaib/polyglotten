@@ -31,5 +31,8 @@ export const questionDelete = (id) => `/forum/questions/${id}/delete/`
 export const answerCreate = `/forum/answers/create/`
 export const answerDelete = (id) => `/forum/answers/${id}/delete/`
 
+// Quiz URLS
+export const quiz = `/quiz/quiz-detail`
+
 // Misc URLS
 export const tags = `/tags/`

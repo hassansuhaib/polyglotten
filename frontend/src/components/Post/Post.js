@@ -40,6 +40,10 @@ const useStyles = makeStyles((theme) => ({
   hideShare: {
     display: 'none',
   },
+  body: {
+    margin: theme.spacing(2),
+    padding: theme.spacing(2),
+  },
 }))
 const Post = ({ post }) => {
   const classes = useStyles()
@@ -160,7 +164,9 @@ const Post = ({ post }) => {
             </div>
           </Grid>
           <Grid item xs={12}>
-            <Box p={5}>{renderBody()}</Box>
+            <Paper elevation={2} className={classes.body}>
+              {renderBody()}
+            </Paper>
           </Grid>
         </Grid>
       )
@@ -194,7 +200,6 @@ const Post = ({ post }) => {
                   : `${state.post.no_of_comments} comments`}
               </Typography>
             </div>
-            <hr />
           </Grid>
           <Grid item xs={12}>
             <div className={classes.buttons}>

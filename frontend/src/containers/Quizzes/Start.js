@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
+import api from '../../api'
+import * as urls from '../../constants'
+import history from '../../history'
 
 import { makeStyles } from '@material-ui/core/styles'
 import { Box, Button, Typography } from '@material-ui/core'
@@ -16,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const Start = (props) => {
+const Start = ({ qState, qSetState }) => {
   const classes = useStyles()
   const [state, setState] = useState({
     language: '',
@@ -28,6 +31,18 @@ const Start = (props) => {
       ...state,
       [event.target.name]: event.target.value,
     })
+  }
+
+  const getQuiz = () => {
+    api
+      .get(urls.quiz, {
+        params: {
+          language: state.language,
+          level: state.level,
+        },
+      })
+      .then((response) => console.log(response))
+      .catch((error) => console.log(error))
   }
 
   return (

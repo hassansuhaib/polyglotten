@@ -241,17 +241,18 @@ class ResultListView(ListAPIView):
 # Detail Views
 
 
-class QuizDetailView(RetrieveAPIView):
+class QuizDetailView(APIView):
     permission_classes = (AllowAny, )
     serializer_class = QuizSerializer
 
-    def get_object(self):
+    def get(self, request, format=None):
         level = self.request.query_params.get('level')
+        language = self.request.query_params.get('language')
         try:
-            quiz = Quiz.objects.get(level=level)
-            return Quiz
-        except:
-            raise Http404("Error fetching the quiz.")
+            quiz = Quiz.objects.get(level=level, language=language)
+            return Response(QuizSerializer(quiz).data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'Error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 # API Views
