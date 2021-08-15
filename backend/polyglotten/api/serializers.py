@@ -57,33 +57,38 @@ class PostImageSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class PostSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
-    sharing_user = UserSerializer()
-    tags = TagSerializer(many=True)
-    no_of_likes = serializers.SerializerMethodField()
-    images = PostImageSerializer(many=True)
-
-    class Meta:
-        model = Post
-        fields = ['user', 'content', 'images', 'created_at', 'edited', 'no_of_likes', 'likes',
-                  'tags', 'mentions', 'shared', 'shared_content', 'shared_at', 'sharing_user']
-
-    def get_no_of_likes(self, obj):
-        return obj.number_of_likes()
-
-
 class CommentSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     no_of_likes = serializers.SerializerMethodField()
 
     class Meta:
         model = Comment
-        fields = ['user', 'post', 'content', 'created_at',
+        fields = ['id', 'user', 'post', 'content', 'created_at',
                   'edited', 'likes', 'no_of_likes', 'tags', 'mentions']
 
     def get_no_of_likes(self, obj):
         return obj.number_of_likes()
+
+
+class PostSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    sharing_user = UserSerializer()
+    tags = TagSerializer(many=True)
+    no_of_likes = serializers.SerializerMethodField()
+    no_of_comments = serializers.SerializerMethodField()
+    images = PostImageSerializer(many=True)
+    comments = CommentSerializer(many=True)
+
+    class Meta:
+        model = Post
+        fields = ['id', 'user', 'content', 'images', 'created_at', 'edited', 'no_of_likes', 'no_of_comments', 'likes', 'comments',
+                  'tags', 'mentions', 'shared', 'shared_content', 'shared_at', 'sharing_user']
+
+    def get_no_of_likes(self, obj):
+        return obj.number_of_likes()
+
+    def get_no_of_comments(self, obj):
+        return obj.number_of_comments()
 
 
 class QuestionSerializer(serializers.ModelSerializer):

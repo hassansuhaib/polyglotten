@@ -7,11 +7,13 @@ export const endpoint = `${API_SERVER}${apiURL}`
 // The api for authentication
 const authURL = `/auth`
 
-// Post URLS
+// Feed URLS
 export const posts = `/feed/posts/`
 export const postCreate = `/feed/posts/create/`
 export const postEdit = (id) => `/feed/posts/${id}/update/`
 export const postDelete = (id) => `/feed/posts/${id}/delete/`
+export const like = (name, id) => `/feed/like/${name}/${id}/`
+export const commentCreate = `/feed/comments/create/`
 
 // Authentication URLs
 export const logout = `${authURL}/logout/`

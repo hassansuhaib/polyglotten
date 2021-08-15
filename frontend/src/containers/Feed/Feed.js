@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({}))
 const Feed = () => {
   const classes = useStyles()
   const [state, setState] = useState({ posts: null })
-
+  console.log('Feed state: ', state)
   useEffect(() => {
     api
       .get(urls.posts)
@@ -21,7 +21,11 @@ const Feed = () => {
   }, [])
 
   const renderPosts = () => {
-    return state.posts.map((post) => <Post key={post.id} post={post} />)
+    if (state.posts) {
+      return state.posts.map((post) => <Post key={post.id} post={post} />)
+    } else {
+      return <Typography>No posts to show.</Typography>
+    }
   }
 
   return (
