@@ -97,11 +97,12 @@ class QuestionSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     tags = TagSerializer(many=True)
     no_of_votes = serializers.SerializerMethodField()
+    votes = UserSerializer(many=True)
 
     class Meta:
         model = Question
         fields = ['id', 'title', 'content', 'created_at',
-                  'user', 'edited', 'tags', 'no_of_votes']
+                  'user', 'edited', 'tags', 'no_of_votes', 'votes']
 
     def get_no_of_votes(self, obj):
         return obj.number_of_votes()
@@ -110,11 +111,12 @@ class QuestionSerializer(serializers.ModelSerializer):
 class AnswerSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     no_of_votes = serializers.SerializerMethodField()
+    votes = UserSerializer(many=True)
 
     class Meta:
         model = Answer
         fields = ['id', 'content', 'created_at',
-                  'user', 'edited', 'no_of_votes']
+                  'user', 'edited', 'no_of_votes', 'votes']
 
     def get_no_of_votes(self, obj):
         return obj.number_of_votes()

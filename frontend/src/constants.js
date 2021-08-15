@@ -30,6 +30,8 @@ export const questionDetail = (id) => `/forum/question-detail/${id}/`
 export const questionDelete = (id) => `/forum/questions/${id}/delete/`
 export const answerCreate = `/forum/answers/create/`
 export const answerDelete = (id) => `/forum/answers/${id}/delete/`
+export const vote = (name, id) => `/forum/vote/${name}/${id}/`
+export const unvote = (name, id) => `/forum/unvote/${name}/${id}/`
 
 // Quiz URLS
 export const quiz = `/quiz/quiz-detail/`

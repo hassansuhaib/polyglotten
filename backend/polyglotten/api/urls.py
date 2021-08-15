@@ -40,10 +40,10 @@ urlpatterns = [
          AnswerDeleteView.as_view(), name='delete-answer'),
 
     # Works for both Question and answer
-    path('forum/upvote/<str:upvote_type>/<int:id>/',
-         UpvoteView.as_view(), name='upvote'),
-    path('forum/unvote/<str:upvote_type>/<int:id>/',
-         UnvoteView.as_view(), name='unvote'),
+    path('forum/vote/<str:vote_type>/<int:id>/',
+         VoteView.as_view(), name='vote'),
+    path('forum/unvote/<str:vote_type>/<int:id>/',
+         UnVoteView.as_view(), name='unvote'),
 
     # Post URLS
     path('feed/posts/', PostListView.as_view(), name='posts'),

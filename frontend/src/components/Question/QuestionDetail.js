@@ -68,6 +68,50 @@ const QuestionDetail = ({ id }) => {
     history.push(`/forum/question/edit/${id}`)
   }
 
+  const handleVote = () => {
+    api
+      .post(urls.vote('question', state.question.id))
+      .then((response) => {
+        const updated = state.question
+        updated.votes.push(user)
+        updated.no_of_votes++
+        setState({ ...state, question: updated })
+      })
+      .catch((error) => console.log(error))
+  }
+
+  const handleUnVote = () => {
+    api
+      .post(urls.unvote('question', state.question.id))
+      .then((response) => {
+        const updated = state.question
+        updated.votes = updated.votes.filter((vote) => vote.pk !== user.pk)
+        updated.no_of_votes--
+        setState({ ...state, question: updated })
+      })
+      .catch((error) => console.log(error))
+  }
+
+  const renderVoteButton = () => {
+    if (state.question) {
+      if (state.question.votes.length > 0) {
+        const found = state.question.votes.find((vote) => vote.pk === user.pk)
+        if (found) {
+          return (
+            <Button variant="contained" color="primary" onClick={handleUnVote}>
+              UnVote
+            </Button>
+          )
+        }
+      }
+      return (
+        <Button variant="contained" color="primary" onClick={handleVote}>
+          Vote
+        </Button>
+      )
+    }
+  }
+
   const renderQuestion = () => {
     if (state.question) {
       return (
@@ -95,8 +139,17 @@ const QuestionDetail = ({ id }) => {
                 </Paper>
               </Fade>
             </Grid>
+            <Grid item container direction="row" alignItems="center" xs={2}>
+              {renderVoteButton()}{' '}
+              <Typography>
+                {' '}
+                {' - '} {state.question.no_of_votes} vote/s
+              </Typography>
+            </Grid>
+            <Grid item xs={10}>
+              <Typography variant="body1">{state.question.content}</Typography>
+            </Grid>
           </Grid>
-          <Typography variant="body1">{state.question.content}</Typography>
         </React.Fragment>
       )
     } else {

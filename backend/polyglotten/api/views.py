@@ -492,6 +492,40 @@ class AnswerCreateView(APIView):
         except Exception as e:
             return Response({'Error': str(e)}, status=status.HTTP_404_NOT_FOUND)
 
+
+class VoteView(APIView):
+    permission_classes = (AllowAny, )
+
+    def post(self, request, vote_type, id, *args, **kwargs):
+        try:
+            user = User.objects.get(id=request.user.id)
+            if vote_type == 'question':
+                question = Question.objects.get(id=id)
+                question.votes.add(user)
+            else:
+                post = Answer.objects.get(id=id)
+                post.votes.add(user)
+            return Response({'Message': 'Voted!'}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'Error': str(e)}, status=status.HTTP_200_OK)
+
+
+class UnVoteView(APIView):
+    permission_classes = (AllowAny, )
+
+    def post(self, request, vote_type, id, *args, **kwargs):
+        try:
+            user = User.objects.get(id=request.user.id)
+            if vote_type == 'question':
+                question = Question.objects.get(id=id)
+                question.votes.remove(user)
+            else:
+                post = Answer.objects.get(id=id)
+                post.votes.remove(user)
+            return Response({'Message': 'UnVoted!'}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'Error': str(e)}, status=status.HTTP_200_OK)
+
 # Update Views
 
 
