@@ -7,6 +7,9 @@ app_name = 'polyglotten'
 urlpatterns = [
     # User URLS
     path('user-detail/', UserDetailView.as_view(), name='user-detail'),
+    path('user-update/<pk>/', UserUpdateView.as_view(), name='update-user'),
+
+    # User Profile URLS
     path('badges/', BadgeListView.as_view(), name='badges'),
     path('interests/', InterestListView.as_view(), name='interests'),
     path('languages/', LanguageListView.as_view(), name='languages'),

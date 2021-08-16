@@ -26,6 +26,12 @@ class UserDetailView(RetrieveAPIView):
         except User.DoesNotExist:
             raise Http404("User does not exist")
 
+
+class UserUpdateView(UpdateAPIView):
+    permission_classes = (IsAuthenticated, )
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+
 # List Views
 
 

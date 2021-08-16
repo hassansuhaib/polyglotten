@@ -7,6 +7,9 @@ export const endpoint = `${API_SERVER}${apiURL}`
 // The api for authentication
 const authURL = `/auth`
 
+// User URLS
+export const userUpdate = `/user-update/`
+
 // Feed URLS
 export const posts = `/feed/posts/`
 export const postCreate = `/feed/posts/create/`
@@ -22,6 +25,7 @@ export const logout = `${authURL}/logout/`
 export const login = `${authURL}/login/`
 export const registration = `${authURL}/registration/`
 export const tokenRefresh = `${authURL}/token/refresh/`
+export const changePassword = (id) => `${authURL}/password/change/`
 
 // Forum URLs
 export const questions = `/forum/questions/`

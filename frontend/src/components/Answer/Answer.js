@@ -95,7 +95,7 @@ const Answer = ({ answer, qDState, qDSetState }) => {
   return (
     <ListItem alignItems="flex-start">
       <Grid container>
-        <Grid itex xs={1}>
+        <Grid item xs={1}>
           {renderVoteButton()}
         </Grid>
         <Grid item xs={10}>

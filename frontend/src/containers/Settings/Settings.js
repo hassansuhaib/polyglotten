@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 
 import AccountSettings from './AccountSettings'
@@ -34,11 +34,16 @@ const Settings = (props) => {
   const classes = useStyles()
   const view = props.match.params.view
   const subview = props.match.params.subview
+  const [selectedIndex, setSelectedIndex] = useState(0)
 
   useEffect(() => {
     window.scrollTo(0, 0)
     document.title = 'Settings'
   }, [])
+
+  const handleListItemClick = (event, index) => {
+    setSelectedIndex(index)
+  }
 
   const renderView = () => {
     switch (view) {
@@ -63,6 +68,8 @@ const Settings = (props) => {
             button
             component={RouterLink}
             to={`/settings/account`}
+            selected={selectedIndex === 0}
+            onClick={(event) => handleListItemClick(event, 0)}
           >
             <ListItemText primary="Account Settings" />
             <ListItemIcon>
@@ -74,6 +81,8 @@ const Settings = (props) => {
             button
             component={RouterLink}
             to={`/settings/languages`}
+            selected={selectedIndex === 1}
+            onClick={(event) => handleListItemClick(event, 1)}
           >
             <ListItemText primary="Language Settings" />
             <ListItemIcon>
@@ -85,6 +94,8 @@ const Settings = (props) => {
             button
             component={RouterLink}
             to={`/settings/interests`}
+            selected={selectedIndex === 2}
+            onClick={(event) => handleListItemClick(event, 2)}
           >
             <ListItemText primary="Interest Settings" />
             <ListItemIcon>
@@ -96,6 +107,8 @@ const Settings = (props) => {
             button
             component={RouterLink}
             to={`/settings/notifications`}
+            selected={selectedIndex === 3}
+            onClick={(event) => handleListItemClick(event, 3)}
           >
             <ListItemText primary="Notification Settings" />
             <ListItemIcon>

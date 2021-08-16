@@ -16,7 +16,7 @@ class PostImageAdmin(admin.StackedInline):
 class PostAdmin(admin.ModelAdmin):
     inlines = [PostImageAdmin, ]
     fields = ('user', 'content', 'edited', 'likes',
-              'shared', 'shared_at', 'shared_content', 'sharing_user')
+              'shared', 'shared_content', 'sharing_user')
 
 
 class MCQAdmin(admin.StackedInline):

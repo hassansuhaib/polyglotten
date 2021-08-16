@@ -44,6 +44,12 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2),
     padding: theme.spacing(2),
   },
+  postImage: {
+    maxWidth: '500px',
+  },
+  text: {
+    textAlign: 'left',
+  },
 }))
 const Post = ({ post }) => {
   const classes = useStyles()
@@ -111,6 +117,12 @@ const Post = ({ post }) => {
     }
   }
 
+  const renderImages = () => {
+    return state.post.images.map((image) => {
+      return <img src={image.image} className={classes.postImage} />
+    })
+  }
+
   const renderBody = () => {
     return (
       <React.Fragment>
@@ -129,11 +141,13 @@ const Post = ({ post }) => {
             )}`}</Typography>
           </div>
         </Grid>
-        <Grid item xs={12}>
-          <div>
+        <Grid item container xs={12}>
+          <Grid item className={classes.text} xs={12}>
             <Typography>{post.content}</Typography>
-            <div>Image</div>
-          </div>
+          </Grid>
+          <Grid item xs={12}>
+            {renderImages()}
+          </Grid>
         </Grid>
       </React.Fragment>
     )
