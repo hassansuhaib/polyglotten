@@ -72,8 +72,10 @@ class UserProfile(models.Model):
         Interest, related_name='user_interests', blank=True)
     languages = models.ManyToManyField(
         Language, related_name='user_languages', through='UserLanguages', blank=True)
-    friends = models.ManyToManyField(
-        User, related_name='friends', blank=True)
+    followers = models.ManyToManyField(
+        User, related_name='followers', blank=True)
+    followees = models.ManyToManyField(
+        User, related_name="followees", blank=True)
     cover_photo = models.FileField(
         upload_to='user_profile/', null=True, blank=True)
     profile_photo = models.FileField(
@@ -300,20 +302,39 @@ class VoiceChannel(models.Model):
         return self.topic
 
 
-class Message(models.Model):
-    content = models.TextField()
-    image = models.FileField(
-        upload_to='message_images/', null=True, blank=True)
-    edited = models.BooleanField(default=False)
-    edited_content = models.TextField(null=True, blank=True)
-    sender = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='sender')
-    receiver = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='receiver')
-    created_at = models.DateTimeField(auto_now_add=True)
+class Contact(models.Model):
+    user = models.ForeignKey(
+        User, related_name='friends', on_delete=models.CASCADE)
+    friends = models.ManyToManyField('self', blank=True)
 
     def __str__(self):
-        return f"Sent by {self.sender} to {self.receiver}"
+        return self.user.username
+
+
+class Message(models.Model):
+    content = models.TextField()
+    # image = models.FileField(
+    #     upload_to='message_images/', null=True, blank=True)
+    edited = models.BooleanField(default=False)
+    edited_content = models.TextField(null=True, blank=True)
+    contact = models.ForeignKey(
+        Contact, on_delete=models.CASCADE, related_name='contact')
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Sent by {self.contact.user.username}"
+
+    def last_10_messages(self):
+        return Message.objects.order_by('-timestamp').all()[:10]
+
+
+class Chat(models.Model):
+    participants = models.ManyToManyField(
+        Contact, related_name='chats', blank=True)
+    messages = models.ManyToManyField(Message, blank=True)
+
+    def __str__(self):
+        return "{}".format(self.pk)
 
 
 class Quiz(models.Model):

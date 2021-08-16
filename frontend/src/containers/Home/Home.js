@@ -7,7 +7,8 @@ import VoiceChannels from '../VoiceChannels/ActiveChannel'
 import Profile from '../Profile/Profile'
 import Search from '../Search/Search'
 import Notifications from '../Notifications/Notifications'
-import MessageList from '../Messages/MessageList'
+import ContactList from '../Messages/ContactList'
+import CreateChat from '../Messages/CreateChat'
 
 import LeftBar from '../../components/SideBars/LeftBar'
 import RightBar from '../../components/SideBars/RightBar'
@@ -45,7 +46,9 @@ const Home = (props) => {
       case 'notifications':
         return <Notifications />
       case 'messages':
-        return <MessageList username={username} />
+        return <ContactList username={username} />
+      case 'messages-create':
+        return <CreateChat />
       default:
         return <Feed />
     }

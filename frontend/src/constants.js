@@ -9,6 +9,7 @@ const authURL = `/auth`
 
 // User URLS
 export const userUpdate = `/user-update/`
+export const userSearch = `/users/search/`
 
 // User Profile URLS
 export const profile = `/profile`
@@ -53,7 +54,14 @@ export const quiz = `/quiz/quiz-detail/`
 export const quizComplete = `/quiz/complete/`
 export const quizResults = `/quiz/results/`
 
+// Chat URLS
+export const chatsAll = `/chats/`
+export const chatCreate = `/chats/create/`
+export const chatDetail = (id) => `/chats/${id}/`
+export const chatUpdate = (id) => `/chats/${id}/update/`
+export const chatDelete = (id) => `/chats/${id}/delete/`
+
 // Misc URLS
 export const tags = `/tags/`
-export const languagesAll = `/languages`
-export const interestsAll = `/interests`
+export const languagesAll = `/languages/`
+export const interestsAll = `/interests/`

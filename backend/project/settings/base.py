@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-
+    'channels',
     'polyglotten',
 ]
 
@@ -169,3 +169,14 @@ SIMPLE_JWT = {
 
 REST_USE_JWT = True
 JWT_AUTH_COOKIE = 'polyglotten-auth'
+
+ASGI_APPLICATION = 'project.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}

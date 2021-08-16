@@ -1,4 +1,5 @@
 from polyglotten.api.views import *
+from polyglotten.chat.views import *
 from django.urls import path
 
 app_name = 'polyglotten'
@@ -102,8 +103,16 @@ urlpatterns = [
          VoiceChannelUpdateView.as_view(), name='update-voice-channel'),
 
     # Misc URLS
-
     path('tags/', TagListView.as_view(), name='tags'),
 
+    # Chat URLS
+    path('chats/', ChatListView.as_view()),
+    path('chats/create/', ChatCreateView.as_view()),
+    path('chats/<pk>/', ChatDetailView.as_view()),
+    path('chats/<pk>/update/', ChatUpdateView.as_view()),
+    path('chats/<pk>/delete/', ChatDeleteView.as_view()),
+
+    # Search URLS
+    path('users/search/', UserSearchView.as_view()),
 
 ]

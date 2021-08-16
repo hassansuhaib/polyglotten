@@ -1,7 +1,11 @@
-import os
+from channels.auth import AuthMiddlewareStack
+from channels.routing import ProtocolTypeRouter, URLRouter
+import polyglotten.chat.routing
 
-from django.core.asgi import get_asgi_application
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings.base')
-
-application = get_asgi_application()
+application = ProtocolTypeRouter({
+    'websocket': AuthMiddlewareStack(
+        URLRouter(
+            polyglotten.chat.routing.websocket_urlpatterns
+        )
+    ),
+})
