@@ -11,8 +11,13 @@ const authURL = `/auth`
 export const userUpdate = `/user-update/`
 
 // User Profile URLS
+export const profile = `/profile`
+export const profileUpdate = (id) => `/profile/${id}/`
 export const languages = `/profile/languages`
 export const interests = `/profile/interests`
+export const notificationSettings = `/profile/notification-settings/`
+export const notificationSettingsUpdate = (id) =>
+  `/profile/notification-settings/${id}/update/`
 export const languageRemove = (id) => `/profile/languages/${id}/delete/`
 export const languageAdd = (id) => `/profile/languages/${id}/delete/`
 export const interestRemove = (id) => `/profile/interests/${id}/delete/`

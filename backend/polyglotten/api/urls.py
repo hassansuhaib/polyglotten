@@ -7,9 +7,15 @@ app_name = 'polyglotten'
 urlpatterns = [
     # User URLS
     path('user-detail/', UserDetailView.as_view(), name='user-detail'),
-    path('user-update/<pk>/', UserUpdateView.as_view(), name='update-user'),
+    path('profile/', ProfileDetailView.as_view(), name='profile-detail'),
+    path('profile/<pk>/update/', ProfileUpdateView.as_view(), name='update-profile'),
+    path('profile/notification-settings/', NotificationSettingsDetailView.as_view(),
+         name='notification-settings-detail'),
+    path('profile/notification-settings/<pk>/update/', NotificationSettingsUpdateView.as_view(),
+         name='update-notification-settings'),
 
     # User Profile URLS
+    path('profile/', ProfileDetailView.as_view(), name='badges'),
     path('badges/', BadgeListView.as_view(), name='badges'),
     path('interests/', InterestListView.as_view(), name='interests'),
     path('languages/', LanguageListView.as_view(), name='languages'),

@@ -32,6 +32,43 @@ class UserUpdateView(UpdateAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
+
+class ProfileUpdateView(UpdateAPIView):
+    permission_classes = (IsAuthenticated, )
+    serializer_class = UserProfileSerializer
+    queryset = UserProfile.objects.all()
+
+
+class ProfileDetailView(RetrieveAPIView):
+    permission_classes = (AllowAny, )
+    serializer_class = UserProfileSerializer
+
+    def get_object(self):
+        try:
+            profile = UserProfile.objects.get(user=self.request.user.id)
+            return profile
+        except UserProfile.DoesNotExist:
+            raise Http404("User Profile does not exist")
+
+
+class NotificationSettingsUpdateView(UpdateAPIView):
+    permission_classes = (IsAuthenticated, )
+    serializer_class = NotificationSettingsSerializer
+    queryset = NotificationSettings.objects.all()
+
+
+class NotificationSettingsDetailView(RetrieveAPIView):
+    permission_classes = (AllowAny, )
+    serializer_class = NotificationSettingsSerializer
+
+    def get_object(self):
+        try:
+            profile = UserProfile.objects.get(user=self.request.user.id)
+            settings = profile.notification_settings
+            return settings
+        except NotificationSettings.DoesNotExist:
+            raise Http404("Notification Settings do not exist")
+
 # List Views
 
 

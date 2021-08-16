@@ -56,12 +56,12 @@ class Language(models.Model):
 
 class NotificationSettings(models.Model):
     every = models.BooleanField(default=True)
-    post = models.BooleanField(default=True)
-    friend_request = models.BooleanField(default=True)
-    recommendations = models.BooleanField(default=True)
+    posts = models.BooleanField(default=True)
+    upvotes = models.BooleanField(default=True)
+    recommended = models.BooleanField(default=True)
 
     def __str__(self):
-        return f'All: {self.every}, Post: {self.post}, Friend Request: {self.friend_request}, Recommendations: {self.recommendations}'
+        return f'All: {self.every}, Post: {self.posts}, Friend Request: {self.upvotes}, Recommended: {self.recommended}'
 
 
 class UserProfile(models.Model):
