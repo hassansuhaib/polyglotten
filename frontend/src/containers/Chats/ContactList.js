@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   fab: {
     position: 'relative',
     bottom: theme.spacing(10),
-    left: theme.spacing(30),
+    left: theme.spacing(5),
   },
 }))
 
@@ -68,7 +68,7 @@ const ContactList = ({ username }) => {
           <ListItem
             button
             component={RouterLink}
-            to="/messages/username"
+            to="/chats/username"
             alignItems="flex-start"
           >
             <ListItemAvatar>
@@ -103,13 +103,13 @@ const ContactList = ({ username }) => {
 
   return (
     <React.Fragment>
-      <div className={classes.parent}>
+      <div>
         <List className={classes.root}>{renderChats()}</List>
         <Fab
           color="primary"
           className={classes.fab}
           component={RouterLink}
-          to="/messages-create"
+          to="/chats-create"
         >
           <AddIcon />
         </Fab>

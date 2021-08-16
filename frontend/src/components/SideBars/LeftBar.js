@@ -57,11 +57,11 @@ const LeftBar = ({ styling }) => {
         </ListItemIcon>
         <ListItemText primary="Profile" />
       </ListItem>
-      <ListItem disableGutters button component={RouterLink} to={`/messages`}>
+      <ListItem disableGutters button component={RouterLink} to={`/chats`}>
         <ListItemIcon>
           <ChatIcon />
         </ListItemIcon>
-        <ListItemText primary="Messages" />
+        <ListItemText primary="Chats" />
       </ListItem>
       <ListItem
         disableGutters

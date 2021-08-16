@@ -6,12 +6,11 @@ import Home from './containers/Home/Home'
 import Landing from './containers/Landing/Landing'
 import Login from './containers/Auth/Login'
 import Register from './containers/Auth/Register'
-import Profile from './containers/Profile/Profile'
 import Forum from './containers/Forum/Forum'
 import Settings from './containers/Settings/Settings'
 import VoiceChannels from './containers/VoiceChannels/VoiceChannels'
 import Quizzes from './containers/Quizzes/Quizzes'
-import Setup from './containers/Setup/Setup'
+import Chats from './containers/Chats/Chats'
 
 import QuestionDetail from './components/Question/QuestionDetail'
 import PrivateRoute from './components/Routes/PrivateRoute'
@@ -31,6 +30,9 @@ const Routes = withRouter(({ location }) => {
           <Route exact path="/settings" component={Settings} />
           <Route exact path="/settings/:view" component={Settings} />
           <Route exact path="/settings/:view/:subview" component={Settings} />
+          <Route exact path="/chats" component={Chats} />
+          <Route exact path="/chats/:view" component={Chats} />
+          <Route exact path="/chats/:view/:username/:id" component={Chats} />
           <Route exact path="/channels" component={VoiceChannels} />
           <Route exact path="/channels/:view" component={VoiceChannels} />
           <Route exact path="/tests" component={Quizzes} />

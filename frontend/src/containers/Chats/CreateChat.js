@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
+
 import api from '../../api'
 import * as urls from '../../constants'
 import history from '../../history'
@@ -20,6 +22,7 @@ const useStyles = makeStyles((theme) => ({}))
 
 const CreateChat = () => {
   const classes = useStyles()
+  const user = useSelector((state) => state.auth.user)
   const [state, setState] = useState({
     loading: false,
     results: [],
@@ -61,7 +64,16 @@ const CreateChat = () => {
 
   const handleCreate = (username) => {
     console.log('Chat created!')
-    history.push(`/messages/${username}`)
+    // Here the user is the current user who is making the request
+    const combined = [username, user.username]
+    api
+      .post(urls.chatCreate, {
+        messages: [],
+        participants: combined,
+      })
+      .then((response) => {
+        history.push(`/chats/${response.data.id}`)
+      })
   }
 
   const renderResults = () => {
