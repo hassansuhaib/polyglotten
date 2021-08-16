@@ -72,7 +72,7 @@ const CreateChat = () => {
         participants: combined,
       })
       .then((response) => {
-        history.push(`/chats/${response.data.id}`)
+        history.push(`user/${username}/${response.data.id}`)
       })
   }
 

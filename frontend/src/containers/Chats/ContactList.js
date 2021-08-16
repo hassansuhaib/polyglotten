@@ -109,7 +109,7 @@ const ContactList = ({ username }) => {
           color="primary"
           className={classes.fab}
           component={RouterLink}
-          to="/chats-create"
+          to="chats/create"
         >
           <AddIcon />
         </Fab>

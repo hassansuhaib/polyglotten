@@ -232,7 +232,8 @@ class ChatSerializer(serializers.ModelSerializer):
         chat = Chat()
         chat.save()
         for username in participants:
-            contact = get_user_contact(username)
+            user = User.objects.get(username=username)
+            contact = Contact.objects.get(user=user)
             chat.participants.add(contact)
         chat.save()
         return chat

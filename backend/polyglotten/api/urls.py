@@ -1,5 +1,4 @@
 from polyglotten.api.views import *
-from polyglotten.chat.views import *
 from django.urls import path
 
 app_name = 'polyglotten'

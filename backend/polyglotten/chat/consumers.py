@@ -3,7 +3,7 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 import json
 from polyglotten.models import Message, Chat, Contact
-from .views import get_last_10_messages, get_user_contact, get_current_chat
+from polyglotten.api.views import get_last_10_messages, get_user_contact, get_current_chat
 
 User = get_user_model()
 

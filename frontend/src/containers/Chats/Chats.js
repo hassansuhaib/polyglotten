@@ -47,9 +47,9 @@ const Chats = (props) => {
 
   const renderView = () => {
     switch (view) {
-      case 'chat':
+      case `user`:
         return <Chat chatId={chatId} />
-      case 'chats-create':
+      case 'create':
         return <CreateChat />
       default:
         return <ContactList username={username} />
