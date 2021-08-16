@@ -12,6 +12,15 @@ const api = axios.create({
   },
 })
 
+export const postApi = axios.create({
+  baseURL: baseURL,
+  timeout: 5000,
+  headers: {
+    Authorization: accessToken ? 'JWT ' + accessToken : null,
+    'content-type': 'multipart/form-data',
+  },
+})
+
 api.interceptors.response.use(
   (response) => response,
   async (error) => {

@@ -27,6 +27,14 @@ class LanguageSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class UserLanguageSerializer(serializers.ModelSerializer):
+    language = LanguageSerializer()
+
+    class Meta:
+        model = UserLanguages
+        fields = ['classification', 'language']
+
+
 class NotificationSettingsSerializer(serializers.ModelSerializer):
     class Meta:
         model = NotificationSettings

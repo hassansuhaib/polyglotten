@@ -12,8 +12,8 @@ GENDER_SELECTION = [
 ]
 
 LANGUAGE_SELECTION = [
-    ('N', 'Native'),
-    ('T', 'Target'),
+    ('Native', 'Native'),
+    ('Target', 'Target'),
 ]
 
 NOTIFICATION_TYPES = [
@@ -69,9 +69,9 @@ class UserProfile(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     about = models.CharField(max_length=250, null=True, blank=True)
     interests = models.ManyToManyField(
-        Interest, related_name='interests', blank=True)
+        Interest, related_name='user_interests', blank=True)
     languages = models.ManyToManyField(
-        Language, related_name='language', through='UserLanguages', blank=True)
+        Language, related_name='user_languages', through='UserLanguages', blank=True)
     friends = models.ManyToManyField(
         User, related_name='friends', blank=True)
     cover_photo = models.FileField(

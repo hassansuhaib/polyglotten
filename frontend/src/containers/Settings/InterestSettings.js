@@ -49,14 +49,14 @@ const InterestSettings = () => {
 
   const handleAdd = () => {
     api
-      .post(urls.interestAdd)
+      .post(urls.interestUpdate)
       .then((response) => console.log(response))
       .catch((error) => console.log(error))
   }
 
   const handleRemove = () => {
     api
-      .post(urls.interestRemove)
+      .post(urls.interestUpdate)
       .then((response) => console.log(response))
       .catch((error) => console.log(error))
   }
@@ -89,7 +89,7 @@ const InterestSettings = () => {
         <Grid item xs={12}>
           <List>{renderInterests()}</List>
         </Grid>
-        <Grid item container spacing={3} xs={12}>
+        <Grid item container spacing={2} xs={12}>
           <Grid item xs={12}>
             <TextField
               id="outlined-basic"

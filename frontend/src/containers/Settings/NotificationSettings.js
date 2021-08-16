@@ -28,14 +28,13 @@ const NotificationSettings = () => {
       .then((response) => console.log(response.data))
       .catch((error) => console.log(error))
   }
-
-  const hem = () => {
-    updateNotifications()
-  }
   const handleChange = (event) => {
     setState({ ...state, [event.target.name]: event.target.checked })
-    hem()
   }
+
+  useEffect(() => {
+    updateNotifications()
+  }, [state])
 
   useEffect(() => {
     const getProfileSettings = () => {

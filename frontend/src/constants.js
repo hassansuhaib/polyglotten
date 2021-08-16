@@ -13,15 +13,13 @@ export const userUpdate = `/user-update/`
 // User Profile URLS
 export const profile = `/profile`
 export const profileUpdate = (id) => `/profile/${id}/`
-export const languages = `/profile/languages`
-export const interests = `/profile/interests`
 export const notificationSettings = `/profile/notification-settings/`
 export const notificationSettingsUpdate = (id) =>
   `/profile/notification-settings/${id}/update/`
-export const languageRemove = (id) => `/profile/languages/${id}/delete/`
-export const languageAdd = (id) => `/profile/languages/${id}/delete/`
-export const interestRemove = (id) => `/profile/interests/${id}/delete/`
-export const interestAdd = (id) => `/profile/interests/${id}/delete/`
+export const languages = `/profile/languages`
+export const interests = `/profile/interests`
+export const languageUpdate = (action) => `/profile/languages/update/${action}/`
+export const interestUpdate = (action) => `/profile/interests/update/${action}/`
 
 // Feed URLS
 export const posts = `/feed/posts/`
@@ -57,3 +55,5 @@ export const quizResults = `/quiz/results/`
 
 // Misc URLS
 export const tags = `/tags/`
+export const languagesAll = `/languages`
+export const interestsAll = `/interests`

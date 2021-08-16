@@ -7,7 +7,6 @@ app_name = 'polyglotten'
 urlpatterns = [
     # User URLS
     path('user-detail/', UserDetailView.as_view(), name='user-detail'),
-    path('profile/', ProfileDetailView.as_view(), name='profile-detail'),
     path('profile/<pk>/update/', ProfileUpdateView.as_view(), name='update-profile'),
     path('profile/notification-settings/', NotificationSettingsDetailView.as_view(),
          name='notification-settings-detail'),
@@ -15,8 +14,17 @@ urlpatterns = [
          name='update-notification-settings'),
 
     # User Profile URLS
-    path('profile/', ProfileDetailView.as_view(), name='badges'),
-    path('badges/', BadgeListView.as_view(), name='badges'),
+    path('profile/', ProfileDetailView.as_view(), name='profile-detail'),
+    path('profile/interests/', ProfileInterestListView.as_view(),
+         name='profile-interests'),
+    path('profile/interests/update/<str:action>/', ProfileInterestUpdateView.as_view(),
+         name='profile-interests-update'),
+    path('profile/languages/', ProfileLanguageListView.as_view(),
+         name='profile-languages'),
+    path('profile/languages/update/<str:action>/', ProfileLanguageUpdateView.as_view(),
+         name='profile-languages-update'),
+
+    # Data URLS
     path('interests/', InterestListView.as_view(), name='interests'),
     path('languages/', LanguageListView.as_view(), name='languages'),
 

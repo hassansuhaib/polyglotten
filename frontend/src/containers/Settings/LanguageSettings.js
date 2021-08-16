@@ -33,16 +33,16 @@ const LanguageSettings = () => {
   const classes = useStyles()
   const [state, setState] = useState({
     languages: '',
-    language: '',
-    language_classification: '',
+    new_language: '',
+    classification: 'Native',
   })
-
+  console.log('Languages state: ', state)
   useEffect(() => {
     api
       .get(urls.languages)
-      .then((response) => setState({ languages: response.data }))
+      .then((response) => setState({ ...state, languages: response.data }))
       .catch((error) => console.log(error))
-  })
+  }, [])
 
   const handleChange = (event) => {
     setState({
@@ -53,35 +53,35 @@ const LanguageSettings = () => {
 
   const handleAdd = () => {
     api
-      .post(urls.languageAdd)
+      .post(urls.languageUpdate('add'), state)
       .then((response) => console.log(response))
       .catch((error) => console.log(error))
   }
 
-  const handleRemove = () => {
+  const handleRemove = (title) => {
     api
-      .post(urls.languageRemove)
+      .post(urls.languageUpdate('remove'), {
+        new_language: title,
+      })
       .then((response) => console.log(response))
       .catch((error) => console.log(error))
   }
 
   const renderLanguages = () => {
-    return (
-      <React.Fragment>
+    if (state.languages && state.languages.length > 1) {
+      return state.languages.map((language) => (
         <ListItem>
-          <ListItemText primary="German" />
+          <ListItemText
+            primary={language.language.title}
+            secondary={language.classification}
+          />
+
           <IconButton>
-            <ClearIcon onClick={handleRemove} />
+            <ClearIcon onClick={() => handleRemove(language.language.title)} />
           </IconButton>
         </ListItem>
-        <ListItem>
-          <ListItemText primary="Spanish" />
-          <IconButton>
-            <ClearIcon onClick={handleRemove} />
-          </IconButton>
-        </ListItem>
-      </React.Fragment>
-    )
+      ))
+    }
   }
 
   return (
@@ -99,9 +99,9 @@ const LanguageSettings = () => {
               id="outlined-basic"
               label="Add Language"
               variant="outlined"
-              name="language"
+              name="new_language"
               fullWidth
-              value={state.language}
+              value={state.new_language}
               onChange={handleChange}
             />
           </Grid>
@@ -111,12 +111,12 @@ const LanguageSettings = () => {
               <Select
                 labelId="select-language"
                 id="language"
-                name="language_classification"
-                value={state.language_classification}
+                name="classification"
+                value={state.classification ? state.classification : 'Native'}
                 onChange={handleChange}
               >
-                <MenuItem value={'N'}>Native</MenuItem>
-                <MenuItem value={'T'}>Target</MenuItem>
+                <MenuItem value={'Native'}>Native</MenuItem>
+                <MenuItem value={'Target'}>Target</MenuItem>
               </Select>
             </FormControl>
           </Grid>

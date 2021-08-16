@@ -72,6 +72,66 @@ class NotificationSettingsDetailView(RetrieveAPIView):
 # List Views
 
 
+class ProfileInterestListView(ListAPIView):
+    permission_classes = (AllowAny, )
+    serializer_class = InterestSerializer
+    pagination_class = None
+
+    def get_queryset(self):
+        user_profile = UserProfile.objects.get(user=self.request.user)
+        qs = user_profile.interests
+        return qs
+
+
+class ProfileLanguageListView(ListAPIView):
+    permission_classes = (AllowAny, )
+    serializer_class = UserLanguageSerializer
+    pagination_class = None
+
+    def get_queryset(self):
+        user_profile = UserProfile.objects.get(user=self.request.user)
+        qs = UserLanguages.objects.filter(user_profile=user_profile)
+        return qs
+
+
+class ProfileLanguageUpdateView(APIView):
+    permission_classes = (AllowAny, )
+
+    def post(self, request, action, *args, **kwargs):
+        new_language = request.data.get('new_language')
+        classification = request.data.get('classification')
+        try:
+            language = Language.objects.get(title=new_language)
+            user_profile = UserProfile.objects.get(user=request.user)
+            if action == 'remove':
+                user_profile.languages.remove(language)
+            else:
+                user_profile.languages.add(language, through_defaults={
+                    'classification': classification})
+
+            return Response(LanguageSerializer(language).data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'Error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ProfileInterestUpdateView(APIView):
+    permission_classes = (AllowAny, )
+
+    def post(self, request, action, *args, **kwargs):
+        new_interest = request.data.get('new_interest')
+        try:
+            interest = Interest.objects.get(title=new_interest)
+            user_profile = UserProfile.objects.get(user=request.user)
+            if action == 'remove':
+                user_profile.interests.remove(interest)
+            else:
+                user_profile.interests.add(interest)
+
+            return Response(InterestSerializer(interest).data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'Error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
 class BadgeListView(ListAPIView):
     permission_classes = (AllowAny, )
     serializer_class = BadgeSerializer
@@ -367,9 +427,12 @@ class PostCreateView(APIView):
 
     def post(self, request, *args, **kwargs):
         content = request.data.get('content')
+        image = request.data.get('image')
         try:
             post = Post(content=content, user=request.user)
             post.save()
+            post_image = PostImage(image=image, post=post)
+            post_image.save()
             return Response(PostSerializer(post).data, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'Error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
@@ -422,14 +485,14 @@ class PostShareView(APIView):
     permission_classes = (AllowAny, )
 
     def post(self, request, *args, **kwargs):
-        sharing_user = User.objects.get(id=request.user.id)
         shared_content = request.data.get('shared_content')
         post_id = request.data.get('post_id')
         try:
-            post = Post.objects.get(id=post_id)
-            post.shared_content = shared_content
-            post.sharing_user = sharing_user
-            post.shared = True
+            original_post = Post.objects.get(id=post_id)
+            post = Post(shared_content=shared_content, sharing_user=request.user,
+                        shared=True, content=original_post.content, user=original_post.user)
+            for image in original_post.images.all():
+                post.images.add(image)
             post.save()
             return Response(PostSerializer(post).data, status=status.HTTP_200_OK)
         except Exception as e:

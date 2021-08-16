@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import api from '../../api'
+import { postApi } from '../../api'
 import * as urls from '../../constants'
 import history from '../../history'
 
@@ -41,9 +41,12 @@ const CreatePost = (props) => {
   console.log('CreatePost State: ', state)
 
   const handleSubmit = () => {
-    console.log(state)
-    api
-      .post(urls.postCreate, state)
+    let form_data = new FormData()
+    form_data.append('image', state.image, state.image.name)
+    form_data.append('content', state.content)
+
+    postApi
+      .post(urls.postCreate, form_data)
       .then((response) => console.log('Response', response))
       .catch((error) => console.log(error))
       .finally(() => {
