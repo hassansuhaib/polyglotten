@@ -39,13 +39,7 @@ const CreateChannel = (props) => {
   return (
     <div>
       <Box boxShadow={3} p={5}>
-        <Grid
-          container
-          direction="column"
-          alignItems="center"
-          justifyContent="center"
-          spacing={3}
-        >
+        <Grid container spacing={3}>
           <Grid item xs={12}>
             <Typography variant="h3">Create Channel</Typography>
           </Grid>
@@ -75,25 +69,23 @@ const CreateChannel = (props) => {
             />
           </Grid>
           <Grid item xs={12}>
-            <div className={classes.invite}>
-              <Autocomplete
-                multiple
-                fullWidth
-                id="tags-outlined"
-                options={friends}
-                getOptionLabel={(option) => option.title}
-                defaultValue={[friends[13]]}
-                filterSelectedOptions
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    variant="outlined"
-                    label="Invite Friends"
-                    placeholder="Favorites"
-                  />
-                )}
-              />
-            </div>
+            <Autocomplete
+              multiple
+              fullWidth
+              id="tags-outlined"
+              options={friends}
+              getOptionLabel={(option) => option.title}
+              defaultValue={[friends[13]]}
+              filterSelectedOptions
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="outlined"
+                  label="Invite Friends"
+                  placeholder="Favorites"
+                />
+              )}
+            />
           </Grid>
           <Grid item xs={12}>
             <Button

@@ -10,6 +10,14 @@ const authURL = `/auth`
 // User URLS
 export const userUpdate = `/user-update/`
 
+// User Profile URLS
+export const languages = `/profile/languages`
+export const interests = `/profile/interests`
+export const languageRemove = (id) => `/profile/languages/${id}/delete/`
+export const languageAdd = (id) => `/profile/languages/${id}/delete/`
+export const interestRemove = (id) => `/profile/interests/${id}/delete/`
+export const interestAdd = (id) => `/profile/interests/${id}/delete/`
+
 // Feed URLS
 export const posts = `/feed/posts/`
 export const postCreate = `/feed/posts/create/`
