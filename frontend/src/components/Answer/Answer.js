@@ -12,6 +12,8 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import Paper from '@material-ui/core/Paper'
 import Fade from '@material-ui/core/Fade'
 import history from '../../history'
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward'
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 
 const useStyles = makeStyles((theme) => ({
   inline: {
@@ -20,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(1),
     position: 'absolute',
+    zIndex: 20,
   },
 }))
 
@@ -78,15 +81,15 @@ const Answer = ({ answer, qDState, qDSetState }) => {
         const found = answer.votes.find((vote) => vote.pk === user.pk)
         if (found) {
           return (
-            <Button variant="contained" color="primary" onClick={handleUnVote}>
-              UnVote
+            <Button color="secondary" onClick={handleUnVote}>
+              <ArrowDownwardIcon />
             </Button>
           )
         }
       }
       return (
-        <Button variant="contained" color="primary" onClick={handleVote}>
-          Vote
+        <Button color="primary" onClick={handleVote}>
+          <ArrowUpwardIcon />
         </Button>
       )
     }

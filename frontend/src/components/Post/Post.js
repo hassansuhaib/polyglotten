@@ -9,6 +9,10 @@ import { Box, Button, Grid, TextField, Typography } from '@material-ui/core'
 import CreateComment from '../Comment/CreateComment'
 import Comment from '../Comment/Comment'
 import SharePost from './SharePost'
+import ThumbUpIcon from '@material-ui/icons/ThumbUp'
+import ThumbDownIcon from '@material-ui/icons/ThumbDown'
+import CommentIcon from '@material-ui/icons/Comment'
+import ShareIcon from '@material-ui/icons/Share'
 
 const useStyles = makeStyles((theme) => ({
   post: {
@@ -45,10 +49,14 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
   },
   postImage: {
-    maxWidth: '500px',
+    maxWidth: '100%',
   },
   text: {
     textAlign: 'left',
+  },
+  padding: {
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
   },
 }))
 const Post = ({ post }) => {
@@ -59,6 +67,7 @@ const Post = ({ post }) => {
     post: post,
     showForm: false,
     showShare: false,
+    dialog: false,
   })
 
   console.log('Post State: ', state)
@@ -103,15 +112,17 @@ const Post = ({ post }) => {
         const found = state.post.likes.find((like) => like.pk === user.pk)
         if (found) {
           return (
-            <Button variant="contained" color="primary" onClick={handleUnLike}>
-              UnLike
+            <Button size="small" color="primary" onClick={handleUnLike}>
+              <ThumbDownIcon fontSize="small" />
+              &nbsp; UnLike
             </Button>
           )
         }
       }
       return (
-        <Button variant="contained" color="primary" onClick={handleLike}>
-          Like
+        <Button size="small" color="primary" onClick={handleLike}>
+          <ThumbUpIcon fontSize="small" />
+          &nbsp; Like
         </Button>
       )
     }
@@ -128,7 +139,7 @@ const Post = ({ post }) => {
       <React.Fragment>
         <Grid item xs={12}>
           <div className={classes.header}>
-            <Typography>{name}</Typography>
+            <Typography variant="h5">{name}</Typography>
             <Typography>{` ${new Date(post.created_at).toLocaleDateString(
               'en-US',
               {
@@ -143,7 +154,9 @@ const Post = ({ post }) => {
         </Grid>
         <Grid item container xs={12}>
           <Grid item className={classes.text} xs={12}>
-            <Typography>{post.content}</Typography>
+            <div className={classes.padding}>
+              <Typography>{post.content}</Typography>
+            </div>
           </Grid>
           <Grid item xs={12}>
             {renderImages()}
@@ -159,7 +172,7 @@ const Post = ({ post }) => {
         <Grid item container>
           <Grid item xs={12}>
             <div className={classes.info}>
-              <Typography>{`${post.sharing_user.first_name} ${post.sharing_user.last_name}`}</Typography>
+              <Typography variant="h5">{`${post.sharing_user.first_name} ${post.sharing_user.last_name}`}</Typography>
               <Typography>{` ${new Date(post.shared_at).toLocaleDateString(
                 'en-US',
                 {
@@ -197,18 +210,23 @@ const Post = ({ post }) => {
             <div
               className={state.showShare ? classes.share : classes.hideShare}
             >
-              <SharePost post={post} pState={state} pSetState={setState} />
+              <SharePost
+                open={state.dialog}
+                post={post}
+                pState={state}
+                pSetState={setState}
+              />
             </div>
           </Grid>
           {renderMain()}
           <Grid item xs={12}>
             <div className={classes.info}>
-              <Typography>
+              <Typography variant="caption">
                 {state.post.no_of_likes === 1
                   ? `${state.post.no_of_likes} like`
                   : `${state.post.no_of_likes} likes`}
               </Typography>
-              <Typography>
+              <Typography variant="caption">
                 {state.post.no_of_comments === 1
                   ? `${state.post.no_of_comments} comment`
                   : `${state.post.no_of_comments} comments`}
@@ -219,21 +237,21 @@ const Post = ({ post }) => {
             <div className={classes.buttons}>
               {renderLikeButton()}
               <Button
-                variant="contained"
+                size="small"
                 onClick={() =>
                   setState({ ...state, showForm: !state.showForm })
                 }
               >
-                Comment
+                <CommentIcon fontSize="small" />
+                &nbsp; Comment
               </Button>
               <Button
-                variant="contained"
+                size="small"
                 color="secondary"
-                onClick={() =>
-                  setState({ ...state, showShare: !state.showShare })
-                }
+                onClick={() => setState({ ...state, dialog: true })}
               >
-                Share
+                <ShareIcon fontSize="small" />
+                &nbsp; Share
               </Button>
             </div>
           </Grid>

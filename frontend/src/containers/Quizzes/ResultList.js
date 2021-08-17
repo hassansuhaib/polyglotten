@@ -44,10 +44,10 @@ const ResultList = (props) => {
   }
 
   return (
-    <Paper elevation={3}>
+    <React.Fragment>
       <Typography variant="h5">Previous Results</Typography>
       <List>{renderResults()}</List>
-    </Paper>
+    </React.Fragment>
   )
 }
 export default ResultList

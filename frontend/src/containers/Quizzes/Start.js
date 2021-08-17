@@ -61,53 +61,51 @@ const Start = ({ qState, qSetState }) => {
 
   return (
     <div>
-      <Box boxShadow={3} p={5}>
-        <Grid container spacing={3}>
-          <Grid item align="center" xs={12}>
-            <Typography variant="h3">Take an Assessment Test</Typography>
-          </Grid>
-          <Grid item align="center" xs={12}>
-            <FormControl className={classes.formControl}>
-              <InputLabel id="select-language">Select Language</InputLabel>
-              <Select
-                labelId="select-language"
-                id="language"
-                name="language"
-                value={state.language}
-                onChange={handleChange}
-              >
-                <MenuItem value={'Spanish'}>Spanish</MenuItem>
-                <MenuItem value={'German'}>German</MenuItem>
-                <MenuItem value={'Mandarin'}>Mandarin</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item align="center" xs={12}>
-            <FormControl className={classes.formControl}>
-              <InputLabel id="select-level">Select Level</InputLabel>
-              <Select
-                labelId="select-level"
-                id="level"
-                name="level"
-                value={state.level}
-                onChange={handleChange}
-              >
-                <MenuItem value={'B'}>Beginner</MenuItem>
-                <MenuItem value={'I'}>Intermediate</MenuItem>
-                <MenuItem value={'A'}>Advanced</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item align="center" xs={12}>
-            <Button variant="contained" color="primary" onClick={handleStart}>
-              Let's Start!
-            </Button>
-          </Grid>
-          <Grid item align="center" xs={12}>
-            <ResultList />
-          </Grid>
+      <Grid container spacing={3}>
+        <Grid item align="center" xs={12}>
+          <Typography variant="h3">Take an Assessment Test</Typography>
         </Grid>
-      </Box>
+        <Grid item align="center" xs={12}>
+          <FormControl className={classes.formControl}>
+            <InputLabel id="select-language">Select Language</InputLabel>
+            <Select
+              labelId="select-language"
+              id="language"
+              name="language"
+              value={state.language}
+              onChange={handleChange}
+            >
+              <MenuItem value={'Spanish'}>Spanish</MenuItem>
+              <MenuItem value={'German'}>German</MenuItem>
+              <MenuItem value={'Mandarin'}>Mandarin</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item align="center" xs={12}>
+          <FormControl className={classes.formControl}>
+            <InputLabel id="select-level">Select Level</InputLabel>
+            <Select
+              labelId="select-level"
+              id="level"
+              name="level"
+              value={state.level}
+              onChange={handleChange}
+            >
+              <MenuItem value={'B'}>Beginner</MenuItem>
+              <MenuItem value={'I'}>Intermediate</MenuItem>
+              <MenuItem value={'A'}>Advanced</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item align="center" xs={12}>
+          <Button variant="contained" color="primary" onClick={handleStart}>
+            Let's Start!
+          </Button>
+        </Grid>
+        <Grid item align="center" xs={12}>
+          <ResultList />
+        </Grid>
+      </Grid>
     </div>
   )
 }

@@ -42,7 +42,9 @@ const CreatePost = (props) => {
 
   const handleSubmit = () => {
     let form_data = new FormData()
-    form_data.append('image', state.image, state.image.name)
+    if (state.image) {
+      form_data.append('image', state.image, state.image.name)
+    }
     form_data.append('content', state.content)
 
     postApi
@@ -70,8 +72,8 @@ const CreatePost = (props) => {
     <div>
       <Paper elevation={2} className={classes.createPost}>
         <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Typography variant="h3">Create a Post</Typography>
+          <Grid item align="left" xs={12}>
+            <Typography variant="h4">Create a Post</Typography>
           </Grid>
           <Grid item xs={12} className={classes.invite}>
             <TextField
@@ -80,6 +82,7 @@ const CreatePost = (props) => {
               multiline
               rows={4}
               variant="outlined"
+              placeholder="Write something"
               value={state.content}
               onChange={(event) => {
                 setState({
@@ -101,6 +104,7 @@ const CreatePost = (props) => {
                 variant="contained"
                 color="primary"
                 onClick={handleSubmit}
+                disabled={state.content ? false : true}
               >
                 Post
               </Button>

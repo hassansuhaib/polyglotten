@@ -17,6 +17,8 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import Fade from '@material-ui/core/Fade'
 import { makeStyles } from '@material-ui/core/styles'
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward'
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 
 const useStyles = makeStyles((theme) => ({
   toolbar: theme.mixins.toolbar,
@@ -26,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(1),
     position: 'absolute',
+    zIndex: '20',
   },
 }))
 
@@ -98,15 +101,15 @@ const QuestionDetail = ({ id }) => {
         const found = state.question.votes.find((vote) => vote.pk === user.pk)
         if (found) {
           return (
-            <Button variant="contained" color="primary" onClick={handleUnVote}>
-              UnVote
+            <Button color="secondary" onClick={handleUnVote}>
+              <ArrowDownwardIcon />
             </Button>
           )
         }
       }
       return (
-        <Button variant="contained" color="primary" onClick={handleVote}>
-          Vote
+        <Button color="primary" onClick={handleVote}>
+          <ArrowUpwardIcon />
         </Button>
       )
     }
@@ -118,7 +121,7 @@ const QuestionDetail = ({ id }) => {
         <React.Fragment>
           <Grid container>
             <Grid item xs={10}>
-              <Typography variant="h3">{state.question.title}</Typography>
+              <Typography variant="h4">{state.question.title}</Typography>
             </Grid>
             <Grid item xs={2}>
               <IconButton
@@ -174,13 +177,6 @@ const QuestionDetail = ({ id }) => {
 
   return (
     <React.Fragment>
-      <Button
-        variant="contained"
-        color="secondary"
-        onClick={() => history.goBack()}
-      >
-        Go Back
-      </Button>
       {renderQuestion()}
       <List>{renderAnswers()}</List>
       <CreateAnswer

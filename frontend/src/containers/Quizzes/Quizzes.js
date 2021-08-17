@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
-
+import history from '../../history'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 
@@ -10,8 +10,16 @@ import TranslationQuiz from './TranslationQuiz'
 import Result from './Result'
 import { Button, Typography } from '@material-ui/core'
 import { quiz } from '../../constants'
+import Paper from '@material-ui/core/Paper'
+import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 
-const useStyles = makeStyles((theme) => ({ toolbar: theme.mixins.toolbar }))
+const useStyles = makeStyles((theme) => ({
+  toolbar: theme.mixins.toolbar,
+  root: {
+    marginTop: theme.spacing(2),
+    padding: theme.spacing(3),
+  },
+}))
 
 const Quizzes = (props) => {
   const classes = useStyles()
@@ -66,15 +74,12 @@ const Quizzes = (props) => {
     <div>
       <div className={classes.toolbar} />
       <Container>
-        <Button
-          variant="contained"
-          color="secondary"
-          component={RouterLink}
-          to="/"
-        >
-          Home
-        </Button>
-        {renderView()}
+        <Paper className={classes.root} elevation={3}>
+          <Button color="primary">
+            <ArrowBackIcon onClick={() => history.goBack()} />
+          </Button>
+          {renderView()}
+        </Paper>
       </Container>
     </div>
   )

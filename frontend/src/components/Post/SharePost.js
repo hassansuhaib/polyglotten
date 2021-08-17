@@ -11,6 +11,12 @@ import Box from '@material-ui/core/Box'
 import TextField from '@material-ui/core/TextField'
 import Grid from '@material-ui/core/Grid'
 import { Paper, Typography } from '@material-ui/core'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogContentText from '@material-ui/core/DialogContentText'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import Slide from '@material-ui/core/Slide'
 
 const useStyles = makeStyles((theme) => ({
   createPost: {
@@ -21,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   buttons: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-between',
   },
   image: {
     '& > *': {
@@ -33,9 +39,16 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
   },
+  postImage: {
+    maxWidth: '500px',
+  },
 }))
 
-const SharePost = ({ post, pState, pSetState }) => {
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />
+})
+
+const SharePost = ({ post, pState, pSetState, open }) => {
   const classes = useStyles()
   const user = useSelector((state) => state.auth.user)
   const [state, setState] = useState({
@@ -44,6 +57,10 @@ const SharePost = ({ post, pState, pSetState }) => {
   })
 
   console.log('SharePost State: ', state)
+
+  const handleClose = () => {
+    pSetState({ ...pState, dialog: false })
+  }
 
   const handleSubmit = () => {
     api
@@ -57,6 +74,7 @@ const SharePost = ({ post, pState, pSetState }) => {
           ...pState,
           showShare: false,
           post: updated,
+          dialog: false,
         })
       })
       .catch((error) => console.log(error))
@@ -64,11 +82,23 @@ const SharePost = ({ post, pState, pSetState }) => {
         setState({})
       })
   }
+  const renderImages = () => {
+    return post.images.map((image) => {
+      return <img src={image.image} className={classes.postImage} />
+    })
+  }
 
   return (
-    <div>
-      <Paper elevation={2} className={classes.createPost}>
-        <Grid container spacing={3}>
+    <Dialog
+      open={open}
+      TransitionComponent={Transition}
+      keepMounted
+      aria-labelledby="alert-dialog-slide-title"
+      aria-describedby="alert-dialog-slide-description"
+    >
+      <DialogTitle id="alert-dialog-slide-title">{'Share Post'}</DialogTitle>
+      <DialogContent>
+        <Grid container>
           <Grid item xs={12} className={classes.invite}>
             <TextField
               id="outlined-multiline-static"
@@ -77,6 +107,7 @@ const SharePost = ({ post, pState, pSetState }) => {
               rows={4}
               variant="outlined"
               value={state.shared_content}
+              placeholder="Write something"
               onChange={(event) => {
                 setState({
                   ...state,
@@ -85,43 +116,44 @@ const SharePost = ({ post, pState, pSetState }) => {
               }}
             />
           </Grid>
-          <Grid item container xs={12}>
-            <Grid item xs={12}>
-              <div className={classes.flex}>
-                <Typography>{`${post.user.first_name} ${post.user.last_name}`}</Typography>
-                <Typography>{` ${new Date(post.created_at).toLocaleDateString(
-                  'en-US',
-                  {
-                    day: 'numeric',
-                    month: 'short',
-                    // year: 'numeric',
-                    // hour: 'numeric',
-                    // minute: 'numeric',
-                  }
-                )}`}</Typography>
-              </div>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography>{post.content}</Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography>Image</Typography>
-            </Grid>
-          </Grid>
-          <Grid item xs={12} className={classes.invite}>
-            <div className={classes.buttons}>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleSubmit}
-              >
-                Share
-              </Button>
-            </div>
-          </Grid>
         </Grid>
-      </Paper>
-    </div>
+        <Paper elevation={2} className={classes.createPost}>
+          <Grid container spacing={3}>
+            <Grid item container xs={12}>
+              <Grid item xs={12}>
+                <div className={classes.flex}>
+                  <Typography variant="h5">{`${post.user.first_name} ${post.user.last_name}`}</Typography>
+                  <Typography>{` ${new Date(post.created_at).toLocaleDateString(
+                    'en-US',
+                    {
+                      day: 'numeric',
+                      month: 'short',
+                      // year: 'numeric',
+                      // hour: 'numeric',
+                      // minute: 'numeric',
+                    }
+                  )}`}</Typography>
+                </div>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography>{post.content}</Typography>
+              </Grid>
+              <Grid item xs={12}>
+                {renderImages()}
+              </Grid>
+            </Grid>
+          </Grid>
+        </Paper>
+        <DialogActions>
+          <Button variant="contained" onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button variant="contained" color="primary" onClick={handleSubmit}>
+            Share
+          </Button>
+        </DialogActions>
+      </DialogContent>
+    </Dialog>
   )
 }
 

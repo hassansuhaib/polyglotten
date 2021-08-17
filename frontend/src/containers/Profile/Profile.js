@@ -95,19 +95,13 @@ const Profile = () => {
           <Typography variant="subtitle2">Football</Typography>
         </div>
         <div className={classes.language}>
-          <Typography variant="subtitle2">Football</Typography>
+          <Typography variant="subtitle2">Literature</Typography>
         </div>
         <div className={classes.language}>
-          <Typography variant="subtitle2">Football</Typography>
+          <Typography variant="subtitle2">Travel</Typography>
         </div>
         <div className={classes.language}>
-          <Typography variant="subtitle2">Football</Typography>
-        </div>
-        <div className={classes.language}>
-          <Typography variant="subtitle2">Football</Typography>
-        </div>
-        <div className={classes.language}>
-          <Typography variant="subtitle2">Football</Typography>
+          <Typography variant="subtitle2">Coffee</Typography>
         </div>
       </div>
     )
@@ -126,9 +120,8 @@ const Profile = () => {
         <div className={classes.name}>
           <Typography variant="h6">Hassan Suhaib</Typography>
           <Typography variant="body2">
-            In love with the languages of the world | Learning: Flag of
-            SpainFlag of Saudi Arabia | Speak: Flag of Pakistan🇺🇲 | FullStack
-            Web Developer Man technologist
+            In love with the languages of the world | Learning: ES AR | Speak:
+            UR AR ES EN | FullStack Web Developer
           </Typography>
         </div>
       </Grid>
@@ -139,31 +132,6 @@ const Profile = () => {
       <Grid item xs={12}>
         <Typography variant="h5">Interests</Typography>
         {renderInterests()}
-      </Grid>
-      <Grid item xs={12}>
-        <Typography variant="h5">Friends</Typography>
-        <ul style={{ listStyle: 'none' }}>
-          <li>
-            <Typography variant="body1" component="p">
-              John Doe
-            </Typography>
-          </li>
-          <li>
-            <Typography variant="body1" component="p">
-              John Doe
-            </Typography>
-          </li>
-          <li>
-            <Typography variant="body1" component="p">
-              John Doe
-            </Typography>
-          </li>
-          <li>
-            <Typography variant="body1" component="p">
-              John Doe
-            </Typography>
-          </li>
-        </ul>
       </Grid>
       <Grid item xs={12}>
         <Feed />

@@ -5,10 +5,12 @@ import * as urls from '../../constants'
 import { makeStyles } from '@material-ui/core/styles'
 import { Button, Grid, Typography } from '@material-ui/core'
 import { Paper } from '@material-ui/core'
+import ThumbUpIcon from '@material-ui/icons/ThumbUp'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    margin: theme.spacing(2),
+    marginTop: theme.spacing(2),
+    marginBotom: theme.spacing(2),
     padding: theme.spacing(2),
     textAlign: 'left',
   },
@@ -20,6 +22,10 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  padding: {
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
   },
 }))
 
@@ -60,16 +66,19 @@ const Comment = ({ comment }) => {
             </div>
           </Grid>
           <Grid item xs={12}>
-            <Typography variant="h5" component="p">
-              {comment.content}
-            </Typography>
+            <div className={classes.padding}>
+              <Typography variant="body1" component="p">
+                {comment.content}
+              </Typography>
+            </div>
           </Grid>
           <Grid item xs={12}>
             <div className={classes.flex}>
-              <Button variant="contained" onClick={handleLike}>
-                Like
+              <Button size="small" color="primary" onClick={handleLike}>
+                <ThumbUpIcon fontSize="small" />
+                &nbsp; Like
               </Button>
-              <Typography>
+              <Typography variant="caption">
                 {state.comment.no_of_likes === 1
                   ? `${state.comment.no_of_likes} like`
                   : `${state.comment.no_of_likes} likes`}
