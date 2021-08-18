@@ -36,8 +36,8 @@ const App = () => {
   }, [])
   useEffect(() => {
     WebSocketInstance.addCallbacks(
-      (message) => dispatch(messageActions.addMessage(message)),
-      (messages) => dispatch(messageActions.setMessages(messages))
+      (messages) => dispatch(messageActions.setMessages(messages)),
+      (message) => dispatch(messageActions.addMessage(message))
     )
   })
   return (

@@ -142,6 +142,7 @@ const Chat = ({ chatID, username }) => {
                 placeholder="Write something"
                 onChange={handleChange}
                 label="Message"
+                value={state.message}
               />
             </Grid>
             <Grid item xs={1} align="right">
@@ -149,7 +150,6 @@ const Chat = ({ chatID, username }) => {
                 color="primary"
                 aria-label="add"
                 size="small"
-                value={state.message}
                 onClick={sendMessage}
               >
                 <SendIcon />
