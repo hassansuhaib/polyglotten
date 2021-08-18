@@ -30,7 +30,7 @@ const Feed = () => {
 
   return (
     <div>
-      <CreatePost />
+      <CreatePost fState={state} fSetState={setState} />
       {renderPosts()}
     </div>
   )

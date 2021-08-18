@@ -34,6 +34,9 @@ const useStyles = makeStyles((theme) => ({
   },
   comment: {
     display: 'flex',
+    alignItems: 'center',
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
   },
   uncomment: {
     display: 'none',
@@ -57,6 +60,10 @@ const useStyles = makeStyles((theme) => ({
   padding: {
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
+  },
+  hr: {
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(2),
   },
 }))
 const Post = ({ post }) => {
@@ -130,7 +137,9 @@ const Post = ({ post }) => {
 
   const renderImages = () => {
     return state.post.images.map((image) => {
-      return <img src={image.image} className={classes.postImage} />
+      return (
+        <img key={image.id} src={image.image} className={classes.postImage} />
+      )
     })
   }
 
@@ -220,6 +229,9 @@ const Post = ({ post }) => {
           </Grid>
           {renderMain()}
           <Grid item xs={12}>
+            <div className={classes.hr}>
+              <hr />
+            </div>
             <div className={classes.info}>
               <Typography variant="caption">
                 {state.post.no_of_likes === 1

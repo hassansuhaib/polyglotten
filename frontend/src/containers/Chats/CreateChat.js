@@ -82,9 +82,12 @@ const CreateChat = () => {
         <ListItem
           button
           onClick={() => handleCreate(user.username)}
-          key={user.id}
+          key={user.pk}
         >
-          <ListItemText primary={`${user.first_name} ${user.last_name}`} />
+          <ListItemText
+            primary={`${user.first_name} ${user.last_name}`}
+            secondary={user.username}
+          />
         </ListItem>
       ))
     }

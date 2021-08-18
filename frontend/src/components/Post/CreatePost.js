@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const CreatePost = (props) => {
+const CreatePost = ({ fState, fSetState }) => {
   const classes = useStyles()
   const [state, setState] = useState({
     image: null,
@@ -49,7 +49,12 @@ const CreatePost = (props) => {
 
     postApi
       .post(urls.postCreate, form_data)
-      .then((response) => console.log('Response', response))
+      .then((response) => {
+        console.log('Response', response)
+        let updatedPosts = fState.posts
+        updatedPosts.unshift(response.data)
+        fSetState({ ...fState, posts: updatedPosts })
+      })
       .catch((error) => console.log(error))
       .finally(() => {
         setState({

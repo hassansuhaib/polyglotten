@@ -20,7 +20,7 @@ const ResultList = (props) => {
   const renderResults = () => {
     if (results) {
       return results.map((result) => (
-        <React.Fragment>
+        <React.Fragment key={result.id}>
           <ListItem>
             <Typography>Language: {result.language}</Typography>
           </ListItem>

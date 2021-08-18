@@ -1,4 +1,4 @@
-import { API_SERVER } from './settings'
+import { SOCKET_URL } from './settings'
 
 class WebSocketService {
   static instance = null
@@ -16,7 +16,8 @@ class WebSocketService {
   }
 
   connect(chatUrl) {
-    const path = `${API_SERVER}/ws/chat/${chatUrl}/`
+    const path = `${SOCKET_URL}/ws/chat/${chatUrl}/`
+    console.log('Path: ', path)
     this.socketRef = new WebSocket(path)
     this.socketRef.onopen = () => {
       console.log('WebSocket open')
@@ -52,6 +53,8 @@ class WebSocketService {
   }
 
   fetchMessages(username, chatId) {
+    console.log('Username: ', username)
+    console.log('Chat ID: ', chatId)
     this.sendMessage({
       command: 'fetch_messages',
       username: username,
@@ -75,6 +78,7 @@ class WebSocketService {
 
   sendMessage(data) {
     try {
+      console.log('We here!', data)
       this.socketRef.send(JSON.stringify({ ...data }))
     } catch (err) {
       console.log(err.message)

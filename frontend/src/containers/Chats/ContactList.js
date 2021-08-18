@@ -38,6 +38,8 @@ const ContactList = ({ username }) => {
     chats: [],
     loading: true,
   })
+
+  console.log('Chats state: ', state)
   const user = useSelector((state) => state.auth.user)
 
   useEffect(() => {
@@ -63,19 +65,19 @@ const ContactList = ({ username }) => {
 
   const renderChats = () => {
     if (state.loading === false && state.chats.length > 0) {
-      state.chats.map((chat) => (
-        <React.Fragment>
+      return state.chats.map((chat) => (
+        <React.Fragment key={chat.id}>
           <ListItem
             button
             component={RouterLink}
-            to="/chats/username"
+            to={`/chats/user/${chat.participants[0]}/${chat.id}`}
             alignItems="flex-start"
           >
             <ListItemAvatar>
               <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
             </ListItemAvatar>
             <ListItemText
-              primary="Brunch this weekend?"
+              primary={chat.participants[0]}
               secondary={
                 <React.Fragment>
                   <Typography

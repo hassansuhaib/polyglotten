@@ -11,6 +11,7 @@ User = get_user_model()
 class ChatConsumer(WebsocketConsumer):
 
     def fetch_messages(self, data):
+        print("We here in fetch mwssages!")
         messages = get_last_10_messages(data['chatId'])
         content = {
             'command': 'messages',
@@ -53,6 +54,7 @@ class ChatConsumer(WebsocketConsumer):
 
     def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
+        print("Room name:", self.room_name)
         self.room_group_name = 'chat_%s' % self.room_name
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,

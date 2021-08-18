@@ -84,7 +84,9 @@ const SharePost = ({ post, pState, pSetState, open }) => {
   }
   const renderImages = () => {
     return post.images.map((image) => {
-      return <img src={image.image} className={classes.postImage} />
+      return (
+        <img key={image.id} src={image.image} className={classes.postImage} />
+      )
     })
   }
 
