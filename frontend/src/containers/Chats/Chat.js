@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import WebSocketInstance from '../../webSocket'
 
 import { makeStyles } from '@material-ui/core/styles'
@@ -30,10 +30,9 @@ const useStyles = makeStyles((theme) => ({
 const Chat = ({ chatID, username }) => {
   const classes = useStyles()
   const user = useSelector((state) => state.auth.user)
+  const messages = useSelector((state) => state.message.messages)
   const [state, setState] = useState({
     message: '',
-    messages: [],
-    chatID: '',
   })
 
   console.log('Chat state: ', state)
@@ -101,7 +100,8 @@ const Chat = ({ chatID, username }) => {
   }
 
   const renderMessages = () => {
-    return state.messages.map((message, i, arr) => (
+    console.log('Messages: ', messages)
+    return messages.map((message, i, arr) => (
       <ListItem
         key={message.id}
         style={{ marginBottom: arr.length - 1 === i ? '300px' : '15px' }}
@@ -125,7 +125,7 @@ const Chat = ({ chatID, username }) => {
         <Grid container>
           <Grid item container>
             <Grid item xs={12}>
-              <Typography variant="h5">Usman Khan</Typography>
+              <Typography variant="h5">{username}</Typography>
               <div className={classes.hr}>
                 <hr />
               </div>
@@ -149,6 +149,7 @@ const Chat = ({ chatID, username }) => {
                 color="primary"
                 aria-label="add"
                 size="small"
+                value={state.message}
                 onClick={sendMessage}
               >
                 <SendIcon />

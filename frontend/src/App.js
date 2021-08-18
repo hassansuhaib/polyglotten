@@ -4,6 +4,8 @@ import { authCheckState } from './store/actions/auth'
 import Routes from './Routes'
 import { Router } from 'react-router-dom'
 import history from './history'
+import WebSocketInstance from './webSocket'
+import * as messageActions from './store/actions/message'
 
 import ThemeProvider from '@material-ui/styles/ThemeProvider'
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -32,6 +34,12 @@ const App = () => {
   useEffect(() => {
     dispatch(authCheckState())
   }, [])
+  useEffect(() => {
+    WebSocketInstance.addCallbacks(
+      (message) => dispatch(messageActions.addMessage(message)),
+      (messages) => dispatch(messageActions.setMessages(messages))
+    )
+  })
   return (
     <div className={classes.root}>
       <ThemeProvider theme={theme}>

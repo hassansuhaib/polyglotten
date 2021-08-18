@@ -53,8 +53,6 @@ class WebSocketService {
   }
 
   fetchMessages(username, chatId) {
-    console.log('Username: ', username)
-    console.log('Chat ID: ', chatId)
     this.sendMessage({
       command: 'fetch_messages',
       username: username,
@@ -78,7 +76,6 @@ class WebSocketService {
 
   sendMessage(data) {
     try {
-      console.log('We here!', data)
       this.socketRef.send(JSON.stringify({ ...data }))
     } catch (err) {
       console.log(err.message)

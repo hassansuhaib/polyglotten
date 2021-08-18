@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { Link as RouterLink } from 'react-router-dom'
 import api from '../../api'
 import * as urls from '../../constants'
+import * as messageActions from '../../store/actions/message'
 
 import { makeStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
@@ -34,38 +35,25 @@ const useStyles = makeStyles((theme) => ({
 
 const ContactList = ({ username }) => {
   const classes = useStyles()
+  const dispatch = useDispatch()
   const [state, setState] = useState({
-    chats: [],
     loading: true,
   })
 
   console.log('Chats state: ', state)
   const user = useSelector((state) => state.auth.user)
+  const chats = useSelector((state) => state.message.chats)
 
   useEffect(() => {
-    const getChats = () => {
-      api
-        .get(urls.chatsAll, {
-          params: {
-            username: user.username,
-          },
-        })
-        .then((response) => {
-          setState({ ...state, chats: response.data, loading: false })
-        })
-        .catch((error) => {
-          setState({ ...state, loading: false })
-          console.log(error)
-        })
-    }
     setTimeout(() => {
-      getChats()
+      dispatch(messageActions.getUserChats(user.username))
+      setState({ ...state, loading: false })
     }, 500)
   }, [])
 
   const renderChats = () => {
-    if (state.loading === false && state.chats.length > 0) {
-      return state.chats.map((chat) => (
+    if (state.loading === false && chats.length > 0) {
+      return chats.map((chat) => (
         <React.Fragment key={chat.id}>
           <ListItem
             button
