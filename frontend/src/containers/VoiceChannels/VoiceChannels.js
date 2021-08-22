@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
 const VoiceChannels = (props) => {
   const classes = useStyles()
   const view = props.match.params.view
+  const roomID = props.match.params.roomID
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -38,7 +39,7 @@ const VoiceChannels = (props) => {
       case 'create':
         return <CreateChannel />
       case 'active':
-        return <ActiveChannel />
+        return <ActiveChannel roomID={roomID} />
       default:
         return <ChannelList />
     }

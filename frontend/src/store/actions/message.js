@@ -32,7 +32,6 @@ export const getUserChats = (username) => {
         },
       })
       .then((res) => {
-        console.log('Response', res.data)
         dispatch(getUserChatsSuccess(res.data))
       })
   }

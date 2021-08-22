@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
+import { v1 as uuid } from 'uuid'
 
 import { makeStyles } from '@material-ui/core/styles'
 import Autocomplete from '@material-ui/lab/Autocomplete'
@@ -13,6 +14,7 @@ import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
 import { Typography } from '@material-ui/core'
 import Paper from '@material-ui/core/Paper'
+import history from '../../history'
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -40,6 +42,12 @@ const CreateChannel = (props) => {
       [event.target.name]: event.target.value,
     })
   }
+
+  const create = () => {
+    const id = uuid()
+    history.push(`/channels/active/${id}`)
+  }
+
   return (
     <div>
       <Paper elevation={3} className={classes.root}>
@@ -92,12 +100,7 @@ const CreateChannel = (props) => {
             />
           </Grid>
           <Grid item xs={12}>
-            <Button
-              variant="contained"
-              color="primary"
-              component={RouterLink}
-              to="/channels/active"
-            >
+            <Button variant="contained" color="primary" onClick={create}>
               Let's Start!
             </Button>
           </Grid>

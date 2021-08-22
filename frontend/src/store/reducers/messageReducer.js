@@ -6,7 +6,6 @@ const initialState = {
 }
 
 export const messageReducer = (state = initialState, action) => {
-  console.log('Action payload: ', action)
   switch (action.type) {
     case actionTypes.ADD_MESSAGE:
       return { ...state, messages: [...state.messages, action.payload] }

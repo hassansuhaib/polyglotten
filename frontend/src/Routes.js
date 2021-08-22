@@ -35,6 +35,11 @@ const Routes = withRouter(({ location }) => {
           <Route exact path="/chats/:view/:username/:id" component={Chats} />
           <Route exact path="/channels" component={VoiceChannels} />
           <Route exact path="/channels/:view" component={VoiceChannels} />
+          <Route
+            exact
+            path="/channels/:view/:roomID"
+            component={VoiceChannels}
+          />
           <Route exact path="/tests" component={Quizzes} />
           <Route exact path="/tests/:view" component={Quizzes} />
           <PrivateRoute exact path="/:view" component={Home} />
