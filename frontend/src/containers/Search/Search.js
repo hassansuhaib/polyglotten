@@ -39,20 +39,22 @@ const Search = () => {
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      api
-        .get(urls.search, {
-          params: {
-            term: state.term,
-          },
-        })
-        .then((response) => {
-          console.log(response.data)
-          setState({
-            ...state,
-            results: response.data,
-            loading: false,
+      if (state.term) {
+        api
+          .get(urls.search, {
+            params: {
+              term: state.term,
+            },
           })
-        })
+          .then((response) => {
+            console.log(response.data)
+            setState({
+              ...state,
+              results: response.data,
+              loading: false,
+            })
+          })
+      }
     }, 500)
     return () => {
       clearTimeout(timeoutId)
@@ -132,13 +134,13 @@ const Search = () => {
             </Tabs>
           </AppBar>
           <TabPanel value={state.value} index={0}>
-            <People people={state.results.people} />
+            <People people={state.results && state.results.people} />
           </TabPanel>
           <TabPanel value={state.value} index={1}>
-            <Posts posts={state.results.posts} />
+            <Posts posts={state.results && state.results.posts} />
           </TabPanel>
           <TabPanel value={state.value} index={2}>
-            <Questions questions={state.results.questions} />
+            <Questions questions={state.results && state.results.questions} />
           </TabPanel>
         </Grid>
       </Grid>

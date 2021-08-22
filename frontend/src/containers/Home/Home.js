@@ -2,7 +2,6 @@ import React from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 
 import Feed from '../Feed/Feed'
-import Quizzes from '../Quizzes/Quizzes'
 import VoiceChannels from '../VoiceChannels/ActiveChannel'
 import Profile from '../Profile/Profile'
 import Search from '../Search/Search'
@@ -15,6 +14,7 @@ import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
 
 import { Container, Hidden, Typography } from '@material-ui/core'
+import PostDetail from '../../components/Post/PostDetail'
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -31,7 +31,8 @@ const useStyles = makeStyles((theme) => ({
 const Home = (props) => {
   const classes = useStyles()
   const view = props.match.params.view
-  const username = props.match.params.username
+  const arg = props.match.params.arg
+  console.log('Args: ', arg)
 
   const renderView = () => {
     switch (view) {
@@ -40,9 +41,11 @@ const Home = (props) => {
       case 'search':
         return <Search />
       case 'profile':
-        return <Profile username={username} />
+        return <Profile username={arg} />
       case 'notifications':
         return <Notifications />
+      case 'post':
+        return <PostDetail postID={arg} />
       default:
         return <Feed />
     }

@@ -63,13 +63,18 @@ class NotificationSettings(models.Model):
     upvotes = models.BooleanField(default=True)
     recommended = models.BooleanField(default=True)
 
+    def save(self, *args, **kwargs):
+        if self.posts is False or self.upvotes is False or self.recommended is False:
+            self.every = False
+        return super(NotificationSettings, self).save(*args, **kwargs)
+
     def __str__(self):
         return f'All: {self.every}, Post: {self.posts}, Friend Request: {self.upvotes}, Recommended: {self.recommended}'
 
 
 class UserProfile(models.Model):
     user = models.OneToOneField(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
     about = models.CharField(max_length=250, null=True, blank=True)
     interests = models.ManyToManyField(
         Interest, related_name='user_interests', blank=True)
@@ -140,6 +145,9 @@ class Post(models.Model):
 
     def number_of_comments(self):
         return self.comments.count()
+
+    def get_user_profile(self):
+        return self.user.profile
 
     def create_tags(self):
         for word in self.content.split():

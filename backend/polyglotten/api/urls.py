@@ -65,6 +65,7 @@ urlpatterns = [
          UnVoteView.as_view(), name='unvote'),
 
     # Post URLS
+    path('feed/post/<int:id>/detail/', PostDetailView.as_view()),
     path('feed/posts/', PostListView.as_view(), name='posts'),
     path('feed/posts/<str:username>/',
          UserPostListView.as_view(), name='user-posts'),

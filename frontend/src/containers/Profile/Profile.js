@@ -9,6 +9,7 @@ import Post from '../../components/Post/Post'
 import TextField from '@material-ui/core/TextField'
 import EditIcon from '@material-ui/icons/Edit'
 import IconButton from '@material-ui/core/IconButton'
+import Edit from '@material-ui/icons/Edit'
 
 const useStyles = makeStyles((theme) => ({
   toolbar: theme.mixins.toolbar,
@@ -17,12 +18,12 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: '1rem',
     paddingRight: '1rem',
   },
+  coverDiv: {
+    position: 'relative',
+  },
   coverPhoto: {
     width: '100%',
     height: '300px',
-    backgroundImage: `url(${
-      process.env.PUBLIC_URL + '/assets/covers/cover.jpg'
-    })`,
     backgroundPosition: 'center center',
     backgroundSize: 'contain',
   },
@@ -40,11 +41,14 @@ const useStyles = makeStyles((theme) => ({
     bottom: '0',
     left: '38%',
     borderRadius: '50%' /*don't forget prefixes*/,
-    backgroundImage: `url(${
-      process.env.PUBLIC_URL + '/assets/profile_photos/philip.jpg'
-    })`,
     backgroundPosition: 'center center',
     backgroundSize: 'contain',
+    '&:hover': {
+      '& .overlay': {
+        display: 'block',
+        background: 'rgba(0,0,0,.3)',
+      },
+    },
   },
   language: {
     border: '1px solid green',
@@ -59,6 +63,14 @@ const useStyles = makeStyles((theme) => ({
     '& > *': {
       margin: '10px',
     },
+  },
+  overlay: {
+    position: 'absolute',
+    bottom: 0,
+    left: '0',
+    right: 0,
+    width: '100%',
+    height: '100%',
   },
 }))
 
@@ -75,10 +87,20 @@ const Profile = ({ username }) => {
     document.title = 'Profile'
     const getUserProfile = () => {
       let profileData = null
+      let cover_photo = null
+      let profile_photo = null
       api
         .get(urls.profile)
         .then((response) => {
           profileData = response.data
+          if (profileData.cover_photo === null) {
+            profileData.cover_photo =
+              process.env.PUBLIC_URL + '/assets/covers/cover.jpg'
+          }
+          if (profileData.profile_photo === null) {
+            profileData.profile_photo =
+              process.env.PUBLIC_URL + '/assets/profile_photos/philip.jpg'
+          }
           return api.get(urls.userPosts(username))
         })
         .then((response) =>
@@ -162,9 +184,21 @@ const Profile = ({ username }) => {
   return (
     <Grid container>
       <Grid item xs={12}>
-        <div className={classes.coverPhoto}></div>
+        <div className={classes.coverDiv}>
+          <div
+            className={classes.coverPhoto}
+            style={{ backgroundImage: `url(${state && state.cover_photo})` }}
+          >
+            <IconButton className={classes.overlay}></IconButton>
+          </div>
+        </div>
         <div className={classes.imagesDiv}>
-          <div className={classes.profileDiv}></div>
+          <div
+            className={classes.profileDiv}
+            style={{ backgroundImage: `url(${state && state.profile_photo})` }}
+          >
+            <IconButton className={classes.overlay}></IconButton>
+          </div>
           {user && user.username == username ? (
             ''
           ) : (

@@ -254,12 +254,12 @@ class SearchView(APIView):
         term = request.query_params.get('term')
         try:
             posts = Post.objects.filter(content__icontains=term)
-            people = User.objects.filter(Q(first_name__startswith=term) | Q(
-                last_name__startswith=term) | Q(username__startswith=term))
+            people = UserProfile.objects.filter(Q(user__first_name__startswith=term) | Q(
+                user__last_name__startswith=term) | Q(user__username__startswith=term))
             questions = Question.objects.filter(
                 Q(content__icontains=term) | Q(tags__title__contains=term))
 
-            return Response({'posts': PostSerializer(posts, many=True).data, 'people': UserSerializer(people, many=True).data, 'questions': QuestionSerializer(questions, many=True).data}, status=status.HTTP_200_OK)
+            return Response({'posts': PostSerializer(posts, many=True).data, 'people': UserProfileSerializer(people, many=True).data, 'questions': QuestionSerializer(questions, many=True).data}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'Error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -400,6 +400,18 @@ class UserPostListView(ListAPIView):
         print("Username", username)
         qs = Post.objects.filter(user__username=username)
         return qs
+
+
+class PostDetailView(RetrieveAPIView):
+    permission_classes = (AllowAny, )
+    serializer_class = PostSerializer
+
+    def get_object(self):
+        try:
+            post = Post.objects.get(id=self.kwargs.get('id'))
+            return post
+        except Post.DoesNotExist:
+            raise Http404("Post does not exist")
 
 # Create Views
 

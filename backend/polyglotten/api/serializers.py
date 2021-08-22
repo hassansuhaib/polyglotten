@@ -84,6 +84,7 @@ class CommentSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     sharing_user = UserSerializer()
+    user_profile = serializers.SerializerMethodField()
     tags = TagSerializer(many=True)
     likes = UserSerializer(many=True)
     no_of_likes = serializers.SerializerMethodField()
@@ -94,13 +95,18 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ['id', 'user', 'content', 'images', 'created_at', 'edited', 'no_of_likes', 'no_of_comments', 'likes', 'comments',
-                  'tags', 'mentions', 'shared', 'shared_content', 'shared_at', 'sharing_user']
+                  'tags', 'mentions', 'shared', 'shared_content', 'shared_at', 'sharing_user', 'user_profile']
 
     def get_no_of_likes(self, obj):
         return obj.number_of_likes()
 
     def get_no_of_comments(self, obj):
         return obj.number_of_comments()
+
+    def get_user_profile(self, obj):
+        profile = obj.get_user_profile()
+        print("Profile", profile)
+        return UserProfileSerializer(profile).data
 
 
 class QuestionSerializer(serializers.ModelSerializer):

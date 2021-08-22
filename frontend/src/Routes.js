@@ -23,7 +23,6 @@ const Routes = withRouter(({ location }) => {
       <Layout>
         <Switch>
           <HomeRoute exact path="/" home={Home} landing={Landing} />
-          <Route exact path="/post/:id" component={PostDetail} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/forum" component={Forum} />
@@ -45,7 +44,7 @@ const Routes = withRouter(({ location }) => {
           <Route exact path="/tests" component={Quizzes} />
           <Route exact path="/tests/:view" component={Quizzes} />
           <PrivateRoute exact path="/:view" component={Home} />
-          <PrivateRoute exact path="/:view/:username" component={Home} />
+          <PrivateRoute exact path="/:view/:arg" component={Home} />
         </Switch>
       </Layout>
     </div>

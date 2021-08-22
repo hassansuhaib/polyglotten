@@ -27,6 +27,7 @@ export const posts = `/feed/posts/`
 export const userPosts = (username) => `/feed/posts/${username}/`
 export const postCreate = `/feed/posts/create/`
 export const postShare = `/feed/posts/share/`
+export const postDetail = (id) => `/feed/post/${id}/detail/`
 export const postEdit = (id) => `/feed/posts/${id}/update/`
 export const postDelete = (id) => `/feed/posts/${id}/delete/`
 export const like = (name, id) => `/feed/like/${name}/${id}/`
