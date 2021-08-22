@@ -12,6 +12,7 @@ import Grid from '@material-ui/core/Grid'
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
 import { Typography } from '@material-ui/core'
+import Paper from '@material-ui/core/Paper'
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -20,6 +21,9 @@ const useStyles = makeStyles((theme) => ({
   },
   invite: {
     minWidth: 300,
+  },
+  root: {
+    padding: theme.spacing(2),
   },
 }))
 
@@ -38,7 +42,7 @@ const CreateChannel = (props) => {
   }
   return (
     <div>
-      <Box boxShadow={3} p={5}>
+      <Paper elevation={3} className={classes.root}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <Typography variant="h3">Create Channel</Typography>
@@ -98,7 +102,7 @@ const CreateChannel = (props) => {
             </Button>
           </Grid>
         </Grid>
-      </Box>
+      </Paper>
     </div>
   )
 }

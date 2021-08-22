@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
 from django.http import Http404
+from django.db.models import Q
 from rest_framework import status, filters
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -246,6 +247,23 @@ class TagListView(ListAPIView):
     queryset = Tag.objects.all()
 
 
+class SearchView(APIView):
+    permission_classes = (AllowAny, )
+
+    def get(self, request, format=None):
+        term = request.query_params.get('term')
+        try:
+            posts = Post.objects.filter(content__icontains=term)
+            people = User.objects.filter(Q(first_name__startswith=term) | Q(
+                last_name__startswith=term) | Q(username__startswith=term))
+            questions = Question.objects.filter(
+                Q(content__icontains=term) | Q(question_tags__title__contains=term))
+
+            return Response({'posts': PostSerializer(posts, many=True), 'people': UserSerializer(people, many=True), 'questions': QuestionSerializer(questions, many=True)}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'Error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
 """ Message Related Views """
 
 
@@ -302,8 +320,8 @@ class QuizDetailView(APIView):
     serializer_class = QuizSerializer
 
     def get(self, request, format=None):
-        level = self.request.query_params.get('level')
-        language = self.request.query_params.get('language')
+        level = request.query_params.get('level')
+        language = request.query_params.get('language')
         try:
             quiz = Quiz.objects.get(level=level, language__title=language)
             return Response(QuizSerializer(quiz).data, status=status.HTTP_200_OK)

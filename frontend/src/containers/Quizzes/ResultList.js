@@ -29,7 +29,7 @@ const ResultList = (props) => {
           </ListItem>
           <ListItem>
             <Typography>
-              Passed: {result.status ? 'Passed' : 'Failed'}
+              Status: {result.status ? 'Passed' : 'Failed'}
             </Typography>
           </ListItem>
         </React.Fragment>
