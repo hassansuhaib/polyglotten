@@ -439,19 +439,19 @@ class Notification(models.Model):
                                 related_name='comment_notification', null=True, blank=True)
     url = models.CharField(max_length=100, null=True, blank=True)
     question = models.ForeignKey(
-        Question, related_name="question_notification", on_delete=models.CASCADE)
+        Question, related_name="question_notification", on_delete=models.CASCADE, null=True, blank=True)
     answer = models.ForeignKey(
-        Answer, related_name="answer_notification", on_delete=models.CASCADE)
+        Answer, related_name="answer_notification", on_delete=models.CASCADE, null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        if notification_type == 'L':
+        if self.notification_type == 'L':
             if self.post:
                 self.url = f'post/{self.post.id}'
                 self.content = f'{self.from_user.first_name} liked your post'
             else:
                 self.url = f'post/{self.post.id}'
                 self.content = f'{self.from_user.first_name} liked your comment'
-        elif notification_type == 'V':
+        elif self.notification_type == 'V':
             if self.question:
                 self.url = f'question/{self.question.id}'
                 self.content = f'{self.from_user.first_name} upvoted your question'

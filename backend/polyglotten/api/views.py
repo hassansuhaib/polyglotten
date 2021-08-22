@@ -438,15 +438,18 @@ class LikeView(APIView):
             if like_type == 'comment':
                 comment = Comment.objects.get(id=id)
                 comment.likes.add(user)
-                comment_author = User.objects.get(id=comment.user)
+                comment_author = User.objects.get(id=comment.user.id)
                 notification = Notification(
                     user=comment_author, from_user=request.user, notification_type='L', comment=comment)
+                notification.save()
             else:
                 post = Post.objects.get(id=id)
                 post.likes.add(user)
-                post_author = User.objects.get(id=post.user)
+                post_author = User.objects.get(id=post.user.id)
                 notification = Notification(
                     user=post_author, from_user=request.user, notification_type='L', post=post)
+
+                notification.save()
             return Response({'Message': 'Liked!'}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'Error': str(e)}, status=status.HTTP_200_OK)
@@ -596,15 +599,19 @@ class VoteView(APIView):
             if vote_type == 'question':
                 question = Question.objects.get(id=id)
                 question.votes.add(user)
-                question_author = User.objects.get(id=question.user)
+                question_author = User.objects.get(id=question.user.id)
                 notification = Notification(
                     user=question_athor, from_user=request.user, notification_type='V', question=question)
+
+                notification.save()
             else:
                 answer = Answer.objects.get(id=id)
                 answer.votes.add(user)
-                answer_author = User.objects.get(id=answer.user)
+                answer_author = User.objects.get(id=answer.user.id)
                 notification = Notification(
                     user=answer_author, from_user=request.user, notification_type='V', answer=answer)
+
+                notification.save()
             return Response({'Message': 'Voted!'}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'Error': str(e)}, status=status.HTTP_200_OK)
@@ -672,6 +679,8 @@ class FollowView(APIView):
             this_user.following.add(user)
             notification = Notification(
                 user=user, from_user=request.user, notification_type='F')
+
+            notification.save()
             return Response({'Message': 'Followed!'}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'Error': str(e)}, status=status.HTTP_404_NOT_FOUND)

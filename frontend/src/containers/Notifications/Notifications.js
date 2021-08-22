@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import api from '../../api'
+import * as urls from '../../constants'
 import { Link as RouterLink } from 'react-router-dom'
 
 import { makeStyles } from '@material-ui/core/styles'
@@ -22,55 +24,48 @@ const useStyles = makeStyles((theme) => ({
 
 const Notifications = ({ username }) => {
   const classes = useStyles()
+  const [state, setState] = useState(null)
+  console.log('Notifications state: ', state)
+  useEffect(() => {
+    const getNotifications = () => {
+      api.get(urls.notifications).then((response) => {
+        setState(response.data)
+      })
+    }
+    getNotifications()
+  }, [])
 
-  const renderNotification = () => {
+  const renderNotification = (notification) => {
     return (
-      <React.Fragment>
+      <React.Fragment key={notification.id}>
         <ListItem
           button
           component={RouterLink}
-          to="/messages/username"
+          to={notification.url}
           alignItems="flex-start"
         >
           <ListItemAvatar>
             <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
           </ListItemAvatar>
-          <ListItemText
-            primary="Brunch this weekend?"
-            secondary={
-              <React.Fragment>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.inline}
-                  color="textPrimary"
-                >
-                  Ali Connors
-                </Typography>
-                {" — I'll be in your neighborhood doing errands this…"}
-              </React.Fragment>
-            }
-          />
+          <ListItemText primary={notification.content} />
         </ListItem>
         <Divider variant="inset" component="li" />
       </React.Fragment>
     )
   }
 
+  const renderAll = () => {
+    if (state && state.length > 0) {
+      return state.map((notification) => renderNotification(notification))
+    } else {
+      return <Typography>No notifications to show!</Typography>
+    }
+  }
+
   return (
     <React.Fragment>
       <h1>Notifications</h1>
-      <List className={classes.root}>
-        {renderNotification()}
-        {renderNotification()}
-        {renderNotification()}
-        {renderNotification()}
-        {renderNotification()}
-        {renderNotification()}
-        {renderNotification()}
-        {renderNotification()}
-        {renderNotification()}
-      </List>
+      <List className={classes.root}>{renderAll()}</List>
     </React.Fragment>
   )
 }

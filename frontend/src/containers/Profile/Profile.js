@@ -66,6 +66,7 @@ const Profile = ({ username }) => {
   const classes = useStyles()
   const [state, setState] = useState({
     edit: false,
+    about: '',
   })
   const user = useSelector((state) => state.auth.user)
   console.log('Profile State: ', state)
@@ -137,7 +138,17 @@ const Profile = ({ username }) => {
   }
 
   const handleAbout = () => {
-    console.log('About')
+    api
+      .patch(urls.profileUpdate(state.pk), {
+        about: state.about,
+      })
+      .then((response) => {
+        console.log(response.data)
+        setState({
+          ...state,
+          edit: false,
+        })
+      })
   }
 
   const handleCover = () => {
@@ -155,9 +166,7 @@ const Profile = ({ username }) => {
         <div className={classes.imagesDiv}>
           <div className={classes.profileDiv}></div>
           {user && user.username == username ? (
-            <Button variant="outlined" color="primary">
-              Edit Profile
-            </Button>
+            ''
           ) : (
             <Button variant="outlined" color="primary">
               Follow
@@ -178,6 +187,7 @@ const Profile = ({ username }) => {
                 multiline
                 rows={4}
                 variant="outlined"
+                value={state.about}
                 onChange={(event) => {
                   setState({
                     ...state,
@@ -191,7 +201,7 @@ const Profile = ({ username }) => {
               </Typography>
             )}
             {state.edit ? (
-              <Button variant="contained" color="primary">
+              <Button variant="contained" color="primary" onClick={handleAbout}>
                 Done
               </Button>
             ) : (

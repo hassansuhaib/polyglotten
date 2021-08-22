@@ -172,7 +172,7 @@ class QuizSerializer(serializers.ModelSerializer):
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
-        fields = '__all__'
+        fields = ['pk', 'url', 'content', 'read', 'created_at']
 
 
 class VoiceChannelSerializer(serializers.ModelSerializer):

@@ -13,7 +13,7 @@ export const userSearch = `/users/search/`
 
 // User Profile URLS
 export const profile = `/profile`
-export const profileUpdate = (id) => `/profile/${id}/`
+export const profileUpdate = (id) => `/profile/${id}/update/`
 export const notificationSettings = `/profile/notification-settings/`
 export const notificationSettingsUpdate = (id) =>
   `/profile/notification-settings/${id}/update/`
@@ -61,6 +61,9 @@ export const chatCreate = `/chats/create/`
 export const chatDetail = (id) => `/chats/${id}/`
 export const chatUpdate = (id) => `/chats/${id}/update/`
 export const chatDelete = (id) => `/chats/${id}/delete/`
+
+// Notification URLS
+export const notifications = `/notifications/`
 
 // Misc URLS
 export const tags = `/tags/`
