@@ -46,8 +46,12 @@ class ProfileDetailView(RetrieveAPIView):
     serializer_class = UserProfileSerializer
 
     def get_object(self):
+        print("we herer")
+        username = self.kwargs.get('username')
+        print("Username: ", username)
         try:
-            profile = UserProfile.objects.get(user=self.request.user.id)
+            profile = UserProfile.objects.get(
+                user__username=username)
             return profile
         except UserProfile.DoesNotExist:
             raise Http404("User Profile does not exist")
@@ -687,8 +691,8 @@ class FollowView(APIView):
         user_id = request.data.get('user_id')
         try:
             user = User.objects.get(id=user_id)
-            user_profile = UserProfile.objects.get(id=request.user.id)
-            this_user.following.add(user)
+            user_profile = UserProfile.objects.get(user__id=request.user.id)
+            user_profile.following.add(user)
             notification = Notification(
                 user=user, from_user=request.user, notification_type='F')
 
@@ -705,11 +709,25 @@ class UnfollowView(APIView):
         user_id = request.data.get('user_id')
         try:
             user = User.objects.get(id=user_id)
-            user_profile = UserProfile.objects.get(id=request.user.id)
-            this_user.following.remove(user)
+            user_profile = UserProfile.objects.get(user__id=request.user.id)
+            user_profile.following.remove(user)
             return Response({'Message': 'Unfollowed!'}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'Error': str(e)}, status=status.HTTP_404_NOT_FOUND)
+
+
+class CheckFollowView(APIView):
+    permission_classes = (AllowAny, )
+
+    def get(self, request, fomat=None):
+        user_id = request.query_params.get('user_id')
+        print("User id: ", user_id)
+        try:
+            user_profile = UserProfile.objects.get(user_id=request.user.id)
+            user_profile.following.get(id=user_id)
+            return Response({'followed': True}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'followed': False}, status=status.HTTP_200_OK)
 
 
 class QuestionDetailView(APIView):

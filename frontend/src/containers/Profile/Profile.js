@@ -79,18 +79,19 @@ const Profile = ({ username }) => {
   const [state, setState] = useState({
     edit: false,
     about: '',
+    followed: false,
   })
   const user = useSelector((state) => state.auth.user)
+
   console.log('Profile State: ', state)
   useEffect(() => {
     window.scrollTo(0, 0)
     document.title = 'Profile'
     const getUserProfile = () => {
       let profileData = null
-      let cover_photo = null
-      let profile_photo = null
+      let posts = null
       api
-        .get(urls.profile)
+        .get(urls.profile(username))
         .then((response) => {
           profileData = response.data
           if (profileData.cover_photo === null) {
@@ -103,9 +104,23 @@ const Profile = ({ username }) => {
           }
           return api.get(urls.userPosts(username))
         })
-        .then((response) =>
-          setState({ ...state, ...profileData, posts: response.data })
-        )
+        .then((response) => {
+          posts = response.data
+          return api.get(urls.checkFollow, {
+            params: {
+              user_id: profileData.user.pk,
+            },
+          })
+        })
+        .then((response) => {
+          setState({
+            ...state,
+            ...profileData,
+            posts: posts,
+            followed: response.data.followed,
+          })
+          console.log(response.data)
+        })
         .catch((error) => console.log(error))
     }
     getUserProfile()
@@ -151,12 +166,60 @@ const Profile = ({ username }) => {
     }
   }
 
+  const renderEditButton = () => {
+    if (state.edit) {
+      return (
+        <Button variant="contained" color="primary" onClick={handleAbout}>
+          Done
+        </Button>
+      )
+    } else {
+      return (
+        <IconButton onClick={() => setState({ ...state, edit: true })}>
+          <EditIcon />
+        </IconButton>
+      )
+    }
+  }
+
+  const renderFollow = () => {
+    if (state.followed) {
+      return (
+        <Button variant="outlined" color="primary" onClick={handleUnfollow}>
+          Unfollow
+        </Button>
+      )
+    } else {
+      return (
+        <Button variant="outlined" color="primary" onClick={handleFollow}>
+          Follow
+        </Button>
+      )
+    }
+  }
+
   const handleFollow = () => {
-    console.log('Follow')
+    api
+      .post(urls.follow, {
+        user_id: state.user.pk,
+      })
+      .then((response) => {
+        setState({ ...state, followed: true })
+        console.log(response.data)
+      })
+      .catch((error) => console.log(error))
   }
 
   const handleUnfollow = () => {
-    console.log('Unfollow')
+    api
+      .post(urls.unfollow, {
+        user_id: state.user.pk,
+      })
+      .then((response) => {
+        setState({ ...state, followed: false })
+        console.log(response.data)
+      })
+      .catch((error) => console.log(error))
   }
 
   const handleAbout = () => {
@@ -199,13 +262,7 @@ const Profile = ({ username }) => {
           >
             <IconButton className={classes.overlay}></IconButton>
           </div>
-          {user && user.username == username ? (
-            ''
-          ) : (
-            <Button variant="outlined" color="primary">
-              Follow
-            </Button>
-          )}
+          {user && user.username == username ? '' : renderFollow()}
         </div>
         <div className={classes.name}>
           <Typography variant="h6">
@@ -234,15 +291,9 @@ const Profile = ({ username }) => {
                 {state && state.about ? state.about : 'Language Learner'}
               </Typography>
             )}
-            {state.edit ? (
-              <Button variant="contained" color="primary" onClick={handleAbout}>
-                Done
-              </Button>
-            ) : (
-              <IconButton onClick={() => setState({ ...state, edit: true })}>
-                <EditIcon />
-              </IconButton>
-            )}
+            {state.user && state.user.username === user.username
+              ? renderEditButton()
+              : ''}
           </div>
         </div>
       </Grid>

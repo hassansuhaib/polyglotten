@@ -20,7 +20,7 @@ const People = ({ people }) => {
         <ListItem
           button
           component={RouterLink}
-          to={`profile/${person.username}`}
+          to={`profile/${person.user.username}`}
           alignItems="flex-start"
         >
           <ListItemAvatar>

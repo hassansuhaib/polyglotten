@@ -14,7 +14,8 @@ urlpatterns = [
          name='update-notification-settings'),
 
     # User Profile URLS
-    path('profile/', ProfileDetailView.as_view(), name='profile-detail'),
+    path('profile/<str:username>/detail/',
+         ProfileDetailView.as_view(), name='profile-detail'),
     path('profile/interests/', ProfileInterestListView.as_view(),
          name='profile-interests'),
     path('profile/interests/update/<str:action>/', ProfileInterestUpdateView.as_view(),
@@ -25,6 +26,7 @@ urlpatterns = [
          name='profile-languages-update'),
     path('profile/follow/', FollowView.as_view()),
     path('profile/unfollow/', UnfollowView.as_view()),
+    path('profile/check-follow/', CheckFollowView.as_view()),
 
     # Data URLS
     path('interests/', InterestListView.as_view(), name='interests'),

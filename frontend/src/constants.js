@@ -12,8 +12,11 @@ export const userUpdate = `/user-update/`
 export const userSearch = `/users/search/`
 
 // User Profile URLS
-export const profile = `/profile`
+export const profile = (username) => `/profile/${username}/detail/`
 export const profileUpdate = (id) => `/profile/${id}/update/`
+export const follow = `/profile/follow/`
+export const unfollow = `/profile/unfollow/`
+export const checkFollow = `/profile/check-follow/`
 export const notificationSettings = `/profile/notification-settings/`
 export const notificationSettingsUpdate = (id) =>
   `/profile/notification-settings/${id}/update/`
