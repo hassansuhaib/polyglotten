@@ -438,9 +438,15 @@ class LikeView(APIView):
             if like_type == 'comment':
                 comment = Comment.objects.get(id=id)
                 comment.likes.add(user)
+                comment_author = User.objects.get(id=comment.user)
+                notification = Notification(
+                    user=comment_author, from_user=request.user, notification_type='L', comment=comment)
             else:
                 post = Post.objects.get(id=id)
                 post.likes.add(user)
+                post_author = User.objects.get(id=post.user)
+                notification = Notification(
+                    user=post_author, from_user=request.user, notification_type='L', post=post)
             return Response({'Message': 'Liked!'}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'Error': str(e)}, status=status.HTTP_200_OK)
@@ -590,9 +596,15 @@ class VoteView(APIView):
             if vote_type == 'question':
                 question = Question.objects.get(id=id)
                 question.votes.add(user)
+                question_author = User.objects.get(id=question.user)
+                notification = Notification(
+                    user=question_athor, from_user=request.user, notification_type='V', question=question)
             else:
-                post = Answer.objects.get(id=id)
-                post.votes.add(user)
+                answer = Answer.objects.get(id=id)
+                answer.votes.add(user)
+                answer_author = User.objects.get(id=answer.user)
+                notification = Notification(
+                    user=answer_author, from_user=request.user, notification_type='V', answer=answer)
             return Response({'Message': 'Voted!'}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'Error': str(e)}, status=status.HTTP_200_OK)
@@ -658,6 +670,8 @@ class FollowView(APIView):
             user = User.objects.get(id=user_id)
             user_profile = UserProfile.objects.get(id=request.user.id)
             this_user.following.add(user)
+            notification = Notification(
+                user=user, from_user=request.user, notification_type='F')
             return Response({'Message': 'Followed!'}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'Error': str(e)}, status=status.HTTP_404_NOT_FOUND)
@@ -687,40 +701,6 @@ class QuestionDetailView(APIView):
             question_serializer = QuestionSerializer(question)
             answers_serializer = AnswerSerializer(answers, many=True)
             return Response({'question': question_serializer.data, 'answers': answers_serializer.data}, status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response({'Error': str(e)}, status=status.HTTP_404_NOT_FOUND)
-
-
-class UpvoteView(APIView):
-    permission_classes = (AllowAny, )
-
-    def post(self, request, upvote_type, id, *args, **kwargs):
-        try:
-            user = User.objects.get(id=request.user.id)
-            if upvote_type == 'answer':
-                answer = Answer.objects.get(id=id)
-                answer.votes.add(user)
-            else:
-                question = Question.objects.get(id=id)
-                question.votes.add(user)
-            return Response({'Message': 'Upvoted!'}, status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response({'Error': str(e)}, status=status.HTTP_404_NOT_FOUND)
-
-
-class UnvoteView(APIView):
-    permission_classes = (AllowAny, )
-
-    def post(self, request, upvote_type, id, *args, **kwargs):
-        try:
-            user = User.objects.get(id=request.user.id)
-            if upvote_type == 'answer':
-                answer = Answer.objects.get(id=id)
-                answer.votes.remove(user)
-            else:
-                question = Question.objects.get(id=id)
-                question.votes.remove(user)
-            return Response({'Message': 'Unvoted!'}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'Error': str(e)}, status=status.HTTP_404_NOT_FOUND)
 

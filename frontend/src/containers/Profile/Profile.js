@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import api from '../../api'
 import * as urls from '../../constants'
 
 import { makeStyles } from '@material-ui/core/styles'
 import { Button, Grid, Typography } from '@material-ui/core'
 import Post from '../../components/Post/Post'
+import TextField from '@material-ui/core/TextField'
+import EditIcon from '@material-ui/icons/Edit'
+import IconButton from '@material-ui/core/IconButton'
 
 const useStyles = makeStyles((theme) => ({
   toolbar: theme.mixins.toolbar,
@@ -60,19 +64,25 @@ const useStyles = makeStyles((theme) => ({
 
 const Profile = ({ username }) => {
   const classes = useStyles()
-  const [state, setState] = useState(null)
+  const [state, setState] = useState({
+    edit: false,
+  })
+  const user = useSelector((state) => state.auth.user)
   console.log('Profile State: ', state)
   useEffect(() => {
     window.scrollTo(0, 0)
     document.title = 'Profile'
     const getUserProfile = () => {
+      let profileData = null
       api
         .get(urls.profile)
         .then((response) => {
-          setState(response.data)
+          profileData = response.data
           return api.get(urls.userPosts(username))
         })
-        .then((response) => setState({ ...state, posts: response.data }))
+        .then((response) =>
+          setState({ ...state, ...profileData, posts: response.data })
+        )
         .catch((error) => console.log(error))
     }
     getUserProfile()
@@ -118,22 +128,78 @@ const Profile = ({ username }) => {
     }
   }
 
+  const handleFollow = () => {
+    console.log('Follow')
+  }
+
+  const handleUnfollow = () => {
+    console.log('Unfollow')
+  }
+
+  const handleAbout = () => {
+    console.log('About')
+  }
+
+  const handleCover = () => {
+    console.log('Cover')
+  }
+
+  const handlePhoto = () => {
+    console.log('Photo')
+  }
+
   return (
     <Grid container>
       <Grid item xs={12}>
         <div className={classes.coverPhoto}></div>
         <div className={classes.imagesDiv}>
           <div className={classes.profileDiv}></div>
-          <Button variant="outlined" color="primary">
-            Edit Profile
-          </Button>
+          {user && user.username == username ? (
+            <Button variant="outlined" color="primary">
+              Edit Profile
+            </Button>
+          ) : (
+            <Button variant="outlined" color="primary">
+              Follow
+            </Button>
+          )}
         </div>
         <div className={classes.name}>
-          <Typography variant="h6">Hassan Suhaib</Typography>
-          <Typography variant="body2">
-            In love with the languages of the world | Learning: ES AR | Speak:
-            UR AR ES EN | FullStack Web Developer
+          <Typography variant="h6">
+            {state && state.user && state.user.first_name}{' '}
+            {state && state.user && state.user.last_name}
           </Typography>
+          <div>
+            {state.edit ? (
+              <TextField
+                id="outlined-multiline-static"
+                label="About"
+                fullWidth
+                multiline
+                rows={4}
+                variant="outlined"
+                onChange={(event) => {
+                  setState({
+                    ...state,
+                    about: event.target.value,
+                  })
+                }}
+              />
+            ) : (
+              <Typography variant="body2">
+                {state && state.about ? state.about : 'Language Learner'}
+              </Typography>
+            )}
+            {state.edit ? (
+              <Button variant="contained" color="primary">
+                Done
+              </Button>
+            ) : (
+              <IconButton onClick={() => setState({ ...state, edit: true })}>
+                <EditIcon />
+              </IconButton>
+            )}
+          </div>
         </div>
       </Grid>
       <Grid item xs={12}>

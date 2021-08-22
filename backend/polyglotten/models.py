@@ -21,7 +21,8 @@ NOTIFICATION_TYPES = [
     ('S', 'Share'),
     ('L', 'Like'),
     ('V', 'Vote'),
-    ('A', 'Answer')
+    ('A', 'Answer'),
+    ('F', 'Follow')
 ]
 
 QUIZ_LEVELS = [
@@ -64,7 +65,6 @@ class NotificationSettings(models.Model):
 
     def __str__(self):
         return f'All: {self.every}, Post: {self.posts}, Friend Request: {self.upvotes}, Recommended: {self.recommended}'
-
 
 
 class UserProfile(models.Model):
@@ -464,9 +464,12 @@ class Notification(models.Model):
         elif self.notification_type == 'S':
             self.url = f'post/{self.post.id}'
             self.content = f'{self.from_user.first_name} shared your post'
-        else:
+        elif self.notification_type == 'A':
             self.url = f'question/{self.answer.question.id}'
             self.content = f'{self.from_user.first_name} answered your question'
+        else:
+            self.url = f'profile/{self.from_user.username}'
+            self.content = f'{self.from_user.first_name} followed you'
 
         return super(Notification, self).save(*args, **kwargs)
 
