@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'channels',
     'polyglotten',
-    'django_extensions',
 ]
 
 SITE_ID = 1

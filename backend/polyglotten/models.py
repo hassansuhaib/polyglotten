@@ -20,6 +20,7 @@ NOTIFICATION_TYPES = [
     ('C', 'Comment'),
     ('S', 'Share'),
     ('L', 'Like'),
+    ('V', 'Vote')
 ]
 
 QUIZ_LEVELS = [
@@ -412,6 +413,8 @@ class Result(models.Model):
 
 
 class Notification(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="notifications")
     created_at = models.DateTimeField(auto_now=True)
     content = models.CharField(max_length=250)
     read = models.BooleanField(default=False)
@@ -419,22 +422,36 @@ class Notification(models.Model):
         max_length=5, choices=NOTIFICATION_TYPES)
     from_user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="from_user")
-    to_user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="to_user")
     post = models.ForeignKey(Post, on_delete=models.CASCADE,
                              related_name='post_notification', null=True, blank=True)
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE,
                                 related_name='comment_notification', null=True, blank=True)
+    url = models.CharField(max_length=100, null=True, blank=True)
+    question = models.ForeignKey(
+        Question, related_name="question_notification", on_delete=models.CASCADE)
+    answer = models.ForeignKey(
+        Answer, related_name="answer_notification", on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
         if notification_type == 'L':
-            if post:
+            if self.post:
+                self.url = f'post/{self.post.id}'
                 self.content = f'{self.from_user.first_name} liked your post'
             else:
+                self.url = f'post/{self.post.id}'
                 self.content = f'{self.from_user.first_name} liked your comment'
-        elif notification_type == 'C':
+        elif notification_type == 'V':
+            if self.question:
+                self.url = f'question/{self.question.id}'
+                self.content = f'{self.from_user.first_name} upvoted your question'
+            else:
+                self.url = f'question/{self.answer.question.id}'
+                self.content = f'{self.from_user.first_name} upvoted your answer'
+        elif self.notification_type == 'C':
+            self.url = f'post/{self.post.id}'
             self.content = f'{self.from_user.first_name} commented on your post'
-        elif notification_type == 'S':
+        elif self.notification_type == 'S':
+            self.url = f'post/{self.post.id}'
             self.content = f'{self.from_user.first_name} shared your post'
 
         return super(Notification, self).save(*args, **kwargs)

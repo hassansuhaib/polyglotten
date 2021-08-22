@@ -11,6 +11,7 @@ import Settings from './containers/Settings/Settings'
 import VoiceChannels from './containers/VoiceChannels/VoiceChannels'
 import Quizzes from './containers/Quizzes/Quizzes'
 import Chats from './containers/Chats/Chats'
+import PostDetail from './components/Post/PostDetail'
 
 import QuestionDetail from './components/Question/QuestionDetail'
 import PrivateRoute from './components/Routes/PrivateRoute'
@@ -22,6 +23,7 @@ const Routes = withRouter(({ location }) => {
       <Layout>
         <Switch>
           <HomeRoute exact path="/" home={Home} landing={Landing} />
+          <Route exact path="/post/:id" component={PostDetail} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/forum" component={Forum} />
