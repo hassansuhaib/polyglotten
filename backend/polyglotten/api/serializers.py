@@ -46,11 +46,13 @@ class UserProfileSerializer(serializers.ModelSerializer):
     languages = LanguageSerializer(many=True)
     interests = InterestSerializer(many=True)
     notification_settings = NotificationSettingsSerializer()
+    followers = UserSerializer(many=True)
+    following = UserSerializer(many=True)
 
     class Meta:
         model = UserProfile
         fields = ['pk', 'user', 'languages', 'interests',
-                  'cover_photo', 'profile_photo', 'notification_settings', 'about']
+                  'cover_photo', 'profile_photo', 'notification_settings', 'about', 'followers', 'following']
 
 
 class TagSerializer(serializers.ModelSerializer):

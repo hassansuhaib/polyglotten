@@ -9,7 +9,7 @@ const Questions = ({ questions }) => {
   return (
     <div>
       {questions.map((question) => (
-        <p>{question.title}</p>
+        <p key={question.id}>{question.title}</p>
       ))}
     </div>
   )

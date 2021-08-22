@@ -20,7 +20,8 @@ NOTIFICATION_TYPES = [
     ('C', 'Comment'),
     ('S', 'Share'),
     ('L', 'Like'),
-    ('V', 'Vote')
+    ('V', 'Vote'),
+    ('A', 'Answer')
 ]
 
 QUIZ_LEVELS = [
@@ -65,6 +66,7 @@ class NotificationSettings(models.Model):
         return f'All: {self.every}, Post: {self.posts}, Friend Request: {self.upvotes}, Recommended: {self.recommended}'
 
 
+
 class UserProfile(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -75,8 +77,8 @@ class UserProfile(models.Model):
         Language, related_name='user_languages', through='UserLanguages', blank=True)
     followers = models.ManyToManyField(
         User, related_name='followers', blank=True)
-    followees = models.ManyToManyField(
-        User, related_name="followees", blank=True)
+    following = models.ManyToManyField(
+        User, related_name="following", blank=True)
     cover_photo = models.FileField(
         upload_to='user_profile/', null=True, blank=True)
     profile_photo = models.FileField(
@@ -232,6 +234,9 @@ class Comment(models.Model):
     def save(self, *args, **kwargs):
         self.create_tags()
         self.create_mentions()
+        post = Post.objects.get(id=self.post)
+        notification = Notification(notification_type='C', post=post)
+        notification.save()
         return super(Comment, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -273,6 +278,12 @@ class Answer(models.Model):
 
     def number_of_votes(self):
         return self.votes.count()
+
+    def save(self, *args, **kwargs):
+        question = Question.objects.get(id=self.question)
+        notification = Notification(notification_type='C', question=question)
+        notification.save()
+        return super(Answer, self).save(*args, **kwargs)
 
     def __str__(self):
         return f'{self.id} answered by {self.user.username}'
@@ -453,6 +464,9 @@ class Notification(models.Model):
         elif self.notification_type == 'S':
             self.url = f'post/{self.post.id}'
             self.content = f'{self.from_user.first_name} shared your post'
+        else:
+            self.url = f'question/{self.answer.question.id}'
+            self.content = f'{self.from_user.first_name} answered your question'
 
         return super(Notification, self).save(*args, **kwargs)
 

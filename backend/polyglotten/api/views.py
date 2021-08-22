@@ -389,6 +389,18 @@ class PostListView(ListAPIView):
         qs = Post.objects.all()
         return qs
 
+
+class UserPostListView(ListAPIView):
+    permission_classes = (AllowAny, )
+    serializer_class = PostSerializer
+    pagination_class = None
+
+    def get_queryset(self):
+        username = self.kwargs.get('username')
+        print("Username", username)
+        qs = Post.objects.filter(user__username=username)
+        return qs
+
 # Create Views
 
 
@@ -636,6 +648,33 @@ class AnswerDeleteView(DestroyAPIView):
 
 
 # API Views
+
+class FollowView(APIView):
+    permission_classes = (AllowAny, )
+
+    def post(self, request, *args, **kwargs):
+        user_id = request.data.get('user_id')
+        try:
+            user = User.objects.get(id=user_id)
+            user_profile = UserProfile.objects.get(id=request.user.id)
+            this_user.following.add(user)
+            return Response({'Message': 'Followed!'}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'Error': str(e)}, status=status.HTTP_404_NOT_FOUND)
+
+
+class UnfollowView(APIView):
+    permission_classes = (AllowAny, )
+
+    def post(self, request, *args, **kwargs):
+        user_id = request.data.get('user_id')
+        try:
+            user = User.objects.get(id=user_id)
+            user_profile = UserProfile.objects.get(id=request.user.id)
+            this_user.following.remove(user)
+            return Response({'Message': 'Unfollowed!'}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'Error': str(e)}, status=status.HTTP_404_NOT_FOUND)
 
 
 class QuestionDetailView(APIView):

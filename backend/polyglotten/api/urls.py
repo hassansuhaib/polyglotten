@@ -23,6 +23,8 @@ urlpatterns = [
          name='profile-languages'),
     path('profile/languages/update/<str:action>/', ProfileLanguageUpdateView.as_view(),
          name='profile-languages-update'),
+    path('profile/follow/', FollowView.as_view()),
+    path('profile/unfollow/', UnfollowView.as_view()),
 
     # Data URLS
     path('interests/', InterestListView.as_view(), name='interests'),
@@ -64,6 +66,8 @@ urlpatterns = [
 
     # Post URLS
     path('feed/posts/', PostListView.as_view(), name='posts'),
+    path('feed/posts/<str:username>/',
+         UserPostListView.as_view(), name='user-posts'),
     path('feed/posts/create/', PostCreateView.as_view(), name='create-post'),
     path('feed/posts/<pk>/update/', PostUpdateView.as_view(), name='update-post'),
     path('feed/posts/share/', PostShareView.as_view(), name='share-post'),

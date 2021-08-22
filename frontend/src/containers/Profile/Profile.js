@@ -1,8 +1,10 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
+import api from '../../api'
+import * as urls from '../../constants'
 
 import { makeStyles } from '@material-ui/core/styles'
 import { Button, Grid, Typography } from '@material-ui/core'
-import Feed from '../Feed/Feed'
+import Post from '../../components/Post/Post'
 
 const useStyles = makeStyles((theme) => ({
   toolbar: theme.mixins.toolbar,
@@ -56,55 +58,64 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const Profile = () => {
+const Profile = ({ username }) => {
   const classes = useStyles()
+  const [state, setState] = useState(null)
+  console.log('Profile State: ', state)
   useEffect(() => {
     window.scrollTo(0, 0)
     document.title = 'Profile'
+    const getUserProfile = () => {
+      api
+        .get(urls.profile)
+        .then((response) => {
+          setState(response.data)
+          return api.get(urls.userPosts(username))
+        })
+        .then((response) => setState({ ...state, posts: response.data }))
+        .catch((error) => console.log(error))
+    }
+    getUserProfile()
   }, [])
 
   const renderLanguages = () => {
-    return (
-      <div className={classes.languages}>
-        <div className={classes.language}>
-          <Typography variant="subtitle2">German</Typography>
+    if (state && state.languages && state.languages.length > 0) {
+      return (
+        <div className={classes.languages}>
+          {state.languages.map((language) => (
+            <div key={language.id} className={classes.language}>
+              <Typography variant="subtitle2">German</Typography>
+            </div>
+          ))}
         </div>
-        <div className={classes.language}>
-          <Typography variant="subtitle2">Spanish</Typography>
-        </div>
-        <div className={classes.language}>
-          <Typography variant="subtitle2">Arabic</Typography>
-        </div>
-        <div className={classes.language}>
-          <Typography variant="subtitle2">Italian</Typography>
-        </div>
-        <div className={classes.language}>
-          <Typography variant="subtitle2">Afrikaans</Typography>
-        </div>
-        <div className={classes.language}>
-          <Typography variant="subtitle2">Urdu</Typography>
-        </div>
-      </div>
-    )
+      )
+    } else {
+      return <Typography>No languages added yet.</Typography>
+    }
   }
 
   const renderInterests = () => {
-    return (
-      <div className={classes.languages}>
-        <div className={classes.language}>
-          <Typography variant="subtitle2">Football</Typography>
+    if (state && state.interests && state.interests.length > 0) {
+      return (
+        <div className={classes.languages}>
+          {state.interests.map((interest) => (
+            <div key={interest.id} className={classes.language}>
+              <Typography variant="subtitle2">German</Typography>
+            </div>
+          ))}
         </div>
-        <div className={classes.language}>
-          <Typography variant="subtitle2">Literature</Typography>
-        </div>
-        <div className={classes.language}>
-          <Typography variant="subtitle2">Travel</Typography>
-        </div>
-        <div className={classes.language}>
-          <Typography variant="subtitle2">Coffee</Typography>
-        </div>
-      </div>
-    )
+      )
+    } else {
+      return <Typography>No interests added yet.</Typography>
+    }
+  }
+
+  const renderPosts = () => {
+    if (state && state.posts && state.posts.length > 0) {
+      return state.posts.map((post) => <Post key={post.id} post={post} />)
+    } else {
+      return <Typography>No posts yet.</Typography>
+    }
   }
 
   return (
@@ -134,7 +145,7 @@ const Profile = () => {
         {renderInterests()}
       </Grid>
       <Grid item xs={12}>
-        <Feed />
+        {renderPosts()}
       </Grid>
     </Grid>
   )
