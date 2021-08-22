@@ -257,9 +257,9 @@ class SearchView(APIView):
             people = User.objects.filter(Q(first_name__startswith=term) | Q(
                 last_name__startswith=term) | Q(username__startswith=term))
             questions = Question.objects.filter(
-                Q(content__icontains=term) | Q(question_tags__title__contains=term))
+                Q(content__icontains=term) | Q(tags__title__contains=term))
 
-            return Response({'posts': PostSerializer(posts, many=True), 'people': UserSerializer(people, many=True), 'questions': QuestionSerializer(questions, many=True)}, status=status.HTTP_200_OK)
+            return Response({'posts': PostSerializer(posts, many=True).data, 'people': UserSerializer(people, many=True).data, 'questions': QuestionSerializer(questions, many=True).data}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'Error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 

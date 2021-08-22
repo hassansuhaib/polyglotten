@@ -1,22 +1,94 @@
 import React, { useState, useEffect } from 'react'
+import api from '../../api'
+import * as urls from '../../constants'
 
 import { makeStyles } from '@material-ui/core/styles'
-import { Grid, Typography } from '@material-ui/core'
+import { Grid } from '@material-ui/core'
 import TextField from '@material-ui/core/TextField'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import SearchIcon from '@material-ui/icons/Search'
+import AppBar from '@material-ui/core/AppBar'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
+import Typography from '@material-ui/core/Typography'
+import Box from '@material-ui/core/Box'
 
-const useStyles = makeStyles((theme) => ({}))
+import Questions from './Questions'
+import People from './People'
+import Posts from './Posts'
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    backgroundColor: theme.palette.background.paper,
+  },
+}))
 
 const Search = () => {
   const classes = useStyles()
-  const [loading, setLoading] = useState(false)
+  const [state, setState] = useState({
+    loading: false,
+    term: '',
+    value: 0,
+  })
 
   useEffect(() => {
     window.scrollTo(0, 0)
     document.title = 'Search'
   }, [])
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      api
+        .get(urls.search, {
+          params: {
+            term: state.term,
+          },
+        })
+        .then((response) => {
+          console.log(response.data)
+          setState({
+            ...state,
+            results: response.data,
+            loading: false,
+          })
+        })
+    }, 500)
+    return () => {
+      clearTimeout(timeoutId)
+    }
+  }, [state.term])
+
+  const handleChange = (event) => {
+    setState({
+      ...state,
+      term: event.target.value,
+      loading: true,
+    })
+  }
+
+  const handleTabChange = (event, newValue) => {
+    setState({
+      ...state,
+      value: newValue,
+    })
+  }
+
+  function TabPanel(props) {
+    const { children, value, index, ...other } = props
+
+    return (
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+        {...other}
+      >
+        {value === index && <Box p={3}>{children}</Box>}
+      </div>
+    )
+  }
 
   return (
     <div>
@@ -28,6 +100,8 @@ const Search = () => {
           <TextField
             variant="outlined"
             fullWidth
+            value={state.term}
+            onChange={handleChange}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -36,7 +110,7 @@ const Search = () => {
               ),
               endAdornment: (
                 <React.Fragment>
-                  {loading ? (
+                  {state.loading ? (
                     <CircularProgress color="inherit" size={20} />
                   ) : null}
                 </React.Fragment>
@@ -45,7 +119,27 @@ const Search = () => {
           />
         </Grid>
         <Grid item xs={12}>
-          <Typography variant="h4">Search Results</Typography>
+          <AppBar position="static">
+            <Tabs
+              value={state.value}
+              onChange={handleTabChange}
+              aria-label="search result tabs"
+              variant="fullWidth"
+            >
+              <Tab label="People" />
+              <Tab label="Posts" />
+              <Tab label="Questions" />
+            </Tabs>
+          </AppBar>
+          <TabPanel value={state.value} index={0}>
+            <People people={state.results.people} />
+          </TabPanel>
+          <TabPanel value={state.value} index={1}>
+            <Posts posts={state.results.posts} />
+          </TabPanel>
+          <TabPanel value={state.value} index={2}>
+            <Questions questions={state.results.questions} />
+          </TabPanel>
         </Grid>
       </Grid>
     </div>

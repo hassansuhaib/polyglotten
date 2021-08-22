@@ -113,5 +113,6 @@ urlpatterns = [
 
     # Search URLS
     path('users/search/', UserSearchView.as_view()),
+    path('search/', SearchView.as_view()),
 
 ]

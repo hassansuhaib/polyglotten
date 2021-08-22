@@ -65,3 +65,4 @@ export const chatDelete = (id) => `/chats/${id}/delete/`
 export const tags = `/tags/`
 export const languagesAll = `/languages/`
 export const interestsAll = `/interests/`
+export const search = `/search/`

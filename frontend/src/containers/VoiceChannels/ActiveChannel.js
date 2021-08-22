@@ -30,6 +30,7 @@ const ActiveChannel = ({ roomID }) => {
   const socketRef = useRef()
   const userAudio = useRef()
   const peersRef = useRef([])
+  console.log('Peers: ', peers)
 
   const constraints = {
     audio: true,
@@ -39,15 +40,13 @@ const ActiveChannel = ({ roomID }) => {
     window.scrollTo(0, 0)
     document.title = 'Active Channel'
     socketRef.current = io.connect('http://localhost:8000')
-    console.log(socketRef.current)
-    console.log(peers)
     navigator.mediaDevices
       .getUserMedia(constraints)
       .then((stream) => {
         userAudio.current.srcObject = stream
         socketRef.current.emit('join room', roomID)
         socketRef.current.on('all users', (users) => {
-          console.log('All user')
+          console.log('All users', users)
           const peers = []
           users.forEach((userID) => {
             const peer = createPeer(userID, socketRef.current.id, stream)
@@ -55,7 +54,10 @@ const ActiveChannel = ({ roomID }) => {
               peerID: userID,
               peer,
             })
-            peers.push(peer)
+            peers.push({
+              peerID: userID,
+              peer,
+            })
           })
           setPeers(peers)
         })
@@ -67,12 +69,27 @@ const ActiveChannel = ({ roomID }) => {
             peer,
           })
 
-          setPeers((users) => [...users, peer])
+          const peerObj = {
+            peer,
+            peerID: payload.callerID,
+          }
+
+          setPeers((users) => [...users, peerObj])
         })
 
         socketRef.current.on('receiving returned signal', (payload) => {
           const item = peersRef.current.find((p) => p.peerID === payload.id)
           item.peer.signal(payload.signal)
+        })
+
+        socketRef.current.on('user left', (id) => {
+          const peerObj = peersRef.current.find((p) => p.peerID == id)
+          if (peerObj) {
+            peerObj.peer.destroy()
+          }
+          const peers = peersRef.current.filter((p) => p.peerID !== id)
+          peersRef.current = peers
+          setPeers(peers)
         })
       })
       .catch((error) => console.log('Error accessing media devices', error))
@@ -142,8 +159,8 @@ const ActiveChannel = ({ roomID }) => {
         </Grid>
         <Grid item xs={12}>
           <audio ref={userAudio} muted controls autoPlay />
-          {peers.map((peer, index) => (
-            <Audio key={index} peer={peer} />
+          {peers.map((peer) => (
+            <Audio key={peer.peerID} peer={peer} />
           ))}
         </Grid>
         <Grid item xs={12}>
