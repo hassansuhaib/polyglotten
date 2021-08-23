@@ -22,17 +22,22 @@ const useStyles = makeStyles((theme) => ({
 const ChannelList = (props) => {
   const classes = useStyles()
   const [state, setState] = useState(null)
+  console.log('ChannelList state: ', state)
   useEffect(() => {
     const getChannels = () => {
-      api.get(urls.channels).then((response) => setState(response.data))
+      api
+        .get(urls.channels)
+        .then((response) => setState(response.data))
+        .catch((error) => console.log(error))
     }
+    getChannels()
   }, [])
 
   const renderChannels = () => {
     if (state) {
       return state.map((channel) => (
         <React.Fragment key={channel.id}>
-          <ListItem button>
+          <ListItem button component={RouterLink} to={channel.url}>
             <ListItemText
               primary={channel.topic}
               secondary={
@@ -43,14 +48,14 @@ const ChannelList = (props) => {
                     className={classes.inline}
                     color="textPrimary"
                   >
-                    Language: {channel.language}
-                  </Typography>
+                    Language: {channel.language.title}
+                  </Typography>{' '}
                   Users: {channel.number_of_users}
                 </React.Fragment>
               }
             />
           </ListItem>
-          <Divider variant="inset" component="li" />
+          <Divider component="li" />
         </React.Fragment>
       ))
     } else {

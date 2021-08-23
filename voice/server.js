@@ -62,4 +62,4 @@ io.on('connection', (socket) => {
   console.log('We here')
 })
 
-server.listen(8000, () => console.log('server is running on port 8000'))
+server.listen(7000, () => console.log('server is running on port 7000'))

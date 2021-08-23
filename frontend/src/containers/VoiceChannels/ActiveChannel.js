@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import io from 'socket.io-client'
 import Peer from 'simple-peer'
+import api from '../../api'
+import * as urls from '../../constants'
 
 import { makeStyles } from '@material-ui/core/styles'
 import { Grid, IconButton, Typography } from '@material-ui/core'
@@ -16,9 +18,11 @@ const Audio = (props) => {
   const ref = useRef()
 
   useEffect(() => {
-    props.peer.on('stream', (stream) => {
-      ref.current.srcObject = stream
-    })
+    if (props.peer.on) {
+      props.peer.on('stream', (stream) => {
+        ref.current.srcObject = stream
+      })
+    }
   }, [])
 
   return <audio ref={ref} controls autoPlay />
@@ -27,72 +31,80 @@ const Audio = (props) => {
 const ActiveChannel = ({ roomID }) => {
   const classes = useStyles()
   const [peers, setPeers] = useState([])
+  const [state, setState] = useState(null)
   const socketRef = useRef()
   const userAudio = useRef()
   const peersRef = useRef([])
-  console.log('Peers: ', peers)
 
   const constraints = {
     audio: true,
   }
+  console.log('Peers: ', peers)
 
   useEffect(() => {
     window.scrollTo(0, 0)
     document.title = 'Active Channel'
-    socketRef.current = io.connect('http://localhost:8000')
-    navigator.mediaDevices
-      .getUserMedia(constraints)
-      .then((stream) => {
-        userAudio.current.srcObject = stream
-        socketRef.current.emit('join room', roomID)
-        socketRef.current.on('all users', (users) => {
-          console.log('All users', users)
-          const peers = []
-          users.forEach((userID) => {
-            const peer = createPeer(userID, socketRef.current.id, stream)
-            peersRef.current.push({
-              peerID: userID,
-              peer,
+    api
+      .get(urls.channelsDetail(roomID))
+      .then((response) => {
+        setState(response.data)
+        socketRef.current = io.connect('http://localhost:7000')
+        navigator.mediaDevices
+          .getUserMedia(constraints)
+          .then((stream) => {
+            userAudio.current.srcObject = stream
+            socketRef.current.emit('join room', roomID)
+            socketRef.current.on('all users', (users) => {
+              console.log('All users', users)
+              const peers = []
+              users.forEach((userID) => {
+                const peer = createPeer(userID, socketRef.current.id, stream)
+                peersRef.current.push({
+                  peerID: userID,
+                  peer,
+                })
+                peers.push({
+                  peerID: userID,
+                  peer,
+                })
+                console.log(peers)
+              })
+              setPeers(peers)
             })
-            peers.push({
-              peerID: userID,
-              peer,
+
+            socketRef.current.on('user joined', (payload) => {
+              const peer = addPeer(payload.signal, payload.callerID, stream)
+              peersRef.current.push({
+                peerID: payload.callerID,
+                peer,
+              })
+
+              const peerObj = {
+                peer,
+                peerID: payload.callerID,
+              }
+
+              setPeers((users) => [...users, peerObj])
+            })
+
+            socketRef.current.on('receiving returned signal', (payload) => {
+              const item = peersRef.current.find((p) => p.peerID === payload.id)
+              item.peer.signal(payload.signal)
+            })
+
+            socketRef.current.on('user left', (id) => {
+              const peerObj = peersRef.current.find((p) => p.peerID == id)
+              if (peerObj) {
+                peerObj.peer.destroy()
+              }
+              const peers = peersRef.current.filter((p) => p.peerID !== id)
+              peersRef.current = peers
+              setPeers(peers)
             })
           })
-          setPeers(peers)
-        })
-
-        socketRef.current.on('user joined', (payload) => {
-          const peer = addPeer(payload.signal, payload.callerID, stream)
-          peersRef.current.push({
-            peerID: payload.callerID,
-            peer,
-          })
-
-          const peerObj = {
-            peer,
-            peerID: payload.callerID,
-          }
-
-          setPeers((users) => [...users, peerObj])
-        })
-
-        socketRef.current.on('receiving returned signal', (payload) => {
-          const item = peersRef.current.find((p) => p.peerID === payload.id)
-          item.peer.signal(payload.signal)
-        })
-
-        socketRef.current.on('user left', (id) => {
-          const peerObj = peersRef.current.find((p) => p.peerID == id)
-          if (peerObj) {
-            peerObj.peer.destroy()
-          }
-          const peers = peersRef.current.filter((p) => p.peerID !== id)
-          peersRef.current = peers
-          setPeers(peers)
-        })
+          .catch((error) => console.log('Error accessing media devices', error))
       })
-      .catch((error) => console.log('Error accessing media devices', error))
+      .catch((error) => console.log(error))
   }, [])
 
   function createPeer(userToSignal, callerID, stream) {
@@ -133,34 +145,21 @@ const ActiveChannel = ({ roomID }) => {
     <div>
       <Grid container>
         <Grid item xs={12}>
-          <Typography variant="h4">Voice Channels</Typography>
-        </Grid>
-        <Grid item xs={12}>
           <div>
-            <Typography variant="h5">Is it worth learning Spanish?</Typography>
-            <div style={{ background: 'blue', borderRadius: '20px' }}>
-              English
-            </div>
+            <Typography variant="h4">Topic: {state && state.topic}</Typography>
+            <Typography variant="h5">
+              Language: {state && state.language.title}
+            </Typography>
           </div>
         </Grid>
         <Grid container item xs={12}>
           <Grid item xs={6}>
-            User 1
+            <audio autoPlay controls ref={userAudio} />
           </Grid>
-          <Grid item xs={6}>
-            User 2
-          </Grid>
-          <Grid item xs={6}>
-            User 3
-          </Grid>
-          <Grid item xs={6}>
-            User 4
-          </Grid>
-        </Grid>
-        <Grid item xs={12}>
-          <audio ref={userAudio} muted controls autoPlay />
           {peers.map((peer) => (
-            <Audio key={peer.peerID} peer={peer} />
+            <Grid item xs={6}>
+              <Audio key={peer.peerID} peer={peer} />
+            </Grid>
           ))}
         </Grid>
         <Grid item xs={12}>

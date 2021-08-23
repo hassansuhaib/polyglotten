@@ -102,10 +102,7 @@ const Chat = ({ chatID, username }) => {
   const renderMessages = () => {
     console.log('Messages: ', messages)
     return messages.map((message, i, arr) => (
-      <ListItem
-        key={message.id}
-        style={{ marginBottom: arr.length - 1 === i ? '300px' : '15px' }}
-      >
+      <ListItem key={message.id}>
         <Grid container>
           <Grid item xs={12}>
             <ListItemText
@@ -143,6 +140,13 @@ const Chat = ({ chatID, username }) => {
                 onChange={handleChange}
                 label="Message"
                 value={state.message}
+                onKeyPress={(ev) => {
+                  console.log(`Pressed keyCode ${ev.key}`)
+                  if (ev.key === 'Enter') {
+                    sendMessage()
+                    ev.preventDefault()
+                  }
+                }}
               />
             </Grid>
             <Grid item xs={1} align="right">

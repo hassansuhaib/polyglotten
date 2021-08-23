@@ -184,10 +184,11 @@ class NotificationSerializer(serializers.ModelSerializer):
 class VoiceChannelSerializer(serializers.ModelSerializer):
     users = UserSerializer(many=True)
     number_of_users = serializers.SerializerMethodField()
+    language = LanguageSerializer()
 
     class Meta:
         model = VoiceChannel
-        fields = ['id', 'users', 'language', 'number_of_users']
+        fields = ['id', 'users', 'language', 'number_of_users', 'topic', 'url']
 
     def get_number_of_users(self, obj):
         return obj.number_of_users()

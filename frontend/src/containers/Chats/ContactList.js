@@ -51,6 +51,14 @@ const ContactList = ({ username }) => {
     }, 500)
   }, [])
 
+  console.log('Chats', chats)
+
+  const getUser = (chat) => {
+    return chat.participants.filter(
+      (participant) => participant !== user.username
+    )
+  }
+
   const renderChats = () => {
     if (state.loading === false && chats.length > 0) {
       return chats.map((chat) => (
@@ -58,14 +66,14 @@ const ContactList = ({ username }) => {
           <ListItem
             button
             component={RouterLink}
-            to={`/chats/user/${chat.participants[0]}/${chat.id}`}
+            to={`/chats/user/${getUser(chat)}/${chat.id}`}
             alignItems="flex-start"
           >
             <ListItemAvatar>
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+              <Avatar />
             </ListItemAvatar>
             <ListItemText
-              primary={chat.participants[0]}
+              primary={getUser(chat)}
               secondary={
                 <React.Fragment>
                   <Typography
@@ -73,10 +81,8 @@ const ContactList = ({ username }) => {
                     variant="body2"
                     className={classes.inline}
                     color="textPrimary"
-                  >
-                    Ali Connors
-                  </Typography>
-                  {" — I'll be in your neighborhood doing errands this…"}
+                  ></Typography>
+                  {''}
                 </React.Fragment>
               }
             />

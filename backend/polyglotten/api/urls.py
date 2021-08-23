@@ -105,7 +105,7 @@ urlpatterns = [
          name='channels'),
     path('channels/create/', VoiceChannelCreateView.as_view(),
          name='create-channel'),
-    path('channels/detail/<int:id>/', VoiceChannelDetailView.as_view(),
+    path('channels/detail/<str:id>/', VoiceChannelDetailView.as_view(),
          name='channel-detail'),
     path('channels/<pk>/update/',
          VoiceChannelUpdateView.as_view(), name='update-channel'),

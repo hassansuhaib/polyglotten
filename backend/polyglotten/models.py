@@ -325,6 +325,9 @@ class Contact(models.Model):
         User, related_name='friends', on_delete=models.CASCADE)
     friends = models.ManyToManyField('self', blank=True)
 
+    def get_profile_photo(self):
+        return self.user.profile.image
+
     def __str__(self):
         return self.user.username
 

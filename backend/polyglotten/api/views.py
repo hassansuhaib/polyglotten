@@ -798,7 +798,14 @@ class VoiceChannelCreateView(CreateAPIView):
 class VoiceChannelDetailView(RetrieveAPIView):
     permission_classes = (AllowAny, )
     serializer_class = VoiceChannelSerializer
-    queryset = VoiceChannel.objects.all()
+
+    def get_object(self):
+        try:
+            voice_channel = VoiceChannel.objects.get(
+                room_id=self.kwargs.get('id'))
+            return voice_channel
+        except VoiceChannel.DoesNotExist:
+            raise Http404("Voice Channel does not exist")
 
 
 class VoiceChannelListView(ListAPIView):
