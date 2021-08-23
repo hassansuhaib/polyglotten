@@ -780,11 +780,16 @@ class VoiceChannelCreateView(CreateAPIView):
         try:
             language_obj = Language.objects.get(title=language)
             voice_channel = VoiceChannel(
-                language=language_obj, room_id=room_id, topic=topic)
+                language=language_obj, room_id=room_id, topic=topic, user=request.user)
             voice_channel.save()
-            voice_channel.users.add(request.user.id)
+            url = f'/channels/active/{room_id}'
+            this_user = User.objects.get(id=request.user.id)
             for user in users:
                 voice_channel.users.add(user['pk'])
+                user_obj = User.objects.get(id=user['pk'])
+                notification = Notification(
+                    user=user_obj, from_user=this_user, notification_type='T', url=url)
+                notification.save()
             return Response(VoiceChannelSerializer(voice_channel).data, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'Error': str(e)}, status=status.HTTP_404_NOT_FOUND)

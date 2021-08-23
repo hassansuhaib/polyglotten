@@ -10,7 +10,7 @@ import { Button, Grid, Typography } from '@material-ui/core'
 import TextField from '@material-ui/core/TextField'
 import EditIcon from '@material-ui/icons/Edit'
 import IconButton from '@material-ui/core/IconButton'
-import Edit from '@material-ui/icons/Edit'
+import ImageDialog from './ImageDialog'
 
 const useStyles = makeStyles((theme) => ({
   toolbar: theme.mixins.toolbar,
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: '300px',
     backgroundPosition: 'center center',
-    backgroundSize: 'contain',
+    backgroundSize: 'cover',
   },
   imagesDiv: {
     position: 'relative',
@@ -43,13 +43,8 @@ const useStyles = makeStyles((theme) => ({
     left: '38%',
     borderRadius: '50%' /*don't forget prefixes*/,
     backgroundPosition: 'center center',
-    backgroundSize: 'contain',
-    '&:hover': {
-      '& .overlay': {
-        display: 'block',
-        background: 'rgba(0,0,0,.3)',
-      },
-    },
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
   },
   language: {
     border: '1px solid green',
@@ -72,6 +67,11 @@ const useStyles = makeStyles((theme) => ({
     right: 0,
     width: '100%',
     height: '100%',
+  },
+  about: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 }))
 
@@ -237,14 +237,6 @@ const Profile = ({ username }) => {
       })
   }
 
-  const handleCover = () => {
-    console.log('Cover')
-  }
-
-  const handlePhoto = () => {
-    console.log('Photo')
-  }
-
   return (
     <Grid container>
       <Grid item xs={12}>
@@ -253,7 +245,12 @@ const Profile = ({ username }) => {
             className={classes.coverPhoto}
             style={{ backgroundImage: `url(${state && state.cover_photo})` }}
           >
-            <IconButton className={classes.overlay}></IconButton>
+            <ImageDialog
+              title={'Change Cover Photo'}
+              pState={state}
+              pSetState={setState}
+              type="cover"
+            />
           </div>
         </div>
         <div className={classes.imagesDiv}>
@@ -261,7 +258,12 @@ const Profile = ({ username }) => {
             className={classes.profileDiv}
             style={{ backgroundImage: `url(${state && state.profile_photo})` }}
           >
-            <IconButton className={classes.overlay}></IconButton>
+            <ImageDialog
+              title={'Change Profile Photo'}
+              pState={state}
+              pSetState={setState}
+              type="profile"
+            />
           </div>
           {user && user.username == username ? '' : renderFollow()}
         </div>
@@ -270,7 +272,7 @@ const Profile = ({ username }) => {
             {state && state.user && state.user.first_name}{' '}
             {state && state.user && state.user.last_name}
           </Typography>
-          <div>
+          <div className={classes.about}>
             {state.edit ? (
               <TextField
                 id="outlined-multiline-static"
@@ -288,7 +290,7 @@ const Profile = ({ username }) => {
                 }}
               />
             ) : (
-              <Typography variant="body2">
+              <Typography variant="body1">
                 {state && state.about ? state.about : 'Language Learner'}
               </Typography>
             )}

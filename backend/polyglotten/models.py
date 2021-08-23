@@ -22,7 +22,8 @@ NOTIFICATION_TYPES = [
     ('L', 'Like'),
     ('V', 'Vote'),
     ('A', 'Answer'),
-    ('F', 'Follow')
+    ('F', 'Follow'),
+    ('T', 'Channel')  # T as in Talk
 ]
 
 QUIZ_LEVELS = [
@@ -298,21 +299,22 @@ class Answer(models.Model):
 
 
 class VoiceChannel(models.Model):
+    user = models.ForeignKey(
+        User, related_name="channels", on_delete=models.CASCADE, null=True, blank=True)
     topic = models.CharField(max_length=250)
     language = models.ForeignKey(Language, on_delete=models.CASCADE)
     users = models.ManyToManyField(User, related_name='user_channels')
-    room_id = models.CharField(max_length=250)
+    room_id = models.CharField(max_length=200)
+    url = models.CharField(max_length=250)
 
     def number_of_users(self):
         return self.users.all().count()
 
-    # def save(self, *args, **kwargs):
-    #     # If it has all the users than of course it will be full
-    #     if user_1 and user_2 and user_3 and user_4:
-    #         self.full = True
-    #     else:
-    #         self.full = False
-    #     return super(VoiceChannel, self).save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        # If it has all the users than of course it will be full
+        url = f"/channels/active/{self.room_id}"
+        self.url = url
+        return super(VoiceChannel, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.topic
@@ -471,9 +473,11 @@ class Notification(models.Model):
         elif self.notification_type == 'A':
             self.url = f'question/{self.answer.question.id}'
             self.content = f'{self.from_user.first_name} answered your question'
-        else:
+        elif self.notification_type == 'F':
             self.url = f'profile/{self.from_user.username}'
             self.content = f'{self.from_user.first_name} followed you'
+        else:
+            self.content = f'{self.from_user.first_name} invited you to a voice channel.'
 
         return super(Notification, self).save(*args, **kwargs)
 
