@@ -182,15 +182,15 @@ class NotificationSerializer(serializers.ModelSerializer):
 
 
 class VoiceChannelSerializer(serializers.ModelSerializer):
-    user_1 = UserSerializer()
-    user_2 = UserSerializer()
-    user_3 = UserSerializer()
-    user_4 = UserSerializer()
+    users = UserSerializer(many=True)
+    number_of_users = serializers.SerializerMethodField()
 
     class Meta:
         model = VoiceChannel
-        fields = ['id', 'user_1', 'user_2',
-                  'user_3', 'user_4', 'language', 'full']
+        fields = ['id', 'users', 'language', 'number_of_users']
+
+    def get_number_of_users(self, obj):
+        return obj.number_of_users()
 
 
 # Creation Serializers

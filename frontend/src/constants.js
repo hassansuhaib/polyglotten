@@ -17,6 +17,8 @@ export const profileUpdate = (id) => `/profile/${id}/update/`
 export const follow = `/profile/follow/`
 export const unfollow = `/profile/unfollow/`
 export const checkFollow = `/profile/check-follow/`
+export const followers = `/profile/followers/`
+export const following = `/profile/following/`
 export const notificationSettings = `/profile/notification-settings/`
 export const notificationSettingsUpdate = (id) =>
   `/profile/notification-settings/${id}/update/`
@@ -65,6 +67,12 @@ export const chatCreate = `/chats/create/`
 export const chatDetail = (id) => `/chats/${id}/`
 export const chatUpdate = (id) => `/chats/${id}/update/`
 export const chatDelete = (id) => `/chats/${id}/delete/`
+
+// Voice Channels
+export const channels = `/channels/all/`
+export const channelsCreate = `/channels/create/`
+export const channelsDetail = (id) => `/channels/detail/${id}/`
+export const channelsUpdate = (id) => `/channels/${id}/update/`
 
 // Notification URLS
 export const notifications = `/notifications/`

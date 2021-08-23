@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import api from '../../api'
 import * as urls from '../../constants'
+import Post from '../../components/Post/Post'
+import CreatePost from '../../components/Post/CreatePost'
 
 import { makeStyles } from '@material-ui/core/styles'
 import { Button, Grid, Typography } from '@material-ui/core'
-import Post from '../../components/Post/Post'
 import TextField from '@material-ui/core/TextField'
 import EditIcon from '@material-ui/icons/Edit'
 import IconButton from '@material-ui/core/IconButton'
@@ -306,6 +307,7 @@ const Profile = ({ username }) => {
         {renderInterests()}
       </Grid>
       <Grid item xs={12}>
+        <CreatePost />
         {renderPosts()}
       </Grid>
     </Grid>

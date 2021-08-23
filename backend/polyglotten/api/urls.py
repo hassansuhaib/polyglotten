@@ -27,6 +27,8 @@ urlpatterns = [
     path('profile/follow/', FollowView.as_view()),
     path('profile/unfollow/', UnfollowView.as_view()),
     path('profile/check-follow/', CheckFollowView.as_view()),
+    path('profile/followers/', FollowerListView.as_view()),
+    path('profile/following/', FollowingListView.as_view()),
 
     # Data URLS
     path('interests/', InterestListView.as_view(), name='interests'),
@@ -99,14 +101,14 @@ urlpatterns = [
     path('messages/all/', MessageListView.as_view(), name='messages'),
 
     # Voice Channel URLS
-    path('voice-channels/create/', VoiceChannelCreateView.as_view(),
-         name='create-voice-channel'),
-    path('voice-channels/detail/<int:id>/', VoiceChannelDetailView.as_view(),
-         name='voice-channel-detail'),
-    path('voice-channels/all/', VoiceChannelListView.as_view(),
-         name='voice-channels'),
-    path('voice-channels/<pk>/update/',
-         VoiceChannelUpdateView.as_view(), name='update-voice-channel'),
+    path('channels/all/', VoiceChannelListView.as_view(),
+         name='channels'),
+    path('channels/create/', VoiceChannelCreateView.as_view(),
+         name='create-channel'),
+    path('channels/detail/<int:id>/', VoiceChannelDetailView.as_view(),
+         name='channel-detail'),
+    path('channels/<pk>/update/',
+         VoiceChannelUpdateView.as_view(), name='update-channel'),
 
     # Misc URLS
     path('tags/', TagListView.as_view(), name='tags'),

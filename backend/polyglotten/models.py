@@ -300,23 +300,19 @@ class Answer(models.Model):
 class VoiceChannel(models.Model):
     topic = models.CharField(max_length=250)
     language = models.ForeignKey(Language, on_delete=models.CASCADE)
-    full = models.BooleanField(default=False)
-    user_1 = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='user_1')
-    user_2 = models.ForeignKey(
-        User, on_delete=models.CASCADE, null=True, blank=True, related_name='user_2')
-    user_3 = models.ForeignKey(
-        User, on_delete=models.CASCADE, null=True, blank=True, related_name='user_3')
-    user_4 = models.ForeignKey(
-        User, on_delete=models.CASCADE, null=True, blank=True, related_name='user_4')
+    users = models.ManyToManyField(User, related_name='user_channels')
+    room_id = models.CharField(max_length=250)
 
-    def save(self, *args, **kwargs):
-        # If it has all the users than of course it will be full
-        if user_1 and user_2 and user_3 and user_4:
-            self.full = True
-        else:
-            self.full = False
-        return super(VoiceChannel, self).save(*args, **kwargs)
+    def number_of_users(self):
+        return self.users.all().count()
+
+    # def save(self, *args, **kwargs):
+    #     # If it has all the users than of course it will be full
+    #     if user_1 and user_2 and user_3 and user_4:
+    #         self.full = True
+    #     else:
+    #         self.full = False
+    #     return super(VoiceChannel, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.topic

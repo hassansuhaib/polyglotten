@@ -46,9 +46,7 @@ class ProfileDetailView(RetrieveAPIView):
     serializer_class = UserProfileSerializer
 
     def get_object(self):
-        print("we herer")
         username = self.kwargs.get('username')
-        print("Username: ", username)
         try:
             profile = UserProfile.objects.get(
                 user__username=username)
@@ -185,6 +183,29 @@ class NotificationListView(ListAPIView):
     def get_queryset(self):
         qs = Notification.objects.filter(user=self.request.user)
         return qs
+
+
+class FollowerListView(ListAPIView):
+    permission_classes = (AllowAny, )
+    serializer_class = UserSerializer
+    pagination_class = None
+
+    def get_queryset(self):
+        user_profile = UserProfile.objects.get(user__id=self.request.user.id)
+        qs = user_profile.followers.all()
+        return qs
+
+
+class FollowingListView(ListAPIView):
+    permission_classes = (AllowAny, )
+    serializer_class = UserSerializer
+    pagination_class = None
+
+    def get_queryset(self):
+        user_profile = UserProfile.objects.get(user__id=self.request.user.id)
+        qs = user_profile.following.all()
+        return qs
+
 
 # API Views
 
@@ -749,8 +770,24 @@ class QuestionDetailView(APIView):
 
 class VoiceChannelCreateView(CreateAPIView):
     permission_classes = (AllowAny, )
-    serializer_class = VoiceChannelCreationSerializer
-    queryset = VoiceChannel.objects.all()
+
+    def post(self, request, *args, **kwargs):
+        users = request.data.get('users')
+        language = request.data.get('language')
+        room_id = request.data.get('room_id')
+        topic = request.data.get('topic')
+        print("Users: ", users)
+        try:
+            language_obj = Language.objects.get(title=language)
+            voice_channel = VoiceChannel(
+                language=language_obj, room_id=room_id, topic=topic)
+            voice_channel.save()
+            voice_channel.users.add(request.user.id)
+            for user in users:
+                voice_channel.users.add(user['pk'])
+            return Response(VoiceChannelSerializer(voice_channel).data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'Error': str(e)}, status=status.HTTP_404_NOT_FOUND)
 
 
 class VoiceChannelDetailView(RetrieveAPIView):
