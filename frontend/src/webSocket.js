@@ -65,6 +65,7 @@ class WebSocketService {
       command: 'new_message',
       from: message.from,
       message: message.content,
+      edited_message: message.edited_content,
       chatId: message.chatId,
     })
   }

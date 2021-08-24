@@ -12,8 +12,17 @@ import Avatar from '@material-ui/core/Avatar'
 
 const useStyles = makeStyles((theme) => ({}))
 
-const People = ({ people }) => {
+const People = ({ people, done }) => {
   const classes = useStyles()
+
+  const renderMessage = () => {
+    if (done) {
+      return <Typography>No results found</Typography>
+    } else {
+      return ''
+    }
+  }
+
   const renderPerson = (person) => {
     return (
       <React.Fragment key={person.id}>
@@ -49,11 +58,9 @@ const People = ({ people }) => {
   return (
     <div>
       <List>
-        {people ? (
-          people.map((person) => renderPerson(person))
-        ) : (
-          <Typography>No people found</Typography>
-        )}
+        {people && people.length > 0
+          ? people.map((person) => renderPerson(person))
+          : renderMessage()}
       </List>
     </div>
   )

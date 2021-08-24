@@ -70,7 +70,7 @@ const LanguageSettings = () => {
   const renderLanguages = () => {
     if (state.languages && state.languages.length > 1) {
       return state.languages.map((language) => (
-        <ListItem>
+        <ListItem key={language.language.id}>
           <ListItemText
             primary={language.language.title}
             secondary={language.classification}

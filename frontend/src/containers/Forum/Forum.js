@@ -4,7 +4,7 @@ import history from '../../history'
 
 import Container from '@material-ui/core/Container'
 import { makeStyles } from '@material-ui/core/styles'
-import { Button, Grid, Typography, Hidden } from '@material-ui/core'
+import { Button, Grid, Typography, Hidden, IconButton } from '@material-ui/core'
 
 import QuestionDetail from '../../components/Question/QuestionDetail'
 import QuestionList from '../../components/Question/QuestionList'
@@ -58,9 +58,9 @@ const Forum = (props) => {
           <Grid container>
             <Grid item xs={12} lg={12}>
               <div className={classes.header}>
-                <Button color="primary">
-                  <ArrowBackIcon onClick={() => history.goBack()} />
-                </Button>
+                <IconButton color="primary" onClick={() => history.goBack()}>
+                  <ArrowBackIcon />
+                </IconButton>
                 <Typography variant="h3" component="h1">
                   Q/A Forum
                 </Typography>

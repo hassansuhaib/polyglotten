@@ -15,6 +15,7 @@ import { Button, IconButton, Typography } from '@material-ui/core'
 import Grid from '@material-ui/core/Grid'
 import TextField from '@material-ui/core/TextField'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
+import Logout from '../../components/Dialogs/Logout'
 
 const useStyles = makeStyles((theme) => ({}))
 
@@ -79,27 +80,29 @@ const AccountSettings = ({ view }) => {
         <List disablePadding>
           <ListItem
             button
+            disableGutters
             component={RouterLink}
             to="/settings/account/username"
           >
             <ListItemText primary="Username" />
           </ListItem>
-          <ListItem button component={RouterLink} to="/settings/account/email">
+          <ListItem
+            disableGutters
+            button
+            component={RouterLink}
+            to="/settings/account/email"
+          >
             <ListItemText primary="Email" />
           </ListItem>
           <ListItem
             button
+            disableGutters
             component={RouterLink}
             to="/settings/account/password"
           >
             <ListItemText primary="Password" />
           </ListItem>
-          <ListItem button onClick={handleDelete}>
-            <ListItemText primary="Delete" />
-          </ListItem>
-          <ListItem button onClick={handleLogout}>
-            <ListItemText primary="Logout" />
-          </ListItem>
+          <Logout settings={true} />
         </List>
       </React.Fragment>
     )
@@ -108,7 +111,7 @@ const AccountSettings = ({ view }) => {
   const renderUsername = () => {
     return (
       <Grid container>
-        <Grid item xs={1}>
+        <Grid item align="center" xs={1}>
           <IconButton onClick={() => history.goBack()}>
             <ChevronLeftIcon />
           </IconButton>
@@ -131,7 +134,11 @@ const AccountSettings = ({ view }) => {
             />
           </Grid>
           <Grid item xs={12}>
-            <Button variant="contained" onClick={handleUsername}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleUsername}
+            >
               Change Username
             </Button>
           </Grid>
@@ -166,7 +173,7 @@ const AccountSettings = ({ view }) => {
             />
           </Grid>
           <Grid item xs={12}>
-            <Button variant="contained" onClick={handleEmail}>
+            <Button variant="contained" color="primary" onClick={handleEmail}>
               Change Email
             </Button>
           </Grid>
@@ -218,7 +225,11 @@ const AccountSettings = ({ view }) => {
             />
           </Grid>
           <Grid item xs={12}>
-            <Button variant="contained" onClick={handlePassword}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handlePassword}
+            >
               Change Password
             </Button>
           </Grid>

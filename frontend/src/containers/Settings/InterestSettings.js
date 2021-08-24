@@ -62,22 +62,16 @@ const InterestSettings = () => {
   }
 
   const renderInterests = () => {
-    return (
-      <React.Fragment>
-        <ListItem>
-          <ListItemText primary="Football" />
+    if (state.interests && state.interests.length > 0) {
+      state.interests.map((interest) => (
+        <ListItem key={interest.id}>
+          <ListItemText primary={interest.title} />
           <IconButton>
             <ClearIcon onClick={handleRemove} />
           </IconButton>
         </ListItem>
-        <ListItem>
-          <ListItemText primary="Call of Duty" />
-          <IconButton>
-            <ClearIcon onClick={handleRemove} />
-          </IconButton>
-        </ListItem>
-      </React.Fragment>
-    )
+      ))
+    }
   }
 
   return (

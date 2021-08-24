@@ -347,13 +347,12 @@ class Contact(models.Model):
 
 
 class Message(models.Model):
+    contact = models.ForeignKey(
+        Contact, on_delete=models.CASCADE, related_name='contact')
     content = models.TextField()
     # image = models.FileField(
     #     upload_to='message_images/', null=True, blank=True)
-    edited = models.BooleanField(default=False)
     edited_content = models.TextField(null=True, blank=True)
-    contact = models.ForeignKey(
-        Contact, on_delete=models.CASCADE, related_name='contact')
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

@@ -54,6 +54,11 @@ const Search = () => {
               loading: false,
             })
           })
+      } else {
+        setState({
+          ...state,
+          loading: false,
+        })
       }
     }, 500)
     return () => {
@@ -134,13 +139,22 @@ const Search = () => {
             </Tabs>
           </AppBar>
           <TabPanel value={state.value} index={0}>
-            <People people={state.results && state.results.people} />
+            <People
+              people={state.results && state.results.people}
+              done={state.results && state.results.people ? true : false}
+            />
           </TabPanel>
           <TabPanel value={state.value} index={1}>
-            <Posts posts={state.results && state.results.posts} />
+            <Posts
+              posts={state.results && state.results.posts}
+              done={state.results && state.results.posts ? true : false}
+            />
           </TabPanel>
           <TabPanel value={state.value} index={2}>
-            <Questions questions={state.results && state.results.questions} />
+            <Questions
+              questions={state.results && state.results.questions}
+              done={state.results && state.results.questions ? true : false}
+            />
           </TabPanel>
         </Grid>
       </Grid>

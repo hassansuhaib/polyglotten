@@ -102,8 +102,9 @@ class ProfileLanguageListView(ListAPIView):
     pagination_class = None
 
     def get_queryset(self):
+        print(self.request.user)
         user_profile = UserProfile.objects.get(user=self.request.user)
-        qs = UserLanguages.objects.filter(user_profile=user_profile)
+        qs = UserLanguages.objects.filter(user_profile=user_profile.id)
         return qs
 
 
@@ -909,14 +910,14 @@ class PostRecommendationView(APIView):
     def get(self, request):
         try:
             user_profile = UserProfile.objects.get(user__pk=request.user.id)
-            languages = user_profile.user_languages.filter(classification='Target')
+            languages = user_profile.user_languages.filter(
+                classification='Target')
             posts = []
             for language in languages:
-                recommended_posts = Post.objects.filter(language__title=language.title)
+                recommended_posts = Post.objects.filter(
+                    language__title=language.title)
                 posts.append(recommended_posts)
 
             return Response(PostSerializer(posts, many=True.data), status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'Error': str(e)}, status=status.HTTP_404_NOT_FOUND)
-
-                

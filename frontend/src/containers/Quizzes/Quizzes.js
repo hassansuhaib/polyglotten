@@ -8,7 +8,7 @@ import Start from './Start'
 import VocabularyQuiz from './VocabularyQuiz'
 import TranslationQuiz from './TranslationQuiz'
 import Result from './Result'
-import { Button, Typography } from '@material-ui/core'
+import { Button, IconButton, Typography } from '@material-ui/core'
 import { quiz } from '../../constants'
 import Paper from '@material-ui/core/Paper'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
@@ -75,9 +75,9 @@ const Quizzes = (props) => {
       <div className={classes.toolbar} />
       <Container>
         <Paper className={classes.root} elevation={3}>
-          <Button color="primary">
-            <ArrowBackIcon onClick={() => history.goBack()} />
-          </Button>
+          <IconButton color="primary" onClick={() => history.goBack()}>
+            <ArrowBackIcon />
+          </IconButton>
           {renderView()}
         </Paper>
       </Container>

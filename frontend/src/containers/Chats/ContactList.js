@@ -13,13 +13,12 @@ import ListItemText from '@material-ui/core/ListItemText'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import Avatar from '@material-ui/core/Avatar'
 import Typography from '@material-ui/core/Typography'
-import { CircularProgress } from '@material-ui/core'
+import { CircularProgress, Grid } from '@material-ui/core'
 import { Fab } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: '100%',
     backgroundColor: theme.palette.background.paper,
     minHeight: '90vh',
   },
@@ -91,25 +90,35 @@ const ContactList = ({ username }) => {
         </React.Fragment>
       ))
     } else if (state.loading === true) {
-      return <CircularProgress />
+      return (
+        <ListItem alignItems="center">
+          <CircularProgress />
+        </ListItem>
+      )
     } else {
-      return <Typography>No chats yet.</Typography>
+      return (
+        <ListItem>
+          <ListItemText primary={'No chats yet'} />
+        </ListItem>
+      )
     }
   }
 
   return (
     <React.Fragment>
-      <div>
-        <List className={classes.root}>{renderChats()}</List>
-        <Fab
-          color="primary"
-          className={classes.fab}
-          component={RouterLink}
-          to="chats/create"
-        >
-          <AddIcon />
-        </Fab>
-      </div>
+      <Grid container>
+        <Grid item xs={12}>
+          <List className={classes.root}>{renderChats()}</List>
+          <Fab
+            color="primary"
+            className={classes.fab}
+            component={RouterLink}
+            to="chats/create"
+          >
+            <AddIcon />
+          </Fab>
+        </Grid>
+      </Grid>
     </React.Fragment>
   )
 }

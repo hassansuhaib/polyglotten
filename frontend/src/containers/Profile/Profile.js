@@ -12,6 +12,7 @@ import TextField from '@material-ui/core/TextField'
 import EditIcon from '@material-ui/icons/Edit'
 import IconButton from '@material-ui/core/IconButton'
 import Chip from '@material-ui/core/Chip'
+import Skeleton from '@material-ui/lab/Skeleton'
 
 const useStyles = makeStyles((theme) => ({
   toolbar: theme.mixins.toolbar,
@@ -76,6 +77,7 @@ const Profile = ({ username }) => {
     edit: false,
     about: '',
     followed: false,
+    loading: true,
   })
   const user = useSelector((state) => state.auth.user)
 
@@ -114,6 +116,7 @@ const Profile = ({ username }) => {
             ...profileData,
             posts: posts,
             followed: response.data.followed,
+            loading: false,
           })
           console.log(response.data)
         })
@@ -127,7 +130,7 @@ const Profile = ({ username }) => {
       return (
         <div className={classes.chips}>
           {state.languages.map((language) => (
-            <Chip label={language.title} color="primary" />
+            <Chip key={language.id} label={language.title} color="primary" />
           ))}
         </div>
       )
@@ -231,34 +234,55 @@ const Profile = ({ username }) => {
       })
   }
 
-  return (
-    <Grid container spacing={2}>
-      <Grid item xs={12}>
+  const renderHeader = () => {
+    return (
+      <React.Fragment>
         <div className={classes.coverDiv}>
-          <div
-            className={classes.coverPhoto}
-            style={{ backgroundImage: `url(${state && state.cover_photo})` }}
-          >
-            <ImageDialog
-              title={'Change Cover Photo'}
-              pState={state}
-              pSetState={setState}
-              type="cover"
-            />
-          </div>
+          {state.loading ? (
+            <Skeleton variant="rect" height={300} />
+          ) : (
+            <React.Fragment>
+              <div
+                className={classes.coverPhoto}
+                style={{
+                  backgroundImage: `url(${state && state.cover_photo})`,
+                }}
+              >
+                <ImageDialog
+                  title={'Change Cover Photo'}
+                  pState={state}
+                  pSetState={setState}
+                  type="cover"
+                />
+              </div>
+            </React.Fragment>
+          )}
         </div>
         <div className={classes.imagesDiv}>
-          <div
-            className={classes.profileDiv}
-            style={{ backgroundImage: `url(${state && state.profile_photo})` }}
-          >
-            <ImageDialog
-              title={'Change Profile Photo'}
-              pState={state}
-              pSetState={setState}
-              type="profile"
-            />
-          </div>
+          {state.loading ? (
+            <div className={classes.profileDiv}>
+              <Skeleton
+                animation="wave"
+                variant="circle"
+                height={150}
+                width={150}
+              />
+            </div>
+          ) : (
+            <div
+              className={classes.profileDiv}
+              style={{
+                backgroundImage: `url(${state && state.profile_photo})`,
+              }}
+            >
+              <ImageDialog
+                title={'Change Profile Photo'}
+                pState={state}
+                pSetState={setState}
+                type="profile"
+              />
+            </div>
+          )}
           {user && user.username == username ? '' : renderFollow()}
         </div>
         <div className={classes.name}>
@@ -293,6 +317,14 @@ const Profile = ({ username }) => {
               : ''}
           </div>
         </div>
+      </React.Fragment>
+    )
+  }
+
+  return (
+    <Grid container spacing={2}>
+      <Grid item xs={12}>
+        {renderHeader()}
       </Grid>
       <Grid item xs={12}>
         <Typography variant="h6">Languages</Typography>

@@ -16,13 +16,14 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 
 const useStyles = makeStyles((theme) => ({}))
 
-const Logout = (props) => {
+const Logout = ({ settings }) => {
   const classes = useStyles()
   const [open, setOpen] = useState(false)
 
   const dispatch = useDispatch()
   const handleLogout = () => {
     dispatch(logout())
+    setOpen(false)
   }
 
   const handleClickOpen = () => {
@@ -30,15 +31,18 @@ const Logout = (props) => {
   }
 
   const handleClose = () => {
-    handleLogout()
     setOpen(false)
   }
   return (
     <div>
       <ListItem disableGutters button onClick={handleClickOpen}>
-        <ListItemIcon>
-          <ExitToAppIcon />
-        </ListItemIcon>
+        {settings ? (
+          ''
+        ) : (
+          <ListItemIcon>
+            <ExitToAppIcon />
+          </ListItemIcon>
+        )}
         <ListItemText primary="Logout" />
       </ListItem>
       <Dialog

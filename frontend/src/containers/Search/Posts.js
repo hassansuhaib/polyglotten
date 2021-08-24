@@ -12,8 +12,15 @@ import Avatar from '@material-ui/core/Avatar'
 
 const useStyles = makeStyles((theme) => ({}))
 
-const Posts = ({ posts }) => {
+const Posts = ({ posts, done }) => {
   const classes = useStyles()
+  const renderMessage = () => {
+    if (done) {
+      return <Typography>No results found</Typography>
+    } else {
+      return ''
+    }
+  }
   const renderPost = (post) => {
     return (
       <React.Fragment key={post.id}>
@@ -49,11 +56,9 @@ const Posts = ({ posts }) => {
   return (
     <div>
       <List>
-        {posts ? (
-          posts.map((post) => renderPost(post))
-        ) : (
-          <Typography>No posts found.</Typography>
-        )}
+        {posts && posts.length > 0
+          ? posts.map((post) => renderPost(post))
+          : renderMessage()}
       </List>
     </div>
   )

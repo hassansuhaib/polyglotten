@@ -5,7 +5,7 @@ const server = http.createServer(app)
 const socket = require('socket.io')
 const io = socket(server, {
   cors: {
-    orgin: ['http://localhost:3000'],
+    origin: ['http://localhost:3000'],
   },
 })
 
@@ -47,6 +47,10 @@ io.on('connection', (socket) => {
       signal: payload.signal,
       id: socket.id,
     })
+  })
+
+  socket.on('send-message', () => {
+    console.log('Pinged!')
   })
 
   socket.on('disconnect', () => {

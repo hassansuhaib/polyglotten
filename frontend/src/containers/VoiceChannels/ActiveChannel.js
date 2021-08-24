@@ -6,7 +6,7 @@ import api from '../../api'
 import * as urls from '../../constants'
 
 import { makeStyles } from '@material-ui/core/styles'
-import { Grid, IconButton, Typography } from '@material-ui/core'
+import { Button, Grid, IconButton, Typography } from '@material-ui/core'
 import HighlightOffIcon from '@material-ui/icons/HighlightOff'
 import MicIcon from '@material-ui/icons/Mic'
 import MicOffIcon from '@material-ui/icons/MicOff'
@@ -142,6 +142,11 @@ const ActiveChannel = ({ roomID }) => {
     return peer
   }
 
+  const handlePing = () => {
+    console.log('Pinging')
+    socketRef.current.emit('send-message')
+  }
+
   return (
     <div>
       <Grid container>
@@ -178,6 +183,9 @@ const ActiveChannel = ({ roomID }) => {
               <HeadsetIcon />
             </IconButton>
           </div>
+        </Grid>
+        <Grid item xs={12}>
+          <Button onClick={handlePing}>Ping</Button>
         </Grid>
       </Grid>
     </div>
