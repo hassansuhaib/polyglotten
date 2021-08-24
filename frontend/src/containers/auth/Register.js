@@ -35,6 +35,8 @@ const useStyles = makeStyles((theme) => ({
   },
   register: {
     backgroundColor: 'white',
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
   },
   text: {
     textAlign: 'center',

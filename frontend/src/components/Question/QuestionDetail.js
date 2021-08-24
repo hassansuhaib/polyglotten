@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { Grid, Typography } from '@material-ui/core'
+import { Divider, Grid, Typography } from '@material-ui/core'
 
 import api from '../../api'
 import * as urls from '../../constants'
@@ -19,6 +19,7 @@ import Fade from '@material-ui/core/Fade'
 import { makeStyles } from '@material-ui/core/styles'
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
+import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 
 const useStyles = makeStyles((theme) => ({
   toolbar: theme.mixins.toolbar,
@@ -101,16 +102,16 @@ const QuestionDetail = ({ id }) => {
         const found = state.question.votes.find((vote) => vote.pk === user.pk)
         if (found) {
           return (
-            <Button color="secondary" onClick={handleUnVote}>
+            <IconButton color="secondary" onClick={handleUnVote}>
               <ArrowDownwardIcon />
-            </Button>
+            </IconButton>
           )
         }
       }
       return (
-        <Button color="primary" onClick={handleVote}>
+        <IconButton color="primary" onClick={handleVote}>
           <ArrowUpwardIcon />
-        </Button>
+        </IconButton>
       )
     }
   }
@@ -120,15 +121,24 @@ const QuestionDetail = ({ id }) => {
       return (
         <React.Fragment>
           <Grid container>
+            <Grid item xs={1}>
+              {renderVoteButton()} {state.question.no_of_votes}
+            </Grid>
             <Grid item xs={10}>
               <Typography variant="h4">{state.question.title}</Typography>
             </Grid>
-            <Grid item xs={2}>
-              <IconButton
-                onClick={() => setState({ ...state, options: !state.options })}
+            <Grid item xs={1}>
+              <ClickAwayListener
+                onClickAway={() => setState({ ...state, options: false })}
               >
-                <MoreHorizIcon />
-              </IconButton>
+                <IconButton
+                  onClick={() =>
+                    setState({ ...state, options: !state.options })
+                  }
+                >
+                  <MoreHorizIcon />
+                </IconButton>
+              </ClickAwayListener>
               <Fade in={state.options}>
                 <Paper className={classes.paper}>
                   <List>
@@ -142,14 +152,8 @@ const QuestionDetail = ({ id }) => {
                 </Paper>
               </Fade>
             </Grid>
-            <Grid item container direction="row" alignItems="center" xs={2}>
-              {renderVoteButton()}{' '}
-              <Typography>
-                {' '}
-                {' - '} {state.question.no_of_votes} vote/s
-              </Typography>
-            </Grid>
-            <Grid item xs={10}>
+            <Grid item xs={1}></Grid>
+            <Grid item container xs={11} alignItems="center">
               <Typography variant="body1">{state.question.content}</Typography>
             </Grid>
           </Grid>
@@ -163,27 +167,53 @@ const QuestionDetail = ({ id }) => {
   const renderAnswers = () => {
     if (state.answers) {
       return state.answers.map((answer) => (
-        <Answer
-          answer={answer}
-          key={answer.id}
-          qDState={state}
-          qDSetState={setState}
-        />
+        <React.Fragment>
+          <ListItem>
+            <Answer
+              answer={answer}
+              key={answer.id}
+              qDState={state}
+              qDSetState={setState}
+            />
+          </ListItem>
+          <Divider variant="middle" component="li" />
+        </React.Fragment>
       ))
     } else {
-      return <Typography>No answers available.</Typography>
+      return (
+        <ListItem>
+          <Typography>No answers available.</Typography>
+        </ListItem>
+      )
     }
   }
 
   return (
     <React.Fragment>
-      {renderQuestion()}
-      <List>{renderAnswers()}</List>
-      <CreateAnswer
-        questionId={parseInt(id)}
-        qDState={state}
-        qDSetState={setState}
-      />
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          {renderQuestion()}
+        </Grid>
+        <Grid item xs={1}></Grid>
+        <Grid item container xs={11} alignItems="center">
+          <Grid item xs={12}>
+            <Typography variant="h6">
+              {state && state.answers.length} Answers
+            </Typography>
+          </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <List disablePadding>{renderAnswers()}</List>
+        </Grid>
+        <Grid item xs={1}></Grid>
+        <Grid item xs={10}>
+          <CreateAnswer
+            questionId={parseInt(id)}
+            qDState={state}
+            qDSetState={setState}
+          />
+        </Grid>
+      </Grid>
     </React.Fragment>
   )
 }

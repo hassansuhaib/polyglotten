@@ -11,9 +11,10 @@ import { makeStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
-import { Button, Typography } from '@material-ui/core'
+import { Button, IconButton, Typography } from '@material-ui/core'
 import Grid from '@material-ui/core/Grid'
 import TextField from '@material-ui/core/TextField'
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 
 const useStyles = makeStyles((theme) => ({}))
 
@@ -107,26 +108,33 @@ const AccountSettings = ({ view }) => {
   const renderUsername = () => {
     return (
       <Grid container>
-        <Grid item xs={12}>
-          <Typography variant="h5">Username</Typography>
+        <Grid item xs={1}>
+          <IconButton onClick={() => history.goBack()}>
+            <ChevronLeftIcon />
+          </IconButton>
         </Grid>
-        <Grid item xs={12}>
-          <Typography>Current Username: {user.username}</Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            id="outlined-basic"
-            label="Change Username"
-            variant="outlined"
-            name="username"
-            value={state.username}
-            onChange={handleChange}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Button variant="contained" onClick={handleUsername}>
-            Change Username
-          </Button>
+        <Grid item container xs={11} spacing={2}>
+          <Grid item xs={12}>
+            <Typography variant="h5">Username</Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography>Current Username: {user.username}</Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              id="outlined-basic"
+              label="Change Username"
+              variant="outlined"
+              name="username"
+              value={state.username}
+              onChange={handleChange}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Button variant="contained" onClick={handleUsername}>
+              Change Username
+            </Button>
+          </Grid>
         </Grid>
       </Grid>
     )
@@ -135,26 +143,33 @@ const AccountSettings = ({ view }) => {
   const renderEmail = () => {
     return (
       <Grid container>
-        <Grid item xs={12}>
-          <Typography variant="h5">Email</Typography>
+        <Grid item xs={1}>
+          <IconButton onClick={() => history.goBack()}>
+            <ChevronLeftIcon />
+          </IconButton>
         </Grid>
-        <Grid item xs={12}>
-          <Typography>Current Email: {user.email}</Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            id="outlined-basic"
-            label="Change Email"
-            variant="outlined"
-            name="email"
-            value={state.email}
-            onChange={handleChange}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Button variant="contained" onClick={handleEmail}>
-            Change Email
-          </Button>
+        <Grid item container xs={11} spacing={2}>
+          <Grid item xs={12}>
+            <Typography variant="h5">Email</Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography>Current Email: {user.email}</Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              id="outlined-basic"
+              label="Change Email"
+              variant="outlined"
+              name="email"
+              value={state.email}
+              onChange={handleChange}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Button variant="contained" onClick={handleEmail}>
+              Change Email
+            </Button>
+          </Grid>
         </Grid>
       </Grid>
     )
@@ -163,43 +178,50 @@ const AccountSettings = ({ view }) => {
   const renderPassword = () => {
     return (
       <Grid container>
-        <Grid item xs={12}>
-          <Typography variant="h5">Password</Typography>
+        <Grid item xs={1}>
+          <IconButton onClick={() => history.goBack()}>
+            <ChevronLeftIcon />
+          </IconButton>
         </Grid>
-        <Grid item xs={12}>
-          <TextField
-            id="outlined-basic"
-            label="Current Password"
-            variant="outlined"
-            name="old_password"
-            value={state.old_password}
-            onChange={handleChange}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            id="outlined-basic"
-            label="New Password"
-            variant="outlined"
-            name="new_password1"
-            value={state.new_password1}
-            onChange={handleChange}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            id="outlined-basic"
-            label="Again"
-            variant="outlined"
-            name="new_password2"
-            value={state.new_password2}
-            onChange={handleChange}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Button variant="contained" onClick={handlePassword}>
-            Change Password
-          </Button>
+        <Grid item container xs={11} spacing={2}>
+          <Grid item xs={12}>
+            <Typography variant="h5">Password</Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              id="outlined-basic"
+              label="Current Password"
+              variant="outlined"
+              name="old_password"
+              value={state.old_password}
+              onChange={handleChange}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              id="outlined-basic"
+              label="New Password"
+              variant="outlined"
+              name="new_password1"
+              value={state.new_password1}
+              onChange={handleChange}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              id="outlined-basic"
+              label="Again"
+              variant="outlined"
+              name="new_password2"
+              value={state.new_password2}
+              onChange={handleChange}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Button variant="contained" onClick={handlePassword}>
+              Change Password
+            </Button>
+          </Grid>
         </Grid>
       </Grid>
     )

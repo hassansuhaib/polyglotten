@@ -14,6 +14,7 @@ import Fade from '@material-ui/core/Fade'
 import history from '../../history'
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
+import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 
 const useStyles = makeStyles((theme) => ({
   inline: {
@@ -81,16 +82,16 @@ const Answer = ({ answer, qDState, qDSetState }) => {
         const found = answer.votes.find((vote) => vote.pk === user.pk)
         if (found) {
           return (
-            <Button color="secondary" onClick={handleUnVote}>
+            <IconButton color="secondary" onClick={handleUnVote}>
               <ArrowDownwardIcon />
-            </Button>
+            </IconButton>
           )
         }
       }
       return (
-        <Button color="primary" onClick={handleVote}>
+        <IconButton color="primary" onClick={handleVote}>
           <ArrowUpwardIcon />
-        </Button>
+        </IconButton>
       )
     }
   }
@@ -98,8 +99,8 @@ const Answer = ({ answer, qDState, qDSetState }) => {
   return (
     <ListItem alignItems="flex-start">
       <Grid container>
-        <Grid item xs={1}>
-          {renderVoteButton()}
+        <Grid item xs={1} align="center">
+          {renderVoteButton()} {no_of_votes}
         </Grid>
         <Grid item xs={10}>
           <ListItemText
@@ -108,23 +109,26 @@ const Answer = ({ answer, qDState, qDSetState }) => {
               <React.Fragment>
                 <Typography
                   component="span"
-                  variant="body2"
+                  variant="caption"
                   className={classes.inline}
                   color="textPrimary"
                 >
                   {`${user.first_name} ${user.last_name}`}
                 </Typography>
-                {` - Votes: ${no_of_votes}`}
               </React.Fragment>
             }
           />
         </Grid>
         <Grid item xs={1}>
-          <IconButton
-            onClick={() => setState({ ...state, options: !state.options })}
+          <ClickAwayListener
+            onClickAway={() => setState({ ...state, options: false })}
           >
-            <MoreHorizIcon />
-          </IconButton>
+            <IconButton
+              onClick={() => setState({ ...state, options: !state.options })}
+            >
+              <MoreHorizIcon />
+            </IconButton>
+          </ClickAwayListener>
           <Fade in={state.options}>
             <Paper className={classes.paper}>
               <List>

@@ -6,6 +6,7 @@ import * as urls from '../../constants'
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
+import { Grid } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({}))
 
@@ -37,24 +38,30 @@ const CreateAnswer = ({ questionId, qDState, qDSetState }) => {
   }
   return (
     <div>
-      <TextField
-        id="outlined-multiline-static"
-        label="Answer"
-        fullWidth
-        multiline
-        rows={4}
-        variant="outlined"
-        value={answer.content}
-        onChange={(event) => {
-          setAnswer({
-            ...answer,
-            content: event.target.value,
-          })
-        }}
-      />
-      <Button variant="contained" color="primary" onClick={submit}>
-        Post
-      </Button>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <TextField
+            id="outlined-multiline-static"
+            label="Answer"
+            fullWidth
+            multiline
+            rows={4}
+            variant="outlined"
+            value={answer.content}
+            onChange={(event) => {
+              setAnswer({
+                ...answer,
+                content: event.target.value,
+              })
+            }}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Button variant="contained" color="primary" onClick={submit}>
+            Post
+          </Button>
+        </Grid>
+      </Grid>
     </div>
   )
 }

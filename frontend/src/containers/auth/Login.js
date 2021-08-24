@@ -120,7 +120,7 @@ const Login = ({ location }) => {
                       >
                         {'Login'}
                       </Button>
-                      <Button
+                      {/*<Button
                         type="submit"
                         fullWidth
                         variant="contained"
@@ -128,7 +128,7 @@ const Login = ({ location }) => {
                         className={classes.submit}
                       >
                         {'Login with Google'}
-                      </Button>
+                      </Button> */}
                     </div>
                   </Form>
                 )}
