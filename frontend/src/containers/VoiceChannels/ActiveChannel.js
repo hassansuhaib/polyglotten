@@ -46,17 +46,18 @@ const ActiveChannel = ({ roomID }) => {
     document.title = 'Active Channel'
     api
       .get(urls.channelsDetail(roomID))
-      .then((response) => {
-        setState(response.data)
-      })
+      .then((response) => {})
       .catch((error) => console.log(error))
       .finally(() => {
-        socketRef.current = io.connect('http://localhost:7000')
+        socketRef.current = io.connect('http://localhost:8000')
         navigator.mediaDevices
           .getUserMedia(constraints)
           .then((stream) => {
             userAudio.current.srcObject = stream
             socketRef.current.emit('join room', roomID)
+            socketRef.current.on('connect_error', (err) => {
+              console.log(`connect_error due to ${err.message}`)
+            })
             socketRef.current.on('all users', (users) => {
               console.log('All users', users)
               const peers = []
@@ -106,6 +107,9 @@ const ActiveChannel = ({ roomID }) => {
           })
           .catch((error) => console.log(error))
       })
+    return () => {
+      console.log(userAudio.current)
+    }
   }, [])
 
   function createPeer(userToSignal, callerID, stream) {
@@ -166,8 +170,8 @@ const ActiveChannel = ({ roomID }) => {
             <audio autoPlay controls ref={userAudio} />
           </Grid>
           {peers.map((peer) => (
-            <Grid item xs={6}>
-              <Audio key={peer.peerID} peer={peer.peer} />
+            <Grid key={peer.peerID} item xs={6}>
+              <Audio peer={peer.peer} />
             </Grid>
           ))}
         </Grid>

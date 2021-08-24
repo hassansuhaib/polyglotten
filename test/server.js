@@ -1,17 +1,24 @@
-require('dotenv').config()
 const express = require('express')
 const http = require('http')
 const app = express()
 const server = http.createServer(app)
 const socket = require('socket.io')
-const io = socket(server)
+const io = socket(server, {
+  cors: {
+    origin: ['http://localhost:3000'],
+    credentials: true,
+    allowEIO3: false,
+  },
+})
 
 const users = {}
 
 const socketToRoom = {}
 
 io.on('connection', (socket) => {
+  console.log('Making connection')
   socket.on('join room', (roomID) => {
+    console.log('Joining room')
     if (users[roomID]) {
       const length = users[roomID].length
       if (length === 4) {
@@ -29,6 +36,7 @@ io.on('connection', (socket) => {
   })
 
   socket.on('sending signal', (payload) => {
+    console.log('Sending signal')
     io.to(payload.userToSignal).emit('user joined', {
       signal: payload.signal,
       callerID: payload.callerID,
@@ -36,13 +44,19 @@ io.on('connection', (socket) => {
   })
 
   socket.on('returning signal', (payload) => {
+    console.log('Returning signal')
     io.to(payload.callerID).emit('receiving returned signal', {
       signal: payload.signal,
       id: socket.id,
     })
   })
 
+  socket.on('send-message', () => {
+    console.log('Pinged!')
+  })
+
   socket.on('disconnect', () => {
+    console.log('Disconnecting')
     const roomID = socketToRoom[socket.id]
     let room = users[roomID]
     if (room) {
@@ -51,8 +65,7 @@ io.on('connection', (socket) => {
     }
     socket.broadcast.emit('user left', socket.id)
   })
+  console.log('We here')
 })
 
-server.listen(process.env.PORT || 8000, () =>
-  console.log('server is running on port 8000')
-)
+server.listen(7000, () => console.log('server is running on port 7000'))

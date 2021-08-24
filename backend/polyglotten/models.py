@@ -17,12 +17,6 @@ LANGUAGE_SELECTION = [
     ('Target', 'Target'),
 ]
 
-LANGUAGE_NAMES = [
-    ('en', 'English'),
-    ('es', 'Spanish'),
-    ('otr', 'Other')
-]
-
 NOTIFICATION_TYPES = [
     ('C', 'Comment'),
     ('S', 'Share'),
@@ -59,7 +53,7 @@ class Interest(models.Model):
 
 
 class Language(models.Model):
-    title = models.CharField(max_length=100, choices=LANGUAGE_NAMES)
+    title = models.CharField(max_length=100)
 
     def __str__(self):
         return f'{self.title}'
@@ -199,10 +193,13 @@ class Post(models.Model):
         self.create_tags()
         self.create_mentions()
         language = detect(self.content)
-        try:
-            self.language = Language.objects.get(title=language)
-        except Language.DoesNotExist:
-            self.language = Languages.objects.get(title='otr')
+        if language == 'en':
+            language = 'English'
+        elif language == 'es':
+            language = 'Spanish'
+        else:
+            language = 'Other'
+        self.language = Language.objects.get(title=language)
         return super(Post, self).save(*args, **kwargs)
 
     def __str__(self):

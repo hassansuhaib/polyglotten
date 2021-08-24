@@ -103,7 +103,13 @@ const Chat = ({ chatID, username }) => {
       chatId: chatID,
     }
     WebSocketInstance.newChatMessage(messageObject)
-    setState({ ...state, message: '', edited_message: '' })
+    setState({
+      ...state,
+      message: '',
+      edited_message: '',
+      edit: false,
+      content: { message: '', author: '' },
+    })
   }
 
   const renderTimestamp = (timestamp) => {
