@@ -60,7 +60,7 @@ const Home = () => {
                   color="primary"
                   fullWidth
                   component={RouterLink}
-                  to="/login"
+                  to="/register"
                 >
                   Get Started
                 </Button>

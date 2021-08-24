@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 
 import Feed from '../Feed/Feed'
@@ -30,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Home = (props) => {
   const classes = useStyles()
+  const [index, setIndex] = useState(0)
   const view = props.match.params.view
   const arg = props.match.params.arg
   console.log('Args: ', arg)
@@ -58,7 +59,11 @@ const Home = (props) => {
         <Grid container>
           <Hidden mdDown>
             <Grid item className={classes.text} xs={12} md={4} lg={3}>
-              <LeftBar styling={classes.leftBar} />
+              <LeftBar
+                styling={classes.leftBar}
+                index={index}
+                setIndex={setIndex}
+              />
             </Grid>
           </Hidden>
           <Grid item className={classes.text} xs={12} md={8} lg={6}>

@@ -52,7 +52,7 @@ const VoiceChannels = (props) => {
         <Grid container>
           <Hidden mdDown>
             <Grid item xs={12} md={4} lg={3}>
-              <LeftBar styling={classes.leftBar} />
+              <LeftBar styling={classes.leftBar} index={5} />
             </Grid>
           </Hidden>
           <Grid item className={classes.channels} xs={12} md={8} lg={8}>

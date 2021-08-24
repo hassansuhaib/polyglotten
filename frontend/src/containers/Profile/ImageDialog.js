@@ -45,6 +45,7 @@ const ImageDialog = ({ title, pState, pSetState, type }) => {
     image: null,
     content: '',
   })
+  console.log('Image Dialog State: ', state)
   const handleClickOpen = () => {
     setOpen(true)
   }

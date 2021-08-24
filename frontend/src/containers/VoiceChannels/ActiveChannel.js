@@ -14,12 +14,12 @@ import HeadsetIcon from '@material-ui/icons/Headset'
 
 const useStyles = makeStyles((theme) => ({}))
 
-const Audio = (props) => {
+const Audio = ({ peer }) => {
   const ref = useRef()
 
   useEffect(() => {
-    if (props.peer.on) {
-      props.peer.on('stream', (stream) => {
+    if (peer.on) {
+      peer.on('stream', (stream) => {
         ref.current.srcObject = stream
       })
     }
@@ -48,6 +48,9 @@ const ActiveChannel = ({ roomID }) => {
       .get(urls.channelsDetail(roomID))
       .then((response) => {
         setState(response.data)
+      })
+      .catch((error) => console.log(error))
+      .finally(() => {
         socketRef.current = io.connect('http://localhost:7000')
         navigator.mediaDevices
           .getUserMedia(constraints)
@@ -67,7 +70,6 @@ const ActiveChannel = ({ roomID }) => {
                   peerID: userID,
                   peer,
                 })
-                console.log(peers)
               })
               setPeers(peers)
             })
@@ -102,9 +104,8 @@ const ActiveChannel = ({ roomID }) => {
               setPeers(peers)
             })
           })
-          .catch((error) => console.log('Error accessing media devices', error))
+          .catch((error) => console.log(error))
       })
-      .catch((error) => console.log(error))
   }, [])
 
   function createPeer(userToSignal, callerID, stream) {
@@ -145,9 +146,12 @@ const ActiveChannel = ({ roomID }) => {
     <div>
       <Grid container>
         <Grid item xs={12}>
+          <Typography variant="h4">Voice Channels</Typography>
+        </Grid>
+        <Grid item xs={12}>
           <div>
-            <Typography variant="h4">Topic: {state && state.topic}</Typography>
-            <Typography variant="h5">
+            <Typography variant="h5">{state && state.topic}</Typography>
+            <Typography variant="body1">
               Language: {state && state.language.title}
             </Typography>
           </div>
@@ -158,7 +162,7 @@ const ActiveChannel = ({ roomID }) => {
           </Grid>
           {peers.map((peer) => (
             <Grid item xs={6}>
-              <Audio key={peer.peerID} peer={peer} />
+              <Audio key={peer.peerID} peer={peer.peer} />
             </Grid>
           ))}
         </Grid>

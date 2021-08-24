@@ -1,7 +1,6 @@
 import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { Link as RouterLink } from 'react-router-dom'
-import { logout } from '../../store/actions/auth'
 
 import { makeStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
@@ -14,24 +13,20 @@ import PersonIcon from '@material-ui/icons/Person'
 import SettingsIcon from '@material-ui/icons/Settings'
 import VolumeUpIcon from '@material-ui/icons/VolumeUp'
 import SubjectIcon from '@material-ui/icons/Subject'
-import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import ForumIcon from '@material-ui/icons/Forum'
 import SearchIcon from '@material-ui/icons/Search'
 import NotificationsIcon from '@material-ui/icons/Notifications'
 import ChatIcon from '@material-ui/icons/Chat'
 
+import Logout from '../Dialogs/Logout'
+
 const useStyles = makeStyles((theme) => ({
   sidebar: {},
 }))
 
-const LeftBar = ({ styling }) => {
+const LeftBar = ({ styling, index }) => {
   const classes = useStyles()
   const auth = useSelector((state) => state.auth)
-  const dispatch = useDispatch()
-
-  const handleLogout = () => {
-    dispatch(logout())
-  }
   return (
     <List className={styling} disablePadding>
       <ListItem disableGutters button component={RouterLink} to={`/`}>
@@ -98,12 +93,7 @@ const LeftBar = ({ styling }) => {
         </ListItemIcon>
         <ListItemText primary="Settings" />
       </ListItem>
-      <ListItem disableGutters button onClick={handleLogout}>
-        <ListItemIcon>
-          <ExitToAppIcon />
-        </ListItemIcon>
-        <ListItemText primary="Logout" />
-      </ListItem>
+      <Logout />
     </List>
   )
 }
