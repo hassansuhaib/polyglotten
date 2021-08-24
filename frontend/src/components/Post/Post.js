@@ -5,7 +5,14 @@ import * as urls from '../../constants'
 
 import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
-import { Box, Button, Grid, TextField, Typography } from '@material-ui/core'
+import {
+  Avatar,
+  Box,
+  Button,
+  Grid,
+  TextField,
+  Typography,
+} from '@material-ui/core'
 import CreateComment from '../Comment/CreateComment'
 import Comment from '../Comment/Comment'
 import SharePost from './SharePost'
@@ -148,6 +155,7 @@ const Post = ({ post }) => {
       <React.Fragment>
         <Grid item xs={12}>
           <div className={classes.header}>
+            <Avatar src={post.user_profile.profile_photo} />
             <Typography variant="h5">{name}</Typography>
             <Typography>{` ${new Date(post.created_at).toLocaleDateString(
               'en-US',

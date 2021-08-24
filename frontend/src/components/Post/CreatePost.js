@@ -11,6 +11,8 @@ import Box from '@material-ui/core/Box'
 import TextField from '@material-ui/core/TextField'
 import Grid from '@material-ui/core/Grid'
 import { Paper, Typography } from '@material-ui/core'
+import Snackbar from '@material-ui/core/Snackbar'
+import Alert from '@material-ui/lab/Alert'
 
 const useStyles = makeStyles((theme) => ({
   createPost: {
@@ -38,7 +40,17 @@ const CreatePost = ({ fState, fSetState }) => {
     content: '',
   })
 
+  const [open, setOpen] = useState(false)
+
   console.log('CreatePost State: ', state)
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return
+    }
+
+    setOpen(false)
+  }
 
   const handleSubmit = () => {
     let form_data = new FormData()
@@ -46,14 +58,11 @@ const CreatePost = ({ fState, fSetState }) => {
       form_data.append('image', state.image, state.image.name)
     }
     form_data.append('content', state.content)
-
     postApi
       .post(urls.postCreate, form_data)
       .then((response) => {
         console.log('Response', response)
-        let updatedPosts = fState.posts
-        updatedPosts.unshift(response.data)
-        fSetState({ ...fState, posts: updatedPosts })
+        setOpen(true)
       })
       .catch((error) => console.log(error))
       .finally(() => {
@@ -117,6 +126,21 @@ const CreatePost = ({ fState, fSetState }) => {
           </Grid>
         </Grid>
       </Paper>
+
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        message="Posted!"
+      >
+        <Alert onClose={handleSnackbarClose} severity="success">
+          Posted!
+        </Alert>
+      </Snackbar>
     </div>
   )
 }

@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: theme.spacing(2),
   },
   root: {
     padding: theme.spacing(2),
@@ -63,14 +64,18 @@ const Forum = (props) => {
                 <Typography variant="h3" component="h1">
                   Q/A Forum
                 </Typography>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  component={RouterLink}
-                  to="/forum/create"
-                >
-                  Ask a Question
-                </Button>
+                {view === 'create' ? (
+                  <div></div>
+                ) : (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    component={RouterLink}
+                    to="/forum/create"
+                  >
+                    Ask a Question
+                  </Button>
+                )}
               </div>
               {renderView()}
             </Grid>

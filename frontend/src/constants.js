@@ -29,7 +29,7 @@ export const interestUpdate = (action) => `/profile/interests/update/${action}/`
 
 // Feed URLS
 export const posts = `/feed/posts/`
-export const userPosts = (username) => `/feed/posts/${username}/`
+export const userPosts = (username) => `/feed/posts/user/${username}/`
 export const postCreate = `/feed/posts/create/`
 export const postShare = `/feed/posts/share/`
 export const postDetail = (id) => `/feed/post/${id}/detail/`

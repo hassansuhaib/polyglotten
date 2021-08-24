@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save
 from django.conf import settings
+from langdetect import detect
 import datetime
 
 
@@ -14,6 +15,12 @@ GENDER_SELECTION = [
 LANGUAGE_SELECTION = [
     ('Native', 'Native'),
     ('Target', 'Target'),
+]
+
+LANGUAGE_NAMES = [
+    ('en', 'English'),
+    ('es', 'Spanish'),
+    ('otr', 'Other')
 ]
 
 NOTIFICATION_TYPES = [
@@ -52,7 +59,7 @@ class Interest(models.Model):
 
 
 class Language(models.Model):
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=100, choices=LANGUAGE_NAMES)
 
     def __str__(self):
         return f'{self.title}'
@@ -130,6 +137,8 @@ class Post(models.Model):
     tags = models.ManyToManyField(Tag, related_name='tags', blank=True)
     mentions = models.ManyToManyField(
         User, related_name='mentions', blank=True)
+    language = models.ForeignKey(
+        Language, on_delete=models.CASCADE, blank=True, null=True)
 
     # Fields related to share functionality
     shared = models.BooleanField(default=False)
@@ -189,6 +198,11 @@ class Post(models.Model):
     def save(self, *args, **kwargs):
         self.create_tags()
         self.create_mentions()
+        language = detect(self.content)
+        try:
+            self.language = Language.objects.get(title=language)
+        except Language.DoesNotExist:
+            self.language = Languages.objects.get(title='otr')
         return super(Post, self).save(*args, **kwargs)
 
     def __str__(self):

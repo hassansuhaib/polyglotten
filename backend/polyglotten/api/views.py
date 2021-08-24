@@ -411,7 +411,7 @@ class PostListView(ListAPIView):
     pagination_class = None
 
     def get_queryset(self):
-        qs = Post.objects.all()
+        qs = Post.objects.all().exclude(user__id=self.request.user.id)
         return qs
 
 
@@ -447,6 +447,7 @@ class PostCreateView(APIView):
     def post(self, request, *args, **kwargs):
         content = request.data.get('content')
         image = request.data.get('image')
+        print("Content: ", content)
         try:
             post = Post(content=content, user=request.user)
             post.save()
@@ -872,3 +873,50 @@ class ChatDeleteView(DestroyAPIView):
     queryset = Chat.objects.all()
     serializer_class = ChatSerializer
     permission_classes = (IsAuthenticated, )
+
+
+""" Recommendation Views """
+
+
+class UserRecommendationView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def get(self, request):
+        try:
+            user_profile = UserProfile.objects.get(user__pk=request.user.id)
+            interests = user_profile.interests.all()
+            languages = user_profile.user_languages.filter(
+                classification='Target')
+            user_list = []
+            for language in languages:
+                recommended_profiles = UserProfile.objects.filter(
+                    languages__title=language.title)
+                user_list.append(recommended_profiles)
+
+            for interest in interests:
+                recommended_profiles = UserProfile.objects.filter(
+                    interests__title=interest.title)
+                user_list.append(recommended_profiles)
+
+            return Response(UserProfileSerializer(user_list, many=True.data), status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'Error': str(e)}, status=status.HTTP_404_NOT_FOUND)
+
+
+class PostRecommendationView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def get(self, request):
+        try:
+            user_profile = UserProfile.objects.get(user__pk=request.user.id)
+            languages = user_profile.user_languages.filter(classification='Target')
+            posts = []
+            for language in languages:
+                recommended_posts = Post.objects.filter(language__title=language.title)
+                posts.append(recommended_posts)
+
+            return Response(PostSerializer(posts, many=True.data), status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'Error': str(e)}, status=status.HTTP_404_NOT_FOUND)
+
+                

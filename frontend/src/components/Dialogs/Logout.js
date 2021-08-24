@@ -58,7 +58,7 @@ const Logout = (props) => {
             Cancel
           </Button>
           <Button onClick={handleLogout} color="primary" autoFocus>
-            Agree
+            Logout
           </Button>
         </DialogActions>
       </Dialog>

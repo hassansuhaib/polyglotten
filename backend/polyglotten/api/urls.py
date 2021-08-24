@@ -71,11 +71,11 @@ urlpatterns = [
     # Post URLS
     path('feed/post/<int:id>/detail/', PostDetailView.as_view()),
     path('feed/posts/', PostListView.as_view(), name='posts'),
-    path('feed/posts/<str:username>/',
-         UserPostListView.as_view(), name='user-posts'),
-    path('feed/posts/create/', PostCreateView.as_view(), name='create-post'),
+    path('feed/posts/create/', PostCreateView.as_view()),
     path('feed/posts/<pk>/update/', PostUpdateView.as_view(), name='update-post'),
     path('feed/posts/share/', PostShareView.as_view(), name='share-post'),
+    path('feed/posts/user/<str:username>/',
+         UserPostListView.as_view(), name='user-posts'),
 
     # Comment URLS
     path('feed/comments/', CommentListView.as_view(), name='comments'),
@@ -123,5 +123,9 @@ urlpatterns = [
     # Search URLS
     path('users/search/', UserSearchView.as_view()),
     path('search/', SearchView.as_view()),
+
+    # Recommendation URLS
+    path('recommendation/users/', UserRecommendationView.as_view),
+    path('recommendation/posts/', UserRecommendationView.as_view),
 
 ]

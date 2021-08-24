@@ -56,20 +56,6 @@ const Nav = () => {
                 </Typography>
               </div>
             </Link>
-            <Hidden mdDown>
-              {auth.token ? (
-                <React.Fragment></React.Fragment>
-              ) : (
-                <React.Fragment>
-                  <Button color="primary" component={RouterLink} to="/login">
-                    Login
-                  </Button>
-                  <Button color="primary" component={RouterLink} to="/register">
-                    Register
-                  </Button>
-                </React.Fragment>
-              )}
-            </Hidden>
             <Hidden lgUp>
               <SideDrawer />
             </Hidden>

@@ -198,7 +198,7 @@ const QuestionDetail = ({ id }) => {
         <Grid item container xs={11} alignItems="center">
           <Grid item xs={12}>
             <Typography variant="h6">
-              {state && state.answers.length} Answers
+              {state && state.answers && state.answers.length} Answers
             </Typography>
           </Grid>
         </Grid>

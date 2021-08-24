@@ -167,8 +167,11 @@ const Profile = ({ username }) => {
       )
     } else {
       return (
-        <IconButton onClick={() => setState({ ...state, edit: true })}>
-          <EditIcon />
+        <IconButton
+          size="small"
+          onClick={() => setState({ ...state, edit: true })}
+        >
+          <EditIcon fontSize="small" />
         </IconButton>
       )
     }
@@ -229,7 +232,7 @@ const Profile = ({ username }) => {
   }
 
   return (
-    <Grid container>
+    <Grid container spacing={2}>
       <Grid item xs={12}>
         <div className={classes.coverDiv}>
           <div

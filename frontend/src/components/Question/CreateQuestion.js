@@ -52,94 +52,86 @@ const CreateQuestion = (props) => {
 
   return (
     <div>
-      <Box boxShadow={3} p={5}>
-        <Grid
-          container
-          direction="column"
-          alignItems="center"
-          justifyContent="center"
-          spacing={3}
-        >
-          <Grid item xs={12}>
-            <Typography variant="h3">Ask a Question</Typography>
-          </Grid>
-          <Grid item xs={12} className={classes.invite}>
-            <TextField
-              id="outlined-multiline-static"
-              label="Title"
-              fullWidth
-              variant="outlined"
-              onChange={(event) => {
-                setState({
-                  ...state,
-                  question: {
-                    ...state.question,
-                    title: event.target.value,
-                  },
-                })
-              }}
-            />
-          </Grid>
-          <Grid item xs={12} className={classes.invite}>
-            <TextField
-              id="outlined-multiline-static"
-              label="Question"
-              fullWidth
-              multiline
-              rows={4}
-              variant="outlined"
-              onChange={(event) => {
-                setState({
-                  ...state,
-                  question: {
-                    ...state.question,
-                    content: event.target.value,
-                  },
-                })
-              }}
-            />
-          </Grid>
-          <Grid item xs={12} className={classes.invite}>
-            <Autocomplete
-              multiple
-              id="tags-filled"
-              options={state.tags.map((option) => option.title)}
-              freeSolo
-              renderTags={(value, getTagProps) =>
-                value.map((option, index) => (
-                  <Chip
-                    variant="outlined"
-                    label={option}
-                    {...getTagProps({ index })}
-                  />
-                ))
-              }
-              onChange={(event, value) => {
-                setState({
-                  ...state,
-                  question: {
-                    ...state.question,
-                    tags: value,
-                  },
-                })
-              }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  variant="outlined"
-                  label="Tags"
-                  placeholder="Spanish"
-                />
-              )}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Button variant="contained" color="primary" onClick={submit}>
-              Post
-            </Button>
-          </Grid>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <Typography variant="h5">Ask a Question</Typography>
         </Grid>
-      </Box>
+        <Grid item xs={12} className={classes.invite}>
+          <TextField
+            id="outlined-multiline-static"
+            label="Title"
+            fullWidth
+            variant="outlined"
+            onChange={(event) => {
+              setState({
+                ...state,
+                question: {
+                  ...state.question,
+                  title: event.target.value,
+                },
+              })
+            }}
+          />
+        </Grid>
+        <Grid item xs={12} className={classes.invite}>
+          <TextField
+            id="outlined-multiline-static"
+            label="Question"
+            fullWidth
+            multiline
+            rows={4}
+            variant="outlined"
+            onChange={(event) => {
+              setState({
+                ...state,
+                question: {
+                  ...state.question,
+                  content: event.target.value,
+                },
+              })
+            }}
+          />
+        </Grid>
+        <Grid item xs={12} className={classes.invite}>
+          <Autocomplete
+            multiple
+            id="tags-filled"
+            options={state.tags.map((option) => option.title)}
+            freeSolo
+            renderTags={(value, getTagProps) =>
+              value.map((option, index) => (
+                <Chip
+                  variant="outlined"
+                  label={option}
+                  {...getTagProps({ index })}
+                />
+              ))
+            }
+            onChange={(event, value) => {
+              setState({
+                ...state,
+                question: {
+                  ...state.question,
+                  tags: value,
+                },
+              })
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="Tags"
+                placeholder="Spanish"
+              />
+            )}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Button variant="contained" color="primary" onClick={submit}>
+            Post
+          </Button>
+        </Grid>
+      </Grid>
     </div>
   )
 }
