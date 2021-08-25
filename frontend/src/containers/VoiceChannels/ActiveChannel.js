@@ -13,6 +13,8 @@ import MicOffIcon from '@material-ui/icons/MicOff'
 import HeadsetIcon from '@material-ui/icons/Headset'
 import Avatar from '@material-ui/core/Avatar'
 
+import ChannelChat from './ChannelChat'
+
 const useStyles = makeStyles((theme) => ({}))
 
 const Audio = ({ peer }) => {
@@ -28,7 +30,7 @@ const Audio = ({ peer }) => {
 
   return (
     <React.Fragment>
-      <audio ref={ref} />
+      <audio autoPlay controls ref={ref} />
     </React.Fragment>
   )
 }
@@ -38,6 +40,7 @@ const ActiveChannel = ({ roomID }) => {
   const [peers, setPeers] = useState([])
   const [state, setState] = useState({
     channelData: null,
+    message: '',
   })
   const socketRef = useRef()
   const userAudio = useRef()
@@ -47,6 +50,7 @@ const ActiveChannel = ({ roomID }) => {
     audio: true,
   }
   console.log('Peers: ', peers)
+  console.log('Message: ', state.message)
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -54,7 +58,8 @@ const ActiveChannel = ({ roomID }) => {
     api
       .get(urls.channelsDetail(roomID))
       .then((response) => {
-        setState(response.data)
+        console.log('We here:', response.data)
+        setState({ ...state, channelData: response.data })
       })
       .catch((error) => console.log(error))
       .finally(() => {
@@ -62,10 +67,6 @@ const ActiveChannel = ({ roomID }) => {
         navigator.mediaDevices
           .getUserMedia(constraints)
           .then((stream) => {
-            setState({
-              ...state,
-              stream: stream,
-            })
             userAudio.current.srcObject = stream
             socketRef.current.emit('join room', roomID)
             socketRef.current.on('connect_error', (err) => {
@@ -117,8 +118,8 @@ const ActiveChannel = ({ roomID }) => {
               peersRef.current = peers
               setPeers(peers)
             })
-            socketRef.current.on('receive-message', (message) => {
-              console.log('Message: ', message)
+            socketRef.current.on('receive message', (message) => {
+              setState({ ...state, message: message })
             })
           })
           .catch((error) => console.log(error))
@@ -165,59 +166,31 @@ const ActiveChannel = ({ roomID }) => {
   }
 
   return (
-    <Grid container>
+    <Grid container spacing={3}>
       <Grid item xs={12}>
         <Typography variant="h4">Voice Channels</Typography>
       </Grid>
       <Grid item xs={12}>
         <div>
           <Typography variant="h5">
-            {state.channelData && state.channelData.topic}
+            Topic: {state.channelData && state.channelData.topic}
           </Typography>
           <Typography variant="body1">
             Language: {state.channelData && state.channelData.language.title}
           </Typography>
         </div>
       </Grid>
-      <Grid container item lg={6}>
+      <Grid container item lg={6} spacing={3}>
         <Grid item xs={6}>
           <div>
-            <Avatar />
-            <audio autoPlay ref={userAudio} />
-            <IconButton component={RouterLink} to="/">
-              <HighlightOffIcon />
-            </IconButton>
-            <IconButton>
-              <MicOffIcon />
-            </IconButton>
-            <IconButton>
-              <HeadsetIcon />
-            </IconButton>
+            <audio autoPlay controls ref={userAudio} />
           </div>
         </Grid>
         {peers.map((peer) => (
           <Grid key={peer.peerID} item xs={6}>
-            <Avatar />
             <Audio peer={peer.peer} />
-            <IconButton component={RouterLink} to="/">
-              <HighlightOffIcon />
-            </IconButton>
-            <IconButton>
-              <MicOffIcon />
-            </IconButton>
-            <IconButton>
-              <HeadsetIcon />
-            </IconButton>
           </Grid>
         ))}
-      </Grid>
-      <Hidden smDown>
-        <Grid lg={6}>
-          <Typography variant="h6">Chat</Typography>
-        </Grid>
-      </Hidden>
-      <Grid item xs={12}>
-        <Button onClick={handlePing}>Ping</Button>
       </Grid>
     </Grid>
   )

@@ -1,17 +1,9 @@
-import React, { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import WebSocketInstance from '../../webSocket'
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 
 import { makeStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
-import {
-  IconButton,
-  List,
-  ListItem,
-  ListItemText,
-  Typography,
-} from '@material-ui/core'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
+import { IconButton, Typography } from '@material-ui/core'
 import TextField from '@material-ui/core/TextField'
 import Fab from '@material-ui/core/Fab'
 import SendIcon from '@material-ui/icons/Send'
@@ -21,8 +13,7 @@ import CloseIcon from '@material-ui/icons/Close'
 
 const useStyles = makeStyles((theme) => ({
   chatSection: {
-    height: '92vh',
-    paddingTop: theme.spacing(2),
+    height: '80vh',
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
   },
@@ -50,46 +41,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const Chat = ({ chatID, username }) => {
+const ChannelChat = ({ socketRef, roomID }) => {
   const classes = useStyles()
   const user = useSelector((state) => state.auth.user)
-  const messages = useSelector((state) => state.message.messages)
   const [state, setState] = useState({
     message: '',
-    edited_message: '',
-    edit: false,
-    content: {
-      message: '',
-      author: '',
-    },
+    messages: [],
+  })
+
+  useEffect(() => {
+    if (socketRef.current) {
+      socketRef.current.on('receive message', (message) => {
+        setState({ message: message })
+      })
+    }
   })
 
   console.log('Chat state: ', state)
-  console.log('chatID: ', chatID)
-
-  const waitForSocketConnection = (callback) => {
-    setTimeout(() => {
-      if (WebSocketInstance.state() === 1) {
-        console.log('Connection is made')
-        callback()
-        return
-      } else {
-        console.log('Chat ID: ', chatID)
-        console.log('Waiting for connection...')
-        waitForSocketConnection(callback)
-      }
-    }, 100)
-  }
-
-  useEffect(() => {
-    const initializeChat = () => {
-      waitForSocketConnection(() => {
-        WebSocketInstance.fetchMessages(username, chatID)
-      })
-      WebSocketInstance.connect(chatID)
-    }
-    initializeChat()
-  }, [])
 
   const handleChange = (e) => {
     console.log(e)
@@ -98,19 +66,19 @@ const Chat = ({ chatID, username }) => {
 
   const sendMessage = () => {
     const messageObject = {
-      from: user.username,
-      content: state.content.message,
-      edited_content: state.edited_message,
-      chatId: chatID,
+      message: '',
+      timestamp: new Date().getTime(),
+      author: user.username,
     }
-    WebSocketInstance.newChatMessage(messageObject)
     setState({
       ...state,
       message: '',
-      edited_message: '',
-      edit: false,
-      content: { message: '', author: '' },
     })
+  }
+
+  const handlePing = () => {
+    console.log('Pinging')
+    socketRef.current.emit('message', 'hello', roomID)
   }
 
   const renderTimestamp = (timestamp) => {
@@ -136,59 +104,35 @@ const Chat = ({ chatID, username }) => {
     return prefix
   }
 
-  const handleEdit = (content, author) => {
-    setState({
-      ...state,
-      edit: true,
-      content: { message: content, author: author },
-    })
-  }
-
-  console.log('Chat state: ', state)
-
   const renderMessages = () => {
-    console.log('Messages: ', messages)
-    return messages.map((message, i, arr) => {
-      if (message.author === user.username) {
-        return (
-          <div className={classes.chatRight} key={message.id}>
-            <div style={{ display: 'inline' }}>
-              {message.edited_content ? (
-                <Paper elevation={1}>
-                  <Typography>
-                    <span style={{ textDecoration: 'line-through' }}>
-                      {message.edited_content}
-                    </span>
-                  </Typography>
-                </Paper>
-              ) : (
-                ''
-              )}
-              <Typography>{message.content}</Typography>
-              <Typography variant="caption">
-                {renderTimestamp(message.timestamp)}
-              </Typography>
+    console.log('Messages: ', state.messages)
+    if (state.messages) {
+      return state.messages.map((message, i, arr) => {
+        if (message.author === user.username) {
+          return (
+            <div className={classes.chatRight} key={message.id}>
+              <div style={{ display: 'inline' }}>
+                <Typography>{message.content}</Typography>
+                <Typography variant="caption">
+                  {renderTimestamp(message.timestamp)}
+                </Typography>
+              </div>
             </div>
-          </div>
-        )
-      } else {
-        return (
-          <div className={classes.chatLeft} key={message.id}>
-            <div style={{ display: 'inline' }}>
-              <Typography>{message.content}</Typography>
-              <Typography variant="caption">
-                {renderTimestamp(message.timestamp)}
-              </Typography>
+          )
+        } else {
+          return (
+            <div className={classes.chatLeft} key={message.id}>
+              <div style={{ display: 'inline' }}>
+                <Typography>{message.content}</Typography>
+                <Typography variant="caption">
+                  {renderTimestamp(message.timestamp)}
+                </Typography>
+              </div>
             </div>
-            <IconButton
-              onClick={() => handleEdit(message.content, message.author)}
-            >
-              <EditIcon />
-            </IconButton>
-          </div>
-        )
-      }
-    })
+          )
+        }
+      })
+    }
   }
 
   const renderTextField = () => {
@@ -245,14 +189,6 @@ const Chat = ({ chatID, username }) => {
     <div>
       <Paper elevation={3} className={classes.chatSection}>
         <Grid container>
-          <Grid item container>
-            <Grid item xs={12}>
-              <Typography variant="h5">{username}</Typography>
-              <div className={classes.hr}>
-                <hr />
-              </div>
-            </Grid>
-          </Grid>
           <Grid item xs={12}>
             <div className={classes.messageArea}>{renderMessages()}</div>
           </Grid>
@@ -265,7 +201,7 @@ const Chat = ({ chatID, username }) => {
                 color="primary"
                 aria-label="add"
                 size="small"
-                onClick={sendMessage}
+                onClick={handlePing}
               >
                 <SendIcon />
               </Fab>
@@ -276,4 +212,4 @@ const Chat = ({ chatID, username }) => {
     </div>
   )
 }
-export default Chat
+export default ChannelChat

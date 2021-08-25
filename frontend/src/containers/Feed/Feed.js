@@ -28,7 +28,7 @@ const Feed = () => {
   }, [])
 
   const renderPosts = () => {
-    if (state.posts) {
+    if (state.posts && state.posts[0]) {
       return state.posts[0].map((post) => {
         console.log('Post: ', post)
         return <Post key={post.id} post={post} />
@@ -39,7 +39,7 @@ const Feed = () => {
   }
 
   const renderRecommended = () => {
-    if (state.recommendedPosts) {
+    if (state.recommendedPosts && state.recommendedPosts[0]) {
       return state.recommendedPosts[0].map((post) => {
         return <Post key={post.id} post={post} />
       })

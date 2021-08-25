@@ -45,10 +45,10 @@ io.on('connection', (socket) => {
     })
   })
 
-  socket.on('message', (message, roomID) => {
-    console.log('We here')
+  socket.on('message', (message) => {
     console.log('Message:', message)
-    socket.emit('receive-message', message)
+    socket.broadcast.emit('receive message', message)
+    console.log('Emit successful')
   })
 
   socket.on('disconnect', () => {

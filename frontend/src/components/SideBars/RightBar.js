@@ -60,6 +60,12 @@ const RightBar = () => {
           </ListItem>
         )
       })
+    } else {
+      return (
+        <ListItem>
+          <ListItemText primary={'No recommendations.'} />
+        </ListItem>
+      )
     }
   }
 
