@@ -30,15 +30,16 @@ const InterestSettings = () => {
   const [state, setState] = useState({
     interests: '',
     interest: '',
-    interest_classification: '',
   })
+
+  console.log('Interest state: ', state)
 
   useEffect(() => {
     api
       .get(urls.interests)
       .then((response) => setState({ interests: response.data }))
       .catch((error) => console.log(error))
-  })
+  }, [])
 
   const handleChange = (event) => {
     setState({
@@ -49,25 +50,37 @@ const InterestSettings = () => {
 
   const handleAdd = () => {
     api
-      .post(urls.interestUpdate)
-      .then((response) => console.log(response))
+      .post(urls.interestUpdate('add'), state)
+      .then((response) => {
+        let interests = state.interests
+        interests.push(response.data)
+        console.log(interests)
+        setState({ interests: interests, interest: '' })
+      })
       .catch((error) => console.log(error))
   }
 
-  const handleRemove = () => {
+  const handleRemove = (title) => {
     api
-      .post(urls.interestUpdate)
-      .then((response) => console.log(response))
+      .post(urls.interestUpdate('remove'), {
+        interest: title,
+      })
+      .then((response) => {
+        const filtered_interests = state.interests.filter(
+          (interest) => interest.title != response.data.title
+        )
+        setState({ ...state, interests: filtered_interests })
+      })
       .catch((error) => console.log(error))
   }
 
   const renderInterests = () => {
     if (state.interests && state.interests.length > 0) {
-      state.interests.map((interest) => (
+      return state.interests.map((interest) => (
         <ListItem key={interest.id}>
           <ListItemText primary={interest.title} />
-          <IconButton>
-            <ClearIcon onClick={handleRemove} />
+          <IconButton onClick={() => handleRemove(interest.title)}>
+            <ClearIcon />
           </IconButton>
         </ListItem>
       ))

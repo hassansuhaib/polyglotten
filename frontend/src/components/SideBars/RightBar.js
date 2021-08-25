@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link as RouterLink } from 'react-router-dom'
 import { logout } from '../../store/actions/auth'
@@ -11,6 +11,8 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
+import ListItemAvatar from '@material-ui/core/ListItemAvatar'
+import Avatar from '@material-ui/core/Avatar'
 
 import PersonIcon from '@material-ui/icons/Person'
 
@@ -24,6 +26,43 @@ const useStyles = makeStyles((theme) => ({
 
 const RightBar = () => {
   const classes = useStyles()
+  const [state, setState] = useState(null)
+
+  console.log('Users state: ', state)
+
+  useEffect(() => {
+    const getUsers = () => {
+      api
+        .get(urls.recommendedUsers)
+        .then((response) => setState(...response.data))
+        .catch((error) => console.log(error))
+    }
+    getUsers()
+  }, [])
+
+  const renderUsers = () => {
+    if (state) {
+      return state.map((user_profile) => {
+        return (
+          <ListItem
+            disableGutters
+            button
+            component={RouterLink}
+            to={`/profile/${user_profile.user.username}`}
+            key={user_profile.user.pk}
+          >
+            <ListItemAvatar>
+              <Avatar src={user_profile.profile_photo} />
+            </ListItemAvatar>
+            <ListItemText
+              primary={`${user_profile.user.first_name} ${user_profile.user.last_name}`}
+            />
+          </ListItem>
+        )
+      })
+    }
+  }
+
   return (
     <div className={classes.sidebar}>
       <List
@@ -35,30 +74,7 @@ const RightBar = () => {
           </Typography>
         }
       >
-        <ListItem disableGutters button component={RouterLink} to={`/profile`}>
-          <ListItemIcon>
-            <PersonIcon />
-          </ListItemIcon>
-          <ListItemText primary="Imtinan" />
-        </ListItem>
-        <ListItem disableGutters button component={RouterLink} to={`/profile`}>
-          <ListItemIcon>
-            <PersonIcon />
-          </ListItemIcon>
-          <ListItemText primary="Usman" />
-        </ListItem>
-        <ListItem disableGutters button component={RouterLink} to={`/profile`}>
-          <ListItemIcon>
-            <PersonIcon />
-          </ListItemIcon>
-          <ListItemText primary="Ahmed" />
-        </ListItem>
-        <ListItem disableGutters button component={RouterLink} to={`/profile`}>
-          <ListItemIcon>
-            <PersonIcon />
-          </ListItemIcon>
-          <ListItemText primary="Hamza" />
-        </ListItem>
+        {renderUsers()}
       </List>
     </div>
   )

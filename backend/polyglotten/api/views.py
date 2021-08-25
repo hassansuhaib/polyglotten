@@ -115,7 +115,10 @@ class ProfileLanguageUpdateView(APIView):
         new_language = request.data.get('new_language')
         classification = request.data.get('classification')
         try:
-            language = Language.objects.get(title=new_language)
+            try:
+                language = Language.objects.get(title=new_language)
+            except:
+                language = Language.objects.get(title='Other')
             user_profile = UserProfile.objects.get(user=request.user)
             if action == 'remove':
                 user_profile.languages.remove(language)
@@ -132,10 +135,15 @@ class ProfileInterestUpdateView(APIView):
     permission_classes = (AllowAny, )
 
     def post(self, request, action, *args, **kwargs):
-        new_interest = request.data.get('new_interest')
+        new_interest = request.data.get('interest')
+        print("New interest: ", new_interest)
         try:
-            interest = Interest.objects.get(title=new_interest)
             user_profile = UserProfile.objects.get(user=request.user)
+            try:
+                interest = Interest.objects.get(title=new_interest)
+            except:
+                interest = Interest(title=new_interest)
+                interest.save()
             if action == 'remove':
                 user_profile.interests.remove(interest)
             else:
@@ -900,7 +908,7 @@ class UserRecommendationView(APIView):
             user_list = []
             for language in languages:
                 recommended_profiles = UserProfile.objects.filter(
-                    languages__title=language.title)
+                    languages__title=language.language.title)
                 user_list.append(UserProfileSerializer(
                     recommended_profiles, many=True).data)
 
@@ -926,7 +934,7 @@ class PostRecommendationView(APIView):
             posts = []
             for language in languages:
                 recommended_posts = Post.objects.filter(
-                    language__title=language.title)
+                    language__title=language.language.title)
                 posts.append(PostSerializer(recommended_posts, many=True).data)
 
             return Response(posts, status=status.HTTP_200_OK)

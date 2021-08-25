@@ -144,7 +144,7 @@ const Profile = ({ username }) => {
       return (
         <div className={classes.chips}>
           {state.interests.map((interest) => (
-            <Chip label={interest.title} color="primary" />
+            <Chip key={interest.id} label={interest.title} color="primary" />
           ))}
         </div>
       )
