@@ -29,6 +29,8 @@ export const interestUpdate = (action) => `/profile/interests/update/${action}/`
 
 // Feed URLS
 export const posts = `/feed/posts/`
+export const recommendedPosts = `/recommendation/posts/`
+export const recommendedUser = `/recommendation/users/`
 export const userPosts = (username) => `/feed/posts/user/${username}/`
 export const postCreate = `/feed/posts/create/`
 export const postShare = `/feed/posts/share/`

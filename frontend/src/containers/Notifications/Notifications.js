@@ -37,7 +37,7 @@ const Notifications = ({ username }) => {
 
   const renderNotification = (notification) => {
     return (
-      <React.Fragment key={notification.id}>
+      <React.Fragment key={notification.pk}>
         <ListItem
           button
           component={RouterLink}

@@ -26,6 +26,9 @@ io.on('connection', (socket) => {
     const usersInThisRoom = users[roomID].filter((id) => id !== socket.id)
 
     socket.emit('all users', usersInThisRoom)
+
+    console.log('Users: ', users)
+    console.log('Socket to room', socketToRoom)
   })
 
   socket.on('sending signal', (payload) => {
@@ -42,6 +45,12 @@ io.on('connection', (socket) => {
     })
   })
 
+  socket.on('message', (message, roomID) => {
+    console.log('We here')
+    console.log('Message:', message)
+    socket.emit('receive-message', message)
+  })
+
   socket.on('disconnect', () => {
     const roomID = socketToRoom[socket.id]
     let room = users[roomID]
@@ -50,9 +59,12 @@ io.on('connection', (socket) => {
       users[roomID] = room
     }
     socket.broadcast.emit('user left', socket.id)
+
+    console.log('Users: ', users)
+    console.log('Socket to room', socketToRoom)
   })
 })
 
-server.listen(process.env.PORT || 8000, () =>
-  console.log('server is running on port 8000')
+server.listen(process.env.PORT || 7000, () =>
+  console.log('server is running on port 7000')
 )

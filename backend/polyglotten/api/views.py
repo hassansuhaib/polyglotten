@@ -406,14 +406,23 @@ class CommentListView(ListAPIView):
         return qs
 
 
-class PostListView(ListAPIView):
+class PostListView(APIView):
     permission_classes = (AllowAny, )
     serializer_class = PostSerializer
     pagination_class = None
 
-    def get_queryset(self):
-        qs = Post.objects.all().exclude(user__id=self.request.user.id)
-        return qs
+    def get(self, request):
+        posts = []
+        try:
+            user_profile = UserProfile.objects.get(user=request.user)
+            following = user_profile.following.all()
+            for followee in following:
+                followee_posts = followee.posts.all()
+                print("Followee Posts: ", followee_posts)
+                posts.append(PostSerializer(followee_posts, many=True).data)
+            return Response(posts, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'Error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserPostListView(ListAPIView):
@@ -886,20 +895,22 @@ class UserRecommendationView(APIView):
         try:
             user_profile = UserProfile.objects.get(user__pk=request.user.id)
             interests = user_profile.interests.all()
-            languages = user_profile.user_languages.filter(
-                classification='Target')
+            languages = UserLanguages.objects.filter(
+                user_profile=user_profile.id, classification="Target")
             user_list = []
             for language in languages:
                 recommended_profiles = UserProfile.objects.filter(
                     languages__title=language.title)
-                user_list.append(recommended_profiles)
+                user_list.append(UserProfileSerializer(
+                    recommended_profiles, many=True).data)
 
             for interest in interests:
                 recommended_profiles = UserProfile.objects.filter(
                     interests__title=interest.title)
-                user_list.append(recommended_profiles)
+                user_list.append(UserProfileSerializer(
+                    recommended_profiles, many=True).data)
 
-            return Response(UserProfileSerializer(user_list, many=True.data), status=status.HTTP_200_OK)
+            return Response(user_list, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'Error': str(e)}, status=status.HTTP_404_NOT_FOUND)
 
@@ -910,14 +921,14 @@ class PostRecommendationView(APIView):
     def get(self, request):
         try:
             user_profile = UserProfile.objects.get(user__pk=request.user.id)
-            languages = user_profile.user_languages.filter(
-                classification='Target')
+            languages = UserLanguages.objects.filter(
+                user_profile=user_profile.id, classification="Target")
             posts = []
             for language in languages:
                 recommended_posts = Post.objects.filter(
                     language__title=language.title)
-                posts.append(recommended_posts)
+                posts.append(PostSerializer(recommended_posts, many=True).data)
 
-            return Response(PostSerializer(posts, many=True.data), status=status.HTTP_200_OK)
+            return Response(posts, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'Error': str(e)}, status=status.HTTP_404_NOT_FOUND)

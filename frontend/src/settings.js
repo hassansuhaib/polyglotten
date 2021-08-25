@@ -7,7 +7,7 @@ switch (process.env.NODE_ENV) {
     SOCKET_URL_VAL = 'ws://127.0.0.1:8000'
     break
   case 'production':
-    API_SERVER_VAL = 'polyglotten.com'
+    API_SERVER_VAL = 'http://127.0.0.1:8000'
     SOCKET_URL_VAL = 'ws://127.0.0.1:8000'
     break
   default:

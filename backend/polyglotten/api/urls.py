@@ -125,7 +125,7 @@ urlpatterns = [
     path('search/', SearchView.as_view()),
 
     # Recommendation URLS
-    path('recommendation/users/', UserRecommendationView.as_view),
-    path('recommendation/posts/', UserRecommendationView.as_view),
+    path('recommendation/users/', UserRecommendationView.as_view()),
+    path('recommendation/posts/', PostRecommendationView.as_view()),
 
 ]

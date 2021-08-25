@@ -54,7 +54,21 @@ const LanguageSettings = () => {
   const handleAdd = () => {
     api
       .post(urls.languageUpdate('add'), state)
-      .then((response) => console.log(response))
+      .then((response) => {
+        console.log('Reponse: ', response.data)
+        let languages = state.languages
+        languages.push({
+          classification: state.classification,
+          language: response.data,
+        })
+        console.log('Languages: ', languages)
+        setState({
+          ...state,
+          languages: languages,
+          classification: 'Native',
+          new_language: '',
+        })
+      })
       .catch((error) => console.log(error))
   }
 
@@ -63,12 +77,17 @@ const LanguageSettings = () => {
       .post(urls.languageUpdate('remove'), {
         new_language: title,
       })
-      .then((response) => console.log(response))
+      .then((response) => {
+        const filtered_languages = state.languages.filter(
+          (language) => language.language.title !== response.data.title
+        )
+        setState({ ...state, languages: filtered_languages })
+      })
       .catch((error) => console.log(error))
   }
 
   const renderLanguages = () => {
-    if (state.languages && state.languages.length > 1) {
+    if (state.languages && state.languages.length > 0) {
       return state.languages.map((language) => (
         <ListItem key={language.language.id}>
           <ListItemText
@@ -76,8 +95,8 @@ const LanguageSettings = () => {
             secondary={language.classification}
           />
 
-          <IconButton>
-            <ClearIcon onClick={() => handleRemove(language.language.title)} />
+          <IconButton onClick={() => handleRemove(language.language.title)}>
+            <ClearIcon />
           </IconButton>
         </ListItem>
       ))

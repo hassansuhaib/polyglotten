@@ -6,11 +6,12 @@ import api from '../../api'
 import * as urls from '../../constants'
 
 import { makeStyles } from '@material-ui/core/styles'
-import { Button, Grid, IconButton, Typography } from '@material-ui/core'
+import { Button, Grid, Hidden, IconButton, Typography } from '@material-ui/core'
 import HighlightOffIcon from '@material-ui/icons/HighlightOff'
 import MicIcon from '@material-ui/icons/Mic'
 import MicOffIcon from '@material-ui/icons/MicOff'
 import HeadsetIcon from '@material-ui/icons/Headset'
+import Avatar from '@material-ui/core/Avatar'
 
 const useStyles = makeStyles((theme) => ({}))
 
@@ -25,13 +26,19 @@ const Audio = ({ peer }) => {
     }
   }, [])
 
-  return <audio ref={ref} controls autoPlay />
+  return (
+    <React.Fragment>
+      <audio ref={ref} />
+    </React.Fragment>
+  )
 }
 
 const ActiveChannel = ({ roomID }) => {
   const classes = useStyles()
   const [peers, setPeers] = useState([])
-  const [state, setState] = useState(null)
+  const [state, setState] = useState({
+    channelData: null,
+  })
   const socketRef = useRef()
   const userAudio = useRef()
   const peersRef = useRef([])
@@ -46,13 +53,19 @@ const ActiveChannel = ({ roomID }) => {
     document.title = 'Active Channel'
     api
       .get(urls.channelsDetail(roomID))
-      .then((response) => {})
+      .then((response) => {
+        setState(response.data)
+      })
       .catch((error) => console.log(error))
       .finally(() => {
-        socketRef.current = io.connect('http://localhost:8000')
+        socketRef.current = io.connect('http://localhost:7000')
         navigator.mediaDevices
           .getUserMedia(constraints)
           .then((stream) => {
+            setState({
+              ...state,
+              stream: stream,
+            })
             userAudio.current.srcObject = stream
             socketRef.current.emit('join room', roomID)
             socketRef.current.on('connect_error', (err) => {
@@ -104,12 +117,12 @@ const ActiveChannel = ({ roomID }) => {
               peersRef.current = peers
               setPeers(peers)
             })
+            socketRef.current.on('receive-message', (message) => {
+              console.log('Message: ', message)
+            })
           })
           .catch((error) => console.log(error))
       })
-    return () => {
-      console.log(userAudio.current)
-    }
   }, [])
 
   function createPeer(userToSignal, callerID, stream) {
@@ -148,35 +161,29 @@ const ActiveChannel = ({ roomID }) => {
 
   const handlePing = () => {
     console.log('Pinging')
-    socketRef.current.emit('send-message')
+    socketRef.current.emit('message', 'hello', roomID)
   }
 
   return (
-    <div>
-      <Grid container>
-        <Grid item xs={12}>
-          <Typography variant="h4">Voice Channels</Typography>
-        </Grid>
-        <Grid item xs={12}>
+    <Grid container>
+      <Grid item xs={12}>
+        <Typography variant="h4">Voice Channels</Typography>
+      </Grid>
+      <Grid item xs={12}>
+        <div>
+          <Typography variant="h5">
+            {state.channelData && state.channelData.topic}
+          </Typography>
+          <Typography variant="body1">
+            Language: {state.channelData && state.channelData.language.title}
+          </Typography>
+        </div>
+      </Grid>
+      <Grid container item lg={6}>
+        <Grid item xs={6}>
           <div>
-            <Typography variant="h5">{state && state.topic}</Typography>
-            <Typography variant="body1">
-              Language: {state && state.language.title}
-            </Typography>
-          </div>
-        </Grid>
-        <Grid container item xs={12}>
-          <Grid item xs={6}>
-            <audio autoPlay controls ref={userAudio} />
-          </Grid>
-          {peers.map((peer) => (
-            <Grid key={peer.peerID} item xs={6}>
-              <Audio peer={peer.peer} />
-            </Grid>
-          ))}
-        </Grid>
-        <Grid item xs={12}>
-          <div>
+            <Avatar />
+            <audio autoPlay ref={userAudio} />
             <IconButton component={RouterLink} to="/">
               <HighlightOffIcon />
             </IconButton>
@@ -188,11 +195,31 @@ const ActiveChannel = ({ roomID }) => {
             </IconButton>
           </div>
         </Grid>
-        <Grid item xs={12}>
-          <Button onClick={handlePing}>Ping</Button>
-        </Grid>
+        {peers.map((peer) => (
+          <Grid key={peer.peerID} item xs={6}>
+            <Avatar />
+            <Audio peer={peer.peer} />
+            <IconButton component={RouterLink} to="/">
+              <HighlightOffIcon />
+            </IconButton>
+            <IconButton>
+              <MicOffIcon />
+            </IconButton>
+            <IconButton>
+              <HeadsetIcon />
+            </IconButton>
+          </Grid>
+        ))}
       </Grid>
-    </div>
+      <Hidden smDown>
+        <Grid lg={6}>
+          <Typography variant="h6">Chat</Typography>
+        </Grid>
+      </Hidden>
+      <Grid item xs={12}>
+        <Button onClick={handlePing}>Ping</Button>
+      </Grid>
+    </Grid>
   )
 }
 export default ActiveChannel
